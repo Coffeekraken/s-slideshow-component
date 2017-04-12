@@ -1,5 +1,5 @@
 import SWebComponent from 'coffeekraken-sugar/js/core/SWebComponent'
-// import querySelectorLive from 'coffeekraken-sugar/js/dom/querySelectorLive'
+import querySelectorLive from 'coffeekraken-sugar/js/dom/querySelectorLive'
 // import __isInViewport from 'coffeekraken-sugar/js/dom/isInViewport'
 import __autoCast from 'coffeekraken-sugar/js/utils/string/autoCast'
 
@@ -187,18 +187,19 @@ export default class SSlideshowComponent extends SWebComponent {
 		this._updateReferences();
 
 		// grab the slides and maintain stack up to date
-		this._slides = [].slice.call(this.querySelectorAll(`${this._componentNameDash}-slide, [${this._componentNameDash}-slide]`));
-		// init slides
-		this._slides.forEach((slide) => {
-			this._initSlide(slide);
-		});
-		// this._slidesObserver = querySelectorLive(`${this._componentNameDash}-slide, [${this._componentNameDash}-slide]`, {
-		// 	rootNode : this
-		// }).stack(this._slides).subscribe((elm) => {
-		// 	console.log('new slide', elm);
-		// 	// init new slide
-		// 	this._initSlide(elm);
+		// this._slides = [].slice.call(this.querySelectorAll(`${this._componentNameDash}-slide, [${this._componentNameDash}-slide]`));
+		// // init slides
+		// this._slides.forEach((slide) => {
+		// 	this._initSlide(slide);
 		// });
+		//
+		this._slidesObserver = querySelectorLive(`${this._componentNameDash}-slide, [${this._componentNameDash}-slide]`, {
+			rootNode : this
+		}).stack(this._slides).subscribe((elm) => {
+			console.log('new slide', elm);
+			// init new slide
+			this._initSlide(elm);
+		});
 
 		// onInit callback
 		this.props.onInit && this.props.onInit(this);
@@ -306,25 +307,29 @@ export default class SSlideshowComponent extends SWebComponent {
 			slide.removeAttribute('active');
 			slide.removeAttribute('before-active');
 			slide.removeAttribute('after-active');
+			slide.removeAttribute('next');
+			slide.removeAttribute('previous');
+			slide.removeAttribute('first');
+			slide.removeAttribute('last');
 		});
 		// remove the active class on all goto
 		[].forEach.call(this._refs.goTos, (goTo) => {
 			goTo.removeAttribute('active');
 		});
 		// remove the previous and next classes
-		if (this.getPreviousSlide()) {
-			this.getPreviousSlide().removeAttribute('previous');
-		}
-		if (this.getNextSlide()) {
-			this.getNextSlide().removeAttribute('next');
-		}
-		// unapply the first and last classes
-		if (this.getFirstSlide()) {
-			this.getFirstSlide().removeAttribute('first');
-		}
-		if (this.getLastSlide()) {
-			this.getLastSlide().removeAttribute('last');
-		}
+		// if (this.getPreviousSlide()) {
+		// 	this.getPreviousSlide().removeAttribute('previous');
+		// }
+		// if (this.getNextSlide()) {
+		// 	this.getNextSlide().removeAttribute('next');
+		// }
+		// // unapply the first and last classes
+		// if (this.getFirstSlide()) {
+		// 	this.getFirstSlide().removeAttribute('first');
+		// }
+		// if (this.getLastSlide()) {
+		// 	this.getLastSlide().removeAttribute('last');
+		// }
 	}
 
 	/**

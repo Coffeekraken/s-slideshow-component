@@ -10,6 +10,10 @@ var _SWebComponent2 = require('coffeekraken-sugar/js/core/SWebComponent');
 
 var _SWebComponent3 = _interopRequireDefault(_SWebComponent2);
 
+var _querySelectorLive = require('coffeekraken-sugar/js/dom/querySelectorLive');
+
+var _querySelectorLive2 = _interopRequireDefault(_querySelectorLive);
+
 var _autoCast = require('coffeekraken-sugar/js/utils/string/autoCast');
 
 var _autoCast2 = _interopRequireDefault(_autoCast);
@@ -21,7 +25,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-// import querySelectorLive from 'coffeekraken-sugar/js/dom/querySelectorLive'
 // import __isInViewport from 'coffeekraken-sugar/js/dom/isInViewport'
 
 
@@ -144,18 +147,19 @@ var SSlideshowComponent = function (_SWebComponent) {
 			this._updateReferences();
 
 			// grab the slides and maintain stack up to date
-			this._slides = [].slice.call(this.querySelectorAll(this._componentNameDash + '-slide, [' + this._componentNameDash + '-slide]'));
-			// init slides
-			this._slides.forEach(function (slide) {
-				_this2._initSlide(slide);
-			});
-			// this._slidesObserver = querySelectorLive(`${this._componentNameDash}-slide, [${this._componentNameDash}-slide]`, {
-			// 	rootNode : this
-			// }).stack(this._slides).subscribe((elm) => {
-			// 	console.log('new slide', elm);
-			// 	// init new slide
-			// 	this._initSlide(elm);
+			// this._slides = [].slice.call(this.querySelectorAll(`${this._componentNameDash}-slide, [${this._componentNameDash}-slide]`));
+			// // init slides
+			// this._slides.forEach((slide) => {
+			// 	this._initSlide(slide);
 			// });
+			//
+			this._slidesObserver = (0, _querySelectorLive2.default)(this._componentNameDash + '-slide, [' + this._componentNameDash + '-slide]', {
+				rootNode: this
+			}).stack(this._slides).subscribe(function (elm) {
+				console.log('new slide', elm);
+				// init new slide
+				_this2._initSlide(elm);
+			});
 
 			// onInit callback
 			this.props.onInit && this.props.onInit(this);
@@ -289,25 +293,29 @@ var SSlideshowComponent = function (_SWebComponent) {
 				slide.removeAttribute('active');
 				slide.removeAttribute('before-active');
 				slide.removeAttribute('after-active');
+				slide.removeAttribute('next');
+				slide.removeAttribute('previous');
+				slide.removeAttribute('first');
+				slide.removeAttribute('last');
 			});
 			// remove the active class on all goto
 			[].forEach.call(this._refs.goTos, function (goTo) {
 				goTo.removeAttribute('active');
 			});
 			// remove the previous and next classes
-			if (this.getPreviousSlide()) {
-				this.getPreviousSlide().removeAttribute('previous');
-			}
-			if (this.getNextSlide()) {
-				this.getNextSlide().removeAttribute('next');
-			}
-			// unapply the first and last classes
-			if (this.getFirstSlide()) {
-				this.getFirstSlide().removeAttribute('first');
-			}
-			if (this.getLastSlide()) {
-				this.getLastSlide().removeAttribute('last');
-			}
+			// if (this.getPreviousSlide()) {
+			// 	this.getPreviousSlide().removeAttribute('previous');
+			// }
+			// if (this.getNextSlide()) {
+			// 	this.getNextSlide().removeAttribute('next');
+			// }
+			// // unapply the first and last classes
+			// if (this.getFirstSlide()) {
+			// 	this.getFirstSlide().removeAttribute('first');
+			// }
+			// if (this.getLastSlide()) {
+			// 	this.getLastSlide().removeAttribute('last');
+			// }
 		}
 
 		/**
