@@ -64,7 +64,7 @@ npm install https://git@github.com/coffeekraken/s-slideshow-component.git --save
 ```
 
 <a name="readme-get-started"></a>
-## Get Started
+## Get Started
 
 First, import the component into your javascript file like so:
 
@@ -104,7 +104,7 @@ If you need some styling to start with, you can generate it like so:
 ```
 
 <a id="readme-browsers-support"></a>
-## Browsers support
+## Browsers support
 
 | [<img src="https://raw.githubusercontent.com/godban/browsers-support-badges/master/src/images/edge.png" alt="IE / Edge" width="16px" height="16px" />](http://godban.github.io/browsers-support-badges/)</br>IE / Edge | [<img src="https://raw.githubusercontent.com/godban/browsers-support-badges/master/src/images/firefox.png" alt="Firefox" width="16px" height="16px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/godban/browsers-support-badges/master/src/images/chrome.png" alt="Chrome" width="16px" height="16px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/godban/browsers-support-badges/master/src/images/safari.png" alt="Safari" width="16px" height="16px" />](http://godban.github.io/browsers-support-badges/)</br>Safari |
 | --------- | --------- | --------- | --------- |
@@ -127,7 +127,7 @@ To do so, you have several possibilities:
 5. [Build web component](https://github.com/Coffeekraken/coffeekraken/blob/master/contribute.md#contribute-build-web-component)
 
 <a id="readme-who-are-coffeekraken"></a>
-## Who are Coffeekraken
+## Who are Coffeekraken
 
 We try to be **some cool guys** that build **some cool tools** to make our (and yours hopefully) **every day life better**.  
 
