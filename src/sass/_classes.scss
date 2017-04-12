@@ -1,0 +1,55 @@
+/**
+ * @name 	s-slideshow Classes
+ * This file provide all the mixins to generate component classes
+ */
+
+/**
+ * Print out the bare and style component css
+ */
+@mixin s-slideshow-classes() {
+	@include s-slideshow-classes-bare();
+	@include s-slideshow-classes-style();
+}
+
+/**
+ * Print out the bare component css
+ */
+@mixin s-slideshow-classes-bare() {
+	@include s-component('s-slideshow') {
+		#{s-component()} {
+			[#{s-component()}-slide] {
+				overflow: hidden;
+				@include s-size(fit,
+					$position : absolute
+				);
+				z-index:0;
+			}
+			[#{s-component()}-slide][active] {
+				transform: translateX(0);
+				z-index:1;
+			}
+			[#{s-component()}-slide][before-active] {
+				transform: translateX(-100%);
+			}
+			[#{s-component()}-slide][after-active] {
+				transform: translateX(100%);
+			}
+		}
+	}
+}
+
+/**
+ * Print out the style component css
+ */
+@mixin s-slideshow-classes-style() {
+	@include s-component('s-slideshow') {
+
+		#{s-component()} {
+			background-color: s-color(default, -opacity .05);
+
+			[#{s-component()}-slide] {
+				transition: transform 0.4s cubic-bezier(0.81, 0.005, 0.735, 1) 0s, -webkit-transform 0.4s cubic-bezier(0.81, 0.005, 0.735, 1) 0s
+			}
+		}
+	}
+}
