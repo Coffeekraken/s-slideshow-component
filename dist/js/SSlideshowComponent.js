@@ -156,7 +156,6 @@ var SSlideshowComponent = function (_SWebComponent) {
 			this._slidesObserver = (0, _querySelectorLive2.default)(this._componentNameDash + '-slide, [' + this._componentNameDash + '-slide]', {
 				rootNode: this
 			}).stack(this._slides).subscribe(function (elm) {
-				console.log('new slide', elm);
 				// init new slide
 				_this2._initSlide(elm);
 			});

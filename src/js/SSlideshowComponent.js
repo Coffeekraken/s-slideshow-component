@@ -196,7 +196,6 @@ export default class SSlideshowComponent extends SWebComponent {
 		this._slidesObserver = querySelectorLive(`${this._componentNameDash}-slide, [${this._componentNameDash}-slide]`, {
 			rootNode : this
 		}).stack(this._slides).subscribe((elm) => {
-			console.log('new slide', elm);
 			// init new slide
 			this._initSlide(elm);
 		});
