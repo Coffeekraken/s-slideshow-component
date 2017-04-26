@@ -334,8 +334,9 @@ var SSlideshowComponent = function (_SWebComponent) {
 			this._activeSlide.setAttribute('active', true);
 			// goto classes
 			[].forEach.call(this._refs.goTos, function (goTo) {
-				var idx = goTo.getAttribute(_this4._componentNameDash + '-goto');
-				if (idx && (0, _autoCast2.default)(idx) === _this4.props.slide) {
+				var slide = goTo.getAttribute(_this4._componentNameDash + '-goto');
+				var idx = _this4._getSlideIdxById(slide);
+				if (idx === _this4.props.slide) {
 					goTo.setAttribute('active', true);
 				}
 			});
@@ -373,6 +374,33 @@ var SSlideshowComponent = function (_SWebComponent) {
 					slide.setAttribute('after-active', true);
 				}
 			});
+		}
+
+		/**
+   * Get slide idx by id
+   * @param 		{String} 		id 		The slide id
+   * @return 		{Integer} 				The slide idx
+   */
+
+	}, {
+		key: '_getSlideIdxById',
+		value: function _getSlideIdxById(id) {
+			// autocast the id
+			id = (0, _autoCast2.default)(id);
+			// if the id is already an integer idx
+			if (typeof id === 'number') return id;
+			// if is a string
+			if (typeof id === 'string') {
+				// find the slide
+				var slideElm = (0, _find2.default)(this._slides, function (sld) {
+					return sld.id === id.replace('#', '');
+				});
+				if (slideElm) {
+					return this._slides.indexOf(slideElm);
+				}
+			}
+			// by default, return first slide
+			return 0;
 		}
 
 		/**
@@ -512,21 +540,8 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: 'goTo',
 		value: function goTo(slide) {
-			// default slide index
-			var slideIndex = 0;
-			// if is a string
-			if (typeof slide === 'string') {
-				// find the slide
-				var slideElm = (0, _find2.default)(this._slides, function (sld) {
-					return sld.id === slide.replace('#', '');
-				});
-				if (slideElm) {
-					slideIndex = this._slides.indexOf(slideElm);
-				}
-			} else if (typeof slide === 'number') {
-				// go to slide by idx
-				slideIndex = slide;
-			}
+			// get the slide idx
+			var slideIndex = this._getSlideIdxById(slide);
 			// check the slide index
 			if (slideIndex >= this._slides.length) {
 				throw 'The slide ' + slideIndex + ' does not exist...';

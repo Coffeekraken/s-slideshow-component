@@ -340,8 +340,9 @@ export default class SSlideshowComponent extends SWebComponent {
 		this._activeSlide.setAttribute('active', true);
 		// goto classes
 		[].forEach.call(this._refs.goTos, (goTo) => {
-			const idx = goTo.getAttribute(`${this._componentNameDash}-goto`);
-			if (idx && __autoCast(idx) === this.props.slide) {
+			const slide = goTo.getAttribute(`${this._componentNameDash}-goto`);
+			const idx = this._getSlideIdxById(slide);
+			if (idx === this.props.slide) {
 				goTo.setAttribute('active', true);
 			}
 		});
@@ -379,6 +380,30 @@ export default class SSlideshowComponent extends SWebComponent {
 				slide.setAttribute('after-active', true);
 			}
 		});
+	}
+
+	/**
+	 * Get slide idx by id
+	 * @param 		{String} 		id 		The slide id
+	 * @return 		{Integer} 				The slide idx
+	 */
+	_getSlideIdxById(id) {
+		// autocast the id
+		id = __autoCast(id);
+		// if the id is already an integer idx
+		if (typeof(id) === 'number') return id;
+		// if is a string
+		if (typeof(id) === 'string') {
+			// find the slide
+			const slideElm = __find(this._slides, (sld) => {
+				return sld.id === id.replace('#','');
+			});
+			if (slideElm) {
+				return this._slides.indexOf(slideElm);
+			}
+		}
+		// by default, return first slide
+		return 0;
 	}
 
 	/**
@@ -501,21 +526,8 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @return 	{SSlideshowComponent} 	The instance itself
 	 */
 	goTo(slide) {
-		// default slide index
-		let slideIndex = 0;
-		// if is a string
-		if (typeof(slide) === 'string') {
-			// find the slide
-			const slideElm = __find(this._slides, (sld) => {
-				return sld.id === slide.replace('#','');
-			});
-			if (slideElm) {
-				slideIndex = this._slides.indexOf(slideElm);
-			}
-		} else if (typeof(slide) === 'number') {
-			// go to slide by idx
-			slideIndex = slide;
-		}
+		// get the slide idx
+		const slideIndex = this._getSlideIdxById(slide);
 		// check the slide index
 		if ( slideIndex >= this._slides.length) {
 			throw `The slide ${slideIndex} does not exist...`;
