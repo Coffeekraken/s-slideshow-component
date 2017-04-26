@@ -18,7 +18,8 @@ import __find from 'lodash/find'
  * 	- ```next``` : Attribute on the next slide
  * 	- ```before-active``` : Attribute on each slides that are before the active one
  * 	- ```after-active``` : Attribute on each slides that are after the active one
- * 	- ```slide="{idx}"``` : Attribute on the slideshow itself that set the active slide
+ * 	- ```slide="{idx}"``` : Attribute on the slideshow itself that set the active slide idx
+ * 	- ```slide-id="{id}"``` : Attribute on the slideshow itself that set the active slide id
  * - Nice and easy API
  * - And more...
  *
@@ -358,7 +359,7 @@ export default class SSlideshowComponent extends SWebComponent {
 			const slide = goTo.getAttribute(`${this._componentNameDash}-goto`);
 			const idx = this._getSlideIdxById(slide);
 			if (idx === this.props.slide) {
-				// goTo.setAttribute('active', true);
+				goTo.setAttribute('active', true);
 			}
 		});
 		// add the next and previous classes

@@ -46,7 +46,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * 	- ```next``` : Attribute on the next slide
  * 	- ```before-active``` : Attribute on each slides that are before the active one
  * 	- ```after-active``` : Attribute on each slides that are after the active one
- * 	- ```slide="{idx}"``` : Attribute on the slideshow itself that set the active slide
+ * 	- ```slide="{idx}"``` : Attribute on the slideshow itself that set the active slide idx
+ * 	- ```slide-id="{id}"``` : Attribute on the slideshow itself that set the active slide id
  * - Nice and easy API
  * - And more...
  *
@@ -347,7 +348,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 				var slide = goTo.getAttribute(_this5._componentNameDash + '-goto');
 				var idx = _this5._getSlideIdxById(slide);
 				if (idx === _this5.props.slide) {
-					// goTo.setAttribute('active', true);
+					goTo.setAttribute('active', true);
 				}
 			});
 			// add the next and previous classes
