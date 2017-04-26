@@ -198,6 +198,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 		value: function componentWillReceiveProp(name, newVal, oldVal) {
 			switch (name) {
 				case 'slide':
+					// case 'slideId':
 					this._goTo(newVal);
 					break;
 			}
@@ -291,6 +292,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_unapplyStateAttrubutes',
 		value: function _unapplyStateAttrubutes() {
+
 			// unactivate all the slides
 			this._slides.forEach(function (slide) {
 				slide.removeAttribute('active');
@@ -477,8 +479,17 @@ var SSlideshowComponent = function (_SWebComponent) {
 				activeSlideIndex = 0;
 			}
 
+			// check if the slide has an id
+			var slideId = null;
+			if (this._slides[activeSlideIndex].hasAttribute('id')) {
+				slideId = this._slides[activeSlideIndex].id;
+			}
+
 			// set slide prop
-			this.setProp('slide', activeSlideIndex);
+			this.setProps({
+				'slide': activeSlideIndex,
+				'slideId': slideId
+			});
 
 			// onNext callback
 			this.props.onNext && this.props.onNext(this);
@@ -521,8 +532,17 @@ var SSlideshowComponent = function (_SWebComponent) {
 				activeSlideIndex = this._slides.length - 1;
 			}
 
+			// check if the slide has an id
+			var slideId = null;
+			if (this._slides[activeSlideIndex].hasAttribute('id')) {
+				slideId = this._slides[activeSlideIndex].id;
+			}
+
 			// set slide prop
-			this.setProp('slide', activeSlideIndex);
+			this.setProps({
+				'slide': activeSlideIndex,
+				'slideId': slideId
+			});
 
 			// onPrevious callback
 			this.props.onPrevious && this.props.onPrevious(this);
@@ -546,7 +566,18 @@ var SSlideshowComponent = function (_SWebComponent) {
 			if (slideIndex >= this._slides.length) {
 				throw 'The slide ' + slideIndex + ' does not exist...';
 			}
-			this.setProp('slide', slideIndex);
+
+			// check if the slide has an id
+			var slideId = null;
+			if (this._slides[slideIndex].hasAttribute('id')) {
+				slideId = this._slides[slideIndex].id;
+			}
+
+			// set slide prop
+			this.setProps({
+				'slide': slideIndex,
+				'slideId': slideId
+			});
 		}
 	}, {
 		key: '_goTo',
@@ -798,6 +829,13 @@ var SSlideshowComponent = function (_SWebComponent) {
 				slide: null,
 
 				/**
+     * Set the slide by id and not by idx as for the slide prop
+     * @prop
+     * @type 		{String}
+     */
+				slideId: null,
+
+				/**
      * Set if the slideshow is infinite
      * @prop
      * @tyoe 	{Boolean}
@@ -851,7 +889,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: 'physicalProps',
 		get: function get() {
-			return ['slide'];
+			return ['slide', 'slideId'];
 		}
 	}]);
 

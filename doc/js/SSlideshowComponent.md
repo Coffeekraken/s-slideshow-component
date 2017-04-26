@@ -54,6 +54,15 @@ Type : **{ Integer }**
 Default : **null**
 
 
+### slideId
+
+Set the slide by id and not by idx as for the slide prop
+
+Type : **{ [String](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/String) }**
+
+Default : **null**
+
+
 ### loop
 
 Set if the slideshow is infinite

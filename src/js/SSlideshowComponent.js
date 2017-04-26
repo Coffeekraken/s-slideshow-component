@@ -61,6 +61,13 @@ export default class SSlideshowComponent extends SWebComponent {
 			slide : null,
 
 			/**
+			 * Set the slide by id and not by idx as for the slide prop
+			 * @prop
+			 * @type 		{String}
+			 */
+			slideId : null,
+
+			/**
 			 * Set if the slideshow is infinite
 			 * @prop
 			 * @tyoe 	{Boolean}
@@ -111,7 +118,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @protected
 	 */
 	static get physicalProps() {
-		return ['slide'];
+		return ['slide', 'slideId'];
 	}
 
 	/**
@@ -229,6 +236,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	componentWillReceiveProp(name, newVal, oldVal) {
 		switch(name) {
 			case 'slide':
+			// case 'slideId':
 				this._goTo(newVal);
 			break;
 		}
@@ -302,6 +310,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * Remove the attributes from the elements
 	 */
 	_unapplyStateAttrubutes() {
+
 		// unactivate all the slides
 		this._slides.forEach((slide) => {
 			slide.removeAttribute('active');
@@ -469,8 +478,17 @@ export default class SSlideshowComponent extends SWebComponent {
 		   activeSlideIndex = 0;
 		}
 
+		// check if the slide has an id
+		let slideId = null;
+		if (this._slides[activeSlideIndex].hasAttribute('id')) {
+			slideId = this._slides[activeSlideIndex].id;
+		}
+
 		// set slide prop
-		this.setProp('slide', activeSlideIndex);
+		this.setProps({
+			'slide': activeSlideIndex,
+			'slideId' : slideId
+		});
 
 		// onNext callback
 		this.props.onNext && this.props.onNext(this);
@@ -510,8 +528,17 @@ export default class SSlideshowComponent extends SWebComponent {
 			activeSlideIndex = this._slides.length-1;
 		}
 
+		// check if the slide has an id
+		let slideId = null;
+		if (this._slides[activeSlideIndex].hasAttribute('id')) {
+			slideId = this._slides[activeSlideIndex].id;
+		}
+
 		// set slide prop
-		this.setProp('slide', activeSlideIndex);
+		this.setProps({
+			'slide': activeSlideIndex,
+			'slideId' : slideId
+		});
 
 		// onPrevious callback
 		this.props.onPrevious && this.props.onPrevious(this);
@@ -532,7 +559,18 @@ export default class SSlideshowComponent extends SWebComponent {
 		if ( slideIndex >= this._slides.length) {
 			throw `The slide ${slideIndex} does not exist...`;
 		}
-		this.setProp('slide', slideIndex);
+
+		// check if the slide has an id
+		let slideId = null;
+		if (this._slides[slideIndex].hasAttribute('id')) {
+			slideId = this._slides[slideIndex].id;
+		}
+
+		// set slide prop
+		this.setProps({
+			'slide': slideIndex,
+			'slideId' : slideId
+		});
 	}
 	_goTo(slideIndex) {
 		// check the slide index
