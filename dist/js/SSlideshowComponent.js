@@ -132,6 +132,8 @@ var SSlideshowComponent = function (_SWebComponent) {
 				currents: [], // all the currents tokens
 				goTos: [] // all the goto elements
 			};
+
+			this._changeSlideTimeout = null;
 		}
 
 		/**
@@ -196,10 +198,16 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: 'componentWillReceiveProp',
 		value: function componentWillReceiveProp(name, newVal, oldVal) {
+			var _this3 = this;
+
+			if (!newVal) return;
 			switch (name) {
 				case 'slide':
-					// case 'slideId':
-					this._goTo(newVal);
+				case 'slideId':
+					clearTimeout(this._changeSlideTimeout);
+					this._changeSlideTimeout = setTimeout(function () {
+						_this3._goTo(newVal);
+					});
 					break;
 			}
 		}
@@ -225,7 +233,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_enable',
 		value: function _enable() {
-			var _this3 = this;
+			var _this4 = this;
 
 			// no transmation
 			this.classList.add('clear-transmations');
@@ -234,11 +242,11 @@ var SSlideshowComponent = function (_SWebComponent) {
 			this.next();
 
 			// add all classes
-			this._applyStateAttributes();
+			// this._applyStateAttributes();
 
 			// remove the no transmation class to allow animations, etc...
 			setTimeout(function () {
-				_this3.classList.remove('clear-transmations');
+				_this4.classList.remove('clear-transmations');
 			});
 
 			// maintain chainability
@@ -330,16 +338,16 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_applyStateAttributes',
 		value: function _applyStateAttributes() {
-			var _this4 = this;
+			var _this5 = this;
 
 			// activate the current slide
 			this._activeSlide.setAttribute('active', true);
 			// goto classes
 			[].forEach.call(this._refs.goTos, function (goTo) {
-				var slide = goTo.getAttribute(_this4._componentNameDash + '-goto');
-				var idx = _this4._getSlideIdxById(slide);
-				if (idx === _this4.props.slide) {
-					goTo.setAttribute('active', true);
+				var slide = goTo.getAttribute(_this5._componentNameDash + '-goto');
+				var idx = _this5._getSlideIdxById(slide);
+				if (idx === _this5.props.slide) {
+					// goTo.setAttribute('active', true);
 				}
 			});
 			// add the next and previous classes
@@ -412,18 +420,18 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_applyTokens',
 		value: function _applyTokens() {
-			var _this5 = this;
+			var _this6 = this;
 
 			// apply current
 			if (this._refs.current) {
 				[].forEach.call(this._refs.current, function (current) {
-					current.innerHTML = _this5.props.slide + 1;
+					current.innerHTML = _this6.props.slide + 1;
 				});
 			}
 			// apply total
 			if (this._refs.total) {
 				[].forEach.call(this._refs.total, function (total) {
-					total.innerHTML = _this5._slides.length;
+					total.innerHTML = _this6._slides.length;
 				});
 			}
 		}
@@ -581,7 +589,11 @@ var SSlideshowComponent = function (_SWebComponent) {
 		}
 	}, {
 		key: '_goTo',
-		value: function _goTo(slideIndex) {
+		value: function _goTo(slide) {
+
+			// transform potential slide id in slide idx
+			var slideIndex = this._getSlideIdxById(slide);
+
 			// check the slide index
 			if (slideIndex >= this._slides.length) {
 				throw 'The slide ' + slideIndex + ' does not exist...';

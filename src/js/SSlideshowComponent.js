@@ -181,6 +181,8 @@ export default class SSlideshowComponent extends SWebComponent {
 			currents : [], 				// all the currents tokens
 			goTos : [] 					// all the goto elements
 		};
+
+		this._changeSlideTimeout = null;
 	}
 
 	/**
@@ -234,10 +236,14 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @protected
 	 */
 	componentWillReceiveProp(name, newVal, oldVal) {
+		if ( ! newVal) return;
 		switch(name) {
 			case 'slide':
-			// case 'slideId':
-				this._goTo(newVal);
+			case 'slideId':
+				clearTimeout(this._changeSlideTimeout);
+				this._changeSlideTimeout = setTimeout(() => {
+					this._goTo(newVal);
+				});
 			break;
 		}
 	}
@@ -264,7 +270,7 @@ export default class SSlideshowComponent extends SWebComponent {
 		this.next();
 
 		// add all classes
-		this._applyStateAttributes();
+		// this._applyStateAttributes();
 
 		// remove the no transmation class to allow animations, etc...
 		setTimeout(() => {
@@ -352,7 +358,7 @@ export default class SSlideshowComponent extends SWebComponent {
 			const slide = goTo.getAttribute(`${this._componentNameDash}-goto`);
 			const idx = this._getSlideIdxById(slide);
 			if (idx === this.props.slide) {
-				goTo.setAttribute('active', true);
+				// goTo.setAttribute('active', true);
 			}
 		});
 		// add the next and previous classes
@@ -572,7 +578,11 @@ export default class SSlideshowComponent extends SWebComponent {
 			'slideId' : slideId
 		});
 	}
-	_goTo(slideIndex) {
+	_goTo(slide) {
+
+		// transform potential slide id in slide idx
+		const slideIndex = this._getSlideIdxById(slide);
+
 		// check the slide index
 		if ( slideIndex >= this._slides.length) {
 			throw `The slide ${slideIndex} does not exist...`;
