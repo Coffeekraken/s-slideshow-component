@@ -131,7 +131,7 @@ Go to a specific slide
 
 Name  |  Type  |  Description  |  Status  |  Default
 ------------  |  ------------  |  ------------  |  ------------  |  ------------
-slideIndex  |  **{ Integer }**  |  The slide index to go to  |  required  |
+slide  |  **{ Integer }**  |  The slide index to go to or the slide id  |  required  |
 
 Return **{ SSlideshowComponent }** The instance itself
 

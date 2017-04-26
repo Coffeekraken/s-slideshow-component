@@ -496,10 +496,25 @@ export default class SSlideshowComponent extends SWebComponent {
 
 	/**
 	 * Go to a specific slide
-	 * @param 	{Integer} 	slideIndex 	The slide index to go to
+	 * @param 	{Integer} 	slide 	The slide index to go to or the slide id
 	 * @return 	{SSlideshowComponent} 	The instance itself
 	 */
-	goTo(slideIndex) {
+	goTo(slide) {
+		// default slide index
+		let slideIndex = 0;
+		// if is a string
+		if (typeof(slide) === 'string') {
+			// find the slide
+			const slideElm = __find(this._slides, (sld) => {
+				return sld.id === slide.replace('#','');
+			});
+			if (slideElm) {
+				slideIndex = this._slides.indexOf(slideElm);
+			}
+		} else if (typeof(slide) === 'number') {
+			// go to slide by idx
+			slideIndex = slide;
+		}
 		// check the slide index
 		if ( slideIndex >= this._slides.length) {
 			throw `The slide ${slideIndex} does not exist...`;

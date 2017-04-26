@@ -501,13 +501,28 @@ var SSlideshowComponent = function (_SWebComponent) {
 
 		/**
    * Go to a specific slide
-   * @param 	{Integer} 	slideIndex 	The slide index to go to
+   * @param 	{Integer} 	slide 	The slide index to go to or the slide id
    * @return 	{SSlideshowComponent} 	The instance itself
    */
 
 	}, {
 		key: 'goTo',
-		value: function goTo(slideIndex) {
+		value: function goTo(slide) {
+			// default slide index
+			var slideIndex = 0;
+			// if is a string
+			if (typeof slide === 'string') {
+				// find the slide
+				var slideElm = __find(this._slides, function (sld) {
+					return sld.id === slide.replace('#', '');
+				});
+				if (slideElm) {
+					slideIndex = this._slides.indexOf(slideElm);
+				}
+			} else if (typeof slide === 'number') {
+				// go to slide by idx
+				slideIndex = slide;
+			}
 			// check the slide index
 			if (slideIndex >= this._slides.length) {
 				throw 'The slide ' + slideIndex + ' does not exist...';
