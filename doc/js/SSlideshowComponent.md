@@ -13,7 +13,8 @@ Features:
 	- ```next``` : Attribute on the next slide
 	- ```before-active``` : Attribute on each slides that are before the active one
 	- ```after-active``` : Attribute on each slides that are after the active one
-	- ```slide="{idx}"``` : Attribute on the slideshow itself that set the active slide
+	- ```slide="{idx}"``` : Attribute on the slideshow itself that set the active slide idx
+	- ```slide-id="{id}"``` : Attribute on the slideshow itself that set the active slide id
 - Nice and easy API
 - And more...
 
