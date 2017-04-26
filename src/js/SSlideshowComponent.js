@@ -2,6 +2,7 @@ import SWebComponent from 'coffeekraken-sugar/js/core/SWebComponent'
 import querySelectorLive from 'coffeekraken-sugar/js/dom/querySelectorLive'
 // import __isInViewport from 'coffeekraken-sugar/js/dom/isInViewport'
 import __autoCast from 'coffeekraken-sugar/js/utils/string/autoCast'
+import __find from 'lodash/find'
 
 /**
  * @name 		SSlideshowComponent

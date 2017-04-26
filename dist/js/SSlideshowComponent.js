@@ -18,6 +18,10 @@ var _autoCast = require('coffeekraken-sugar/js/utils/string/autoCast');
 
 var _autoCast2 = _interopRequireDefault(_autoCast);
 
+var _find = require('lodash/find');
+
+var _find2 = _interopRequireDefault(_find);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -513,7 +517,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 			// if is a string
 			if (typeof slide === 'string') {
 				// find the slide
-				var slideElm = __find(this._slides, function (sld) {
+				var slideElm = (0, _find2.default)(this._slides, function (sld) {
 					return sld.id === slide.replace('#', '');
 				});
 				if (slideElm) {
