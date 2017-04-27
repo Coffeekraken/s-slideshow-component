@@ -739,7 +739,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @return 	{Boolean} 	true if the first slide is active
 	 */
 	isLast() {
-		return this._slides[this.slides.length-1].hasAttribute('active');
+		return this._slides[this._slides.length-1].hasAttribute('active');
 	}
 
 	/**

@@ -792,7 +792,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: 'isLast',
 		value: function isLast() {
-			return this._slides[this.slides.length - 1].hasAttribute('active');
+			return this._slides[this._slides.length - 1].hasAttribute('active');
 		}
 
 		/**
