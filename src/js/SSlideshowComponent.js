@@ -20,6 +20,8 @@ import __find from 'lodash/find'
  * 	- ```after-active``` : Attribute on each slides that are after the active one
  * 	- ```slide="{idx}"``` : Attribute on the slideshow itself that set the active slide idx
  * 	- ```slide-id="{id}"``` : Attribute on the slideshow itself that set the active slide id
+ * 	- ```last``` : Attribute on the slideshow itself when the slideshow is at the last slide
+ * 	- ```first``` : Attribute on the slideshow itself when the slideshow is at the first slide
  * - Nice and easy API
  * - And more...
  *
@@ -332,20 +334,9 @@ export default class SSlideshowComponent extends SWebComponent {
 		[].forEach.call(this._refs.goTos, (goTo) => {
 			goTo.removeAttribute('active');
 		});
-		// remove the previous and next classes
-		// if (this.getPreviousSlide()) {
-		// 	this.getPreviousSlide().removeAttribute('previous');
-		// }
-		// if (this.getNextSlide()) {
-		// 	this.getNextSlide().removeAttribute('next');
-		// }
-		// // unapply the first and last classes
-		// if (this.getFirstSlide()) {
-		// 	this.getFirstSlide().removeAttribute('first');
-		// }
-		// if (this.getLastSlide()) {
-		// 	this.getLastSlide().removeAttribute('last');
-		// }
+		// remove attributes on the slideshow itself
+		this.removeAttribute('last');
+		this.removeAttribute('first');
 	}
 
 	/**
@@ -396,6 +387,13 @@ export default class SSlideshowComponent extends SWebComponent {
 				slide.setAttribute('after-active', true);
 			}
 		});
+		// first and last attribute on the slideshow itself
+		if (this.isLast()) {
+			this.setAttribute('last', true);
+		}
+		if (this.isFirst()) {
+			this.setAttribute('first', true);
+		}
 	}
 
 	/**

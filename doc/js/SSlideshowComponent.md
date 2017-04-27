@@ -15,6 +15,8 @@ Features:
 	- ```after-active``` : Attribute on each slides that are after the active one
 	- ```slide="{idx}"``` : Attribute on the slideshow itself that set the active slide idx
 	- ```slide-id="{id}"``` : Attribute on the slideshow itself that set the active slide id
+	- ```last``` : Attribute on the slideshow itself when the slideshow is at the last slide
+	- ```first``` : Attribute on the slideshow itself when the slideshow is at the first slide
 - Nice and easy API
 - And more...
 
