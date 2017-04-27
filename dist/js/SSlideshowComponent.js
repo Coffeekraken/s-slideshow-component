@@ -154,12 +154,12 @@ var SSlideshowComponent = function (_SWebComponent) {
 			this._updateReferences();
 
 			// grab the slides and maintain stack up to date
-			// this._slides = [].slice.call(this.querySelectorAll(`${this._componentNameDash}-slide, [${this._componentNameDash}-slide]`));
-			// // init slides
-			// this._slides.forEach((slide) => {
-			// 	this._initSlide(slide);
-			// });
-			//
+			this._slides = [].slice.call(this.querySelectorAll(this._componentNameDash + '-slide, [' + this._componentNameDash + '-slide]'));
+			// init slides
+			this._slides.forEach(function (slide) {
+				_this2._initSlide(slide);
+			});
+			// listen for new items
 			this._slidesObserver = (0, _querySelectorLive2.default)(this._componentNameDash + '-slide, [' + this._componentNameDash + '-slide]', {
 				rootNode: this
 			}).stack(this._slides).subscribe(function (elm) {
