@@ -239,7 +239,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @protected
 	 */
 	componentWillReceiveProp(name, newVal, oldVal) {
-		if ( ! newVal) return;
+		if (newVal === undefined || newVal === null) return;
 		switch(name) {
 			case 'slide':
 			case 'slideId':

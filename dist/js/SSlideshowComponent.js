@@ -203,7 +203,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 		value: function componentWillReceiveProp(name, newVal, oldVal) {
 			var _this3 = this;
 
-			if (!newVal) return;
+			if (newVal === undefined || newVal === null) return;
 			switch (name) {
 				case 'slide':
 				case 'slideId':
