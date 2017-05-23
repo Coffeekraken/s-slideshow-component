@@ -26,7 +26,6 @@ import __find from 'lodash/find'
  * - And more...
  *
  *
- * @styleguide 		Objects / Slideshow
  * @example 		html
  * <s-slideshow loop>
  * 	<div s-slideshow-slide>

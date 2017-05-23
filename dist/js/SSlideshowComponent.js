@@ -54,7 +54,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * - And more...
  *
  *
- * @styleguide 		Objects / Slideshow
  * @example 		html
  * <s-slideshow loop>
  * 	<div s-slideshow-slide>
