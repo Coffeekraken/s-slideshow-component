@@ -51,7 +51,7 @@ module.exports = {
 								</a>
 							</div>
 						</div>
-						<div s-slideshow-slide>
+						<div s-slideshow-slide id="my-cool-slide">
 							<img class="abs-cover" src="https://source.unsplash.com//category/people/800x600" />
 							<div class="slideshow__metas slideshow__metas--secondary">
 								<h1 class="h3 m-b">Hello World #3</h1>
@@ -84,6 +84,9 @@ module.exports = {
 					</a>
 					<a href="#" onclick="document.querySelector('s-slideshow').goTo(3)" class="btn">
 						Go to slide 3
+					</a>
+					<a href="#" onclick="document.querySelector('s-slideshow').goTo('my-cool-slide')" class="btn">
+						Go to "my-cool-slide"
 					</a>
 				</div>
 			`
