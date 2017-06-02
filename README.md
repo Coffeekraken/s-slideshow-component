@@ -50,7 +50,7 @@ Create nice, simple and fully customizable slideshow.
 3. [Get Started](#readme-get-started)
 4. [Javascript API](doc/js)
 5. [SASS API](doc/sass)
-6. [Sugar Web Components Documentation](http://github.com/coffeekraken/sugar/doc/webcomponent.md)
+6. [Sugar Web Components Documentation](http://github.com/coffeekraken/sugar/doc/js/webcomponents.md)
 7. [Browsers support](#readme-browsers-support)
 8. [Contribute](#readme-contribute)
 9. [Who are Coffeekraken?](#readme-who-are-coffeekraken)
@@ -60,7 +60,7 @@ Create nice, simple and fully customizable slideshow.
 ## Install
 
 ```
-npm install https://git@github.com/coffeekraken/s-slideshow-component.git --save
+npm install coffeekraken-s-slideshow-component --save
 ```
 
 <a name="readme-get-started"></a>
