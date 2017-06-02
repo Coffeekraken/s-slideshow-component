@@ -13,7 +13,10 @@ Features:
 	- ```next``` : Attribute on the next slide
 	- ```before-active``` : Attribute on each slides that are before the active one
 	- ```after-active``` : Attribute on each slides that are after the active one
-	- ```slide="{idx}"``` : Attribute on the slideshow itself that set the active slide
+	- ```slide="{idx}"``` : Attribute on the slideshow itself that set the active slide idx
+	- ```slide-id="{id}"``` : Attribute on the slideshow itself that set the active slide id
+	- ```last``` : Attribute on the slideshow itself when the slideshow is at the last slide
+	- ```first``` : Attribute on the slideshow itself when the slideshow is at the first slide
 - Nice and easy API
 - And more...
 
@@ -50,6 +53,15 @@ Here's the list of available attribute to set on the element.
 Set the active slide by index
 
 Type : **{ Integer }**
+
+Default : **null**
+
+
+### slideId
+
+Set the slide by id and not by idx as for the slide prop
+
+Type : **{ [String](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/String) }**
 
 Default : **null**
 
@@ -131,7 +143,7 @@ Go to a specific slide
 
 Name  |  Type  |  Description  |  Status  |  Default
 ------------  |  ------------  |  ------------  |  ------------  |  ------------
-slideIndex  |  **{ Integer }**  |  The slide index to go to  |  required  |
+slide  |  **{ Integer }**  |  The slide index to go to or the slide id  |  required  |
 
 Return **{ SSlideshowComponent }** The instance itself
 

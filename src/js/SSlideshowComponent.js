@@ -1,7 +1,8 @@
 import SWebComponent from 'coffeekraken-sugar/js/core/SWebComponent'
-// import querySelectorLive from 'coffeekraken-sugar/js/dom/querySelectorLive'
+import querySelectorLive from 'coffeekraken-sugar/js/dom/querySelectorLive'
 // import __isInViewport from 'coffeekraken-sugar/js/dom/isInViewport'
 import __autoCast from 'coffeekraken-sugar/js/utils/string/autoCast'
+import __find from 'lodash/find'
 
 /**
  * @name 		SSlideshowComponent
@@ -17,12 +18,14 @@ import __autoCast from 'coffeekraken-sugar/js/utils/string/autoCast'
  * 	- ```next``` : Attribute on the next slide
  * 	- ```before-active``` : Attribute on each slides that are before the active one
  * 	- ```after-active``` : Attribute on each slides that are after the active one
- * 	- ```slide="{idx}"``` : Attribute on the slideshow itself that set the active slide
+ * 	- ```slide="{idx}"``` : Attribute on the slideshow itself that set the active slide idx
+ * 	- ```slide-id="{id}"``` : Attribute on the slideshow itself that set the active slide id
+ * 	- ```last``` : Attribute on the slideshow itself when the slideshow is at the last slide
+ * 	- ```first``` : Attribute on the slideshow itself when the slideshow is at the first slide
  * - Nice and easy API
  * - And more...
  *
  *
- * @styleguide 		Objects / Slideshow
  * @example 		html
  * <s-slideshow loop>
  * 	<div s-slideshow-slide>
@@ -58,6 +61,13 @@ export default class SSlideshowComponent extends SWebComponent {
 			 * @type 		{Integer}
 			 */
 			slide : null,
+
+			/**
+			 * Set the slide by id and not by idx as for the slide prop
+			 * @prop
+			 * @type 		{String}
+			 */
+			slideId : null,
 
 			/**
 			 * Set if the slideshow is infinite
@@ -110,7 +120,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @protected
 	 */
 	static get physicalProps() {
-		return ['slide'];
+		return ['slide', 'slideId'];
 	}
 
 	/**
@@ -173,6 +183,8 @@ export default class SSlideshowComponent extends SWebComponent {
 			currents : [], 				// all the currents tokens
 			goTos : [] 					// all the goto elements
 		};
+
+		this._changeSlideTimeout = null;
 	}
 
 	/**
@@ -192,13 +204,13 @@ export default class SSlideshowComponent extends SWebComponent {
 		this._slides.forEach((slide) => {
 			this._initSlide(slide);
 		});
-		// this._slidesObserver = querySelectorLive(`${this._componentNameDash}-slide, [${this._componentNameDash}-slide]`, {
-		// 	rootNode : this
-		// }).stack(this._slides).subscribe((elm) => {
-		// 	console.log('new slide', elm);
-		// 	// init new slide
-		// 	this._initSlide(elm);
-		// });
+		// listen for new items
+		this._slidesObserver = querySelectorLive(`${this._componentNameDash}-slide, [${this._componentNameDash}-slide]`, {
+			rootNode : this
+		}).stack(this._slides).subscribe((elm) => {
+			// init new slide
+			this._initSlide(elm);
+		});
 
 		// onInit callback
 		this.props.onInit && this.props.onInit(this);
@@ -226,9 +238,14 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @protected
 	 */
 	componentWillReceiveProp(name, newVal, oldVal) {
+		if (newVal === undefined || newVal === null) return;
 		switch(name) {
 			case 'slide':
-				this._goTo(newVal);
+			case 'slideId':
+				clearTimeout(this._changeSlideTimeout);
+				this._changeSlideTimeout = setTimeout(() => {
+					this._goTo(newVal);
+				});
 			break;
 		}
 	}
@@ -255,7 +272,7 @@ export default class SSlideshowComponent extends SWebComponent {
 		this.next();
 
 		// add all classes
-		this._applyStateAttributes();
+		// this._applyStateAttributes();
 
 		// remove the no transmation class to allow animations, etc...
 		setTimeout(() => {
@@ -301,30 +318,24 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * Remove the attributes from the elements
 	 */
 	_unapplyStateAttrubutes() {
+
 		// unactivate all the slides
 		this._slides.forEach((slide) => {
 			slide.removeAttribute('active');
 			slide.removeAttribute('before-active');
 			slide.removeAttribute('after-active');
+			slide.removeAttribute('next');
+			slide.removeAttribute('previous');
+			slide.removeAttribute('first');
+			slide.removeAttribute('last');
 		});
 		// remove the active class on all goto
 		[].forEach.call(this._refs.goTos, (goTo) => {
 			goTo.removeAttribute('active');
 		});
-		// remove the previous and next classes
-		if (this.getPreviousSlide()) {
-			this.getPreviousSlide().removeAttribute('previous');
-		}
-		if (this.getNextSlide()) {
-			this.getNextSlide().removeAttribute('next');
-		}
-		// unapply the first and last classes
-		if (this.getFirstSlide()) {
-			this.getFirstSlide().removeAttribute('first');
-		}
-		if (this.getLastSlide()) {
-			this.getLastSlide().removeAttribute('last');
-		}
+		// remove attributes on the slideshow itself
+		this.removeAttribute('last');
+		this.removeAttribute('first');
 	}
 
 	/**
@@ -335,8 +346,9 @@ export default class SSlideshowComponent extends SWebComponent {
 		this._activeSlide.setAttribute('active', true);
 		// goto classes
 		[].forEach.call(this._refs.goTos, (goTo) => {
-			const idx = goTo.getAttribute(`${this._componentNameDash}-goto`);
-			if (idx && __autoCast(idx) === this.props.slide) {
+			const slide = goTo.getAttribute(`${this._componentNameDash}-goto`);
+			const idx = this._getSlideIdxById(slide);
+			if (idx === this.props.slide) {
 				goTo.setAttribute('active', true);
 			}
 		});
@@ -374,6 +386,37 @@ export default class SSlideshowComponent extends SWebComponent {
 				slide.setAttribute('after-active', true);
 			}
 		});
+		// first and last attribute on the slideshow itself
+		if (this.isLast()) {
+			this.setAttribute('last', true);
+		}
+		if (this.isFirst()) {
+			this.setAttribute('first', true);
+		}
+	}
+
+	/**
+	 * Get slide idx by id
+	 * @param 		{String} 		id 		The slide id
+	 * @return 		{Integer} 				The slide idx
+	 */
+	_getSlideIdxById(id) {
+		// autocast the id
+		id = __autoCast(id);
+		// if the id is already an integer idx
+		if (typeof(id) === 'number') return id;
+		// if is a string
+		if (typeof(id) === 'string') {
+			// find the slide
+			const slideElm = __find(this._slides, (sld) => {
+				return sld.id === id.replace('#','');
+			});
+			if (slideElm) {
+				return this._slides.indexOf(slideElm);
+			}
+		}
+		// by default, return first slide
+		return 0;
 	}
 
 	/**
@@ -439,8 +482,17 @@ export default class SSlideshowComponent extends SWebComponent {
 		   activeSlideIndex = 0;
 		}
 
+		// check if the slide has an id
+		let slideId = null;
+		if (this._slides[activeSlideIndex].hasAttribute('id')) {
+			slideId = this._slides[activeSlideIndex].id;
+		}
+
 		// set slide prop
-		this.setProp('slide', activeSlideIndex);
+		this.setProps({
+			'slide': activeSlideIndex,
+			'slideId' : slideId
+		});
 
 		// onNext callback
 		this.props.onNext && this.props.onNext(this);
@@ -480,8 +532,17 @@ export default class SSlideshowComponent extends SWebComponent {
 			activeSlideIndex = this._slides.length-1;
 		}
 
+		// check if the slide has an id
+		let slideId = null;
+		if (this._slides[activeSlideIndex].hasAttribute('id')) {
+			slideId = this._slides[activeSlideIndex].id;
+		}
+
 		// set slide prop
-		this.setProp('slide', activeSlideIndex);
+		this.setProps({
+			'slide': activeSlideIndex,
+			'slideId' : slideId
+		});
 
 		// onPrevious callback
 		this.props.onPrevious && this.props.onPrevious(this);
@@ -492,17 +553,34 @@ export default class SSlideshowComponent extends SWebComponent {
 
 	/**
 	 * Go to a specific slide
-	 * @param 	{Integer} 	slideIndex 	The slide index to go to
+	 * @param 	{Integer} 	slide 	The slide index to go to or the slide id
 	 * @return 	{SSlideshowComponent} 	The instance itself
 	 */
-	goTo(slideIndex) {
+	goTo(slide) {
+		// get the slide idx
+		const slideIndex = this._getSlideIdxById(slide);
 		// check the slide index
 		if ( slideIndex >= this._slides.length) {
 			throw `The slide ${slideIndex} does not exist...`;
 		}
-		this.setProp('slide', slideIndex);
+
+		// check if the slide has an id
+		let slideId = null;
+		if (this._slides[slideIndex].hasAttribute('id')) {
+			slideId = this._slides[slideIndex].id;
+		}
+
+		// set slide prop
+		this.setProps({
+			'slide': slideIndex,
+			'slideId' : slideId
+		});
 	}
-	_goTo(slideIndex) {
+	_goTo(slide) {
+
+		// transform potential slide id in slide idx
+		const slideIndex = this._getSlideIdxById(slide);
+
 		// check the slide index
 		if ( slideIndex >= this._slides.length) {
 			throw `The slide ${slideIndex} does not exist...`;
@@ -660,7 +738,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @return 	{Boolean} 	true if the first slide is active
 	 */
 	isLast() {
-		return this._slides[this.slides.length-1].hasAttribute('active');
+		return this._slides[this._slides.length-1].hasAttribute('active');
 	}
 
 	/**

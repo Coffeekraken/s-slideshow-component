@@ -10,9 +10,17 @@ var _SWebComponent2 = require('coffeekraken-sugar/js/core/SWebComponent');
 
 var _SWebComponent3 = _interopRequireDefault(_SWebComponent2);
 
+var _querySelectorLive = require('coffeekraken-sugar/js/dom/querySelectorLive');
+
+var _querySelectorLive2 = _interopRequireDefault(_querySelectorLive);
+
 var _autoCast = require('coffeekraken-sugar/js/utils/string/autoCast');
 
 var _autoCast2 = _interopRequireDefault(_autoCast);
+
+var _find = require('lodash/find');
+
+var _find2 = _interopRequireDefault(_find);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21,7 +29,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-// import querySelectorLive from 'coffeekraken-sugar/js/dom/querySelectorLive'
 // import __isInViewport from 'coffeekraken-sugar/js/dom/isInViewport'
 
 
@@ -39,12 +46,14 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * 	- ```next``` : Attribute on the next slide
  * 	- ```before-active``` : Attribute on each slides that are before the active one
  * 	- ```after-active``` : Attribute on each slides that are after the active one
- * 	- ```slide="{idx}"``` : Attribute on the slideshow itself that set the active slide
+ * 	- ```slide="{idx}"``` : Attribute on the slideshow itself that set the active slide idx
+ * 	- ```slide-id="{id}"``` : Attribute on the slideshow itself that set the active slide id
+ * 	- ```last``` : Attribute on the slideshow itself when the slideshow is at the last slide
+ * 	- ```first``` : Attribute on the slideshow itself when the slideshow is at the first slide
  * - Nice and easy API
  * - And more...
  *
  *
- * @styleguide 		Objects / Slideshow
  * @example 		html
  * <s-slideshow loop>
  * 	<div s-slideshow-slide>
@@ -125,6 +134,8 @@ var SSlideshowComponent = function (_SWebComponent) {
 				currents: [], // all the currents tokens
 				goTos: [] // all the goto elements
 			};
+
+			this._changeSlideTimeout = null;
 		}
 
 		/**
@@ -149,13 +160,13 @@ var SSlideshowComponent = function (_SWebComponent) {
 			this._slides.forEach(function (slide) {
 				_this2._initSlide(slide);
 			});
-			// this._slidesObserver = querySelectorLive(`${this._componentNameDash}-slide, [${this._componentNameDash}-slide]`, {
-			// 	rootNode : this
-			// }).stack(this._slides).subscribe((elm) => {
-			// 	console.log('new slide', elm);
-			// 	// init new slide
-			// 	this._initSlide(elm);
-			// });
+			// listen for new items
+			this._slidesObserver = (0, _querySelectorLive2.default)(this._componentNameDash + '-slide, [' + this._componentNameDash + '-slide]', {
+				rootNode: this
+			}).stack(this._slides).subscribe(function (elm) {
+				// init new slide
+				_this2._initSlide(elm);
+			});
 
 			// onInit callback
 			this.props.onInit && this.props.onInit(this);
@@ -189,9 +200,16 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: 'componentWillReceiveProp',
 		value: function componentWillReceiveProp(name, newVal, oldVal) {
+			var _this3 = this;
+
+			if (newVal === undefined || newVal === null) return;
 			switch (name) {
 				case 'slide':
-					this._goTo(newVal);
+				case 'slideId':
+					clearTimeout(this._changeSlideTimeout);
+					this._changeSlideTimeout = setTimeout(function () {
+						_this3._goTo(newVal);
+					});
 					break;
 			}
 		}
@@ -217,7 +235,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_enable',
 		value: function _enable() {
-			var _this3 = this;
+			var _this4 = this;
 
 			// no transmation
 			this.classList.add('clear-transmations');
@@ -226,11 +244,11 @@ var SSlideshowComponent = function (_SWebComponent) {
 			this.next();
 
 			// add all classes
-			this._applyStateAttributes();
+			// this._applyStateAttributes();
 
 			// remove the no transmation class to allow animations, etc...
 			setTimeout(function () {
-				_this3.classList.remove('clear-transmations');
+				_this4.classList.remove('clear-transmations');
 			});
 
 			// maintain chainability
@@ -284,30 +302,24 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_unapplyStateAttrubutes',
 		value: function _unapplyStateAttrubutes() {
+
 			// unactivate all the slides
 			this._slides.forEach(function (slide) {
 				slide.removeAttribute('active');
 				slide.removeAttribute('before-active');
 				slide.removeAttribute('after-active');
+				slide.removeAttribute('next');
+				slide.removeAttribute('previous');
+				slide.removeAttribute('first');
+				slide.removeAttribute('last');
 			});
 			// remove the active class on all goto
 			[].forEach.call(this._refs.goTos, function (goTo) {
 				goTo.removeAttribute('active');
 			});
-			// remove the previous and next classes
-			if (this.getPreviousSlide()) {
-				this.getPreviousSlide().removeAttribute('previous');
-			}
-			if (this.getNextSlide()) {
-				this.getNextSlide().removeAttribute('next');
-			}
-			// unapply the first and last classes
-			if (this.getFirstSlide()) {
-				this.getFirstSlide().removeAttribute('first');
-			}
-			if (this.getLastSlide()) {
-				this.getLastSlide().removeAttribute('last');
-			}
+			// remove attributes on the slideshow itself
+			this.removeAttribute('last');
+			this.removeAttribute('first');
 		}
 
 		/**
@@ -317,14 +329,15 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_applyStateAttributes',
 		value: function _applyStateAttributes() {
-			var _this4 = this;
+			var _this5 = this;
 
 			// activate the current slide
 			this._activeSlide.setAttribute('active', true);
 			// goto classes
 			[].forEach.call(this._refs.goTos, function (goTo) {
-				var idx = goTo.getAttribute(_this4._componentNameDash + '-goto');
-				if (idx && (0, _autoCast2.default)(idx) === _this4.props.slide) {
+				var slide = goTo.getAttribute(_this5._componentNameDash + '-goto');
+				var idx = _this5._getSlideIdxById(slide);
+				if (idx === _this5.props.slide) {
 					goTo.setAttribute('active', true);
 				}
 			});
@@ -362,6 +375,40 @@ var SSlideshowComponent = function (_SWebComponent) {
 					slide.setAttribute('after-active', true);
 				}
 			});
+			// first and last attribute on the slideshow itself
+			if (this.isLast()) {
+				this.setAttribute('last', true);
+			}
+			if (this.isFirst()) {
+				this.setAttribute('first', true);
+			}
+		}
+
+		/**
+   * Get slide idx by id
+   * @param 		{String} 		id 		The slide id
+   * @return 		{Integer} 				The slide idx
+   */
+
+	}, {
+		key: '_getSlideIdxById',
+		value: function _getSlideIdxById(id) {
+			// autocast the id
+			id = (0, _autoCast2.default)(id);
+			// if the id is already an integer idx
+			if (typeof id === 'number') return id;
+			// if is a string
+			if (typeof id === 'string') {
+				// find the slide
+				var slideElm = (0, _find2.default)(this._slides, function (sld) {
+					return sld.id === id.replace('#', '');
+				});
+				if (slideElm) {
+					return this._slides.indexOf(slideElm);
+				}
+			}
+			// by default, return first slide
+			return 0;
 		}
 
 		/**
@@ -371,18 +418,18 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_applyTokens',
 		value: function _applyTokens() {
-			var _this5 = this;
+			var _this6 = this;
 
 			// apply current
 			if (this._refs.current) {
 				[].forEach.call(this._refs.current, function (current) {
-					current.innerHTML = _this5.props.slide + 1;
+					current.innerHTML = _this6.props.slide + 1;
 				});
 			}
 			// apply total
 			if (this._refs.total) {
 				[].forEach.call(this._refs.total, function (total) {
-					total.innerHTML = _this5._slides.length;
+					total.innerHTML = _this6._slides.length;
 				});
 			}
 		}
@@ -438,8 +485,17 @@ var SSlideshowComponent = function (_SWebComponent) {
 				activeSlideIndex = 0;
 			}
 
+			// check if the slide has an id
+			var slideId = null;
+			if (this._slides[activeSlideIndex].hasAttribute('id')) {
+				slideId = this._slides[activeSlideIndex].id;
+			}
+
 			// set slide prop
-			this.setProp('slide', activeSlideIndex);
+			this.setProps({
+				'slide': activeSlideIndex,
+				'slideId': slideId
+			});
 
 			// onNext callback
 			this.props.onNext && this.props.onNext(this);
@@ -482,8 +538,17 @@ var SSlideshowComponent = function (_SWebComponent) {
 				activeSlideIndex = this._slides.length - 1;
 			}
 
+			// check if the slide has an id
+			var slideId = null;
+			if (this._slides[activeSlideIndex].hasAttribute('id')) {
+				slideId = this._slides[activeSlideIndex].id;
+			}
+
 			// set slide prop
-			this.setProp('slide', activeSlideIndex);
+			this.setProps({
+				'slide': activeSlideIndex,
+				'slideId': slideId
+			});
 
 			// onPrevious callback
 			this.props.onPrevious && this.props.onPrevious(this);
@@ -494,22 +559,39 @@ var SSlideshowComponent = function (_SWebComponent) {
 
 		/**
    * Go to a specific slide
-   * @param 	{Integer} 	slideIndex 	The slide index to go to
+   * @param 	{Integer} 	slide 	The slide index to go to or the slide id
    * @return 	{SSlideshowComponent} 	The instance itself
    */
 
 	}, {
 		key: 'goTo',
-		value: function goTo(slideIndex) {
+		value: function goTo(slide) {
+			// get the slide idx
+			var slideIndex = this._getSlideIdxById(slide);
 			// check the slide index
 			if (slideIndex >= this._slides.length) {
 				throw 'The slide ' + slideIndex + ' does not exist...';
 			}
-			this.setProp('slide', slideIndex);
+
+			// check if the slide has an id
+			var slideId = null;
+			if (this._slides[slideIndex].hasAttribute('id')) {
+				slideId = this._slides[slideIndex].id;
+			}
+
+			// set slide prop
+			this.setProps({
+				'slide': slideIndex,
+				'slideId': slideId
+			});
 		}
 	}, {
 		key: '_goTo',
-		value: function _goTo(slideIndex) {
+		value: function _goTo(slide) {
+
+			// transform potential slide id in slide idx
+			var slideIndex = this._getSlideIdxById(slide);
+
 			// check the slide index
 			if (slideIndex >= this._slides.length) {
 				throw 'The slide ' + slideIndex + ' does not exist...';
@@ -709,7 +791,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: 'isLast',
 		value: function isLast() {
-			return this._slides[this.slides.length - 1].hasAttribute('active');
+			return this._slides[this._slides.length - 1].hasAttribute('active');
 		}
 
 		/**
@@ -755,6 +837,13 @@ var SSlideshowComponent = function (_SWebComponent) {
      * @type 		{Integer}
      */
 				slide: null,
+
+				/**
+     * Set the slide by id and not by idx as for the slide prop
+     * @prop
+     * @type 		{String}
+     */
+				slideId: null,
 
 				/**
      * Set if the slideshow is infinite
@@ -810,7 +899,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: 'physicalProps',
 		get: function get() {
-			return ['slide'];
+			return ['slide', 'slideId'];
 		}
 	}]);
 
