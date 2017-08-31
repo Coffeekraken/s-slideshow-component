@@ -22,6 +22,10 @@ var _find = require('lodash/find');
 
 var _find2 = _interopRequireDefault(_find);
 
+var _dispatchEvent = require('coffeekraken-sugar/js/dom/dispatchEvent');
+
+var _dispatchEvent2 = _interopRequireDefault(_dispatchEvent);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -72,6 +76,24 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  *
  * @author 		Olivier Bossel <olivier.bossel@gmail.com>
  */
+
+/**
+ * @name 	beforeChange
+ * Dispatched before the change happen
+ * @event
+ */
+
+/**
+* @name 	change
+* Dispatched when the change happen
+* @event
+*/
+
+/**
+* @name 	afterChange
+* Dispatched after the change happen
+* @event
+*/
 
 var SSlideshowComponent = function (_SWebComponent) {
 	_inherits(SSlideshowComponent, _SWebComponent);
@@ -599,6 +621,9 @@ var SSlideshowComponent = function (_SWebComponent) {
 			// beforeChange callback
 			this.props.beforeChange && this.props.beforeChange(this);
 
+			// event
+			(0, _dispatchEvent2.default)(this, 'beforeChange');
+
 			// unapply classes
 			this._unapplyStateAttrubutes();
 
@@ -611,11 +636,17 @@ var SSlideshowComponent = function (_SWebComponent) {
 			// onChange callback
 			this.props.onChange && this.props.onChange(this);
 
+			// change event
+			(0, _dispatchEvent2.default)(this, 'change');
+
 			// apply classes
 			this._applyStateAttributes();
 
 			// afterChange callback
 			this.props.afterChange && this.props.afterChange(this);
+
+			// event
+			(0, _dispatchEvent2.default)(this, 'afterChange');
 
 			// maintain chainability
 			return this;
