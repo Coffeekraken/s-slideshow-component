@@ -247,3 +247,21 @@ Return **{ [Boolean](https://developer.mozilla.org/fr/docs/Web/JavaScript/Refere
 Return if the first slide is active
 
 Return **{ [Boolean](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Boolean) }** true if the first slide is active
+
+
+## Events
+
+
+### beforeChange
+
+Dispatched before the change happen
+
+
+### change
+
+Dispatched when the change happen
+
+
+### afterChange
+
+Dispatched after the change happen
