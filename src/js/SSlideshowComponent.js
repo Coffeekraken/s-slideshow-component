@@ -3,6 +3,7 @@ import querySelectorLive from 'coffeekraken-sugar/js/dom/querySelectorLive'
 // import __isInViewport from 'coffeekraken-sugar/js/dom/isInViewport'
 import __autoCast from 'coffeekraken-sugar/js/utils/string/autoCast'
 import __find from 'lodash/find'
+import __dispatchEvent from 'coffeekraken-sugar/js/dom/dispatchEvent';
 
 /**
  * @name 		SSlideshowComponent
@@ -43,6 +44,24 @@ import __find from 'lodash/find'
  * </s-slideshow>
  *
  * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+
+/**
+ * @name 	beforeChange
+ * Dispatched before the change happen
+ * @event
+ */
+
+ /**
+ * @name 	change
+ * Dispatched when the change happen
+ * @event
+ */
+
+ /**
+ * @name 	afterChange
+ * Dispatched after the change happen
+ * @event
  */
 
 export default class SSlideshowComponent extends SWebComponent {
@@ -588,6 +607,9 @@ export default class SSlideshowComponent extends SWebComponent {
 		// beforeChange callback
 		this.props.beforeChange && this.props.beforeChange(this);
 
+		// event
+		__dispatchEvent(this, 'beforeChange');
+
 		// unapply classes
 		this._unapplyStateAttrubutes();
 
@@ -600,11 +622,17 @@ export default class SSlideshowComponent extends SWebComponent {
 		// onChange callback
 		this.props.onChange && this.props.onChange(this);
 
+		// change event
+		__dispatchEvent(this, 'change');
+
 		// apply classes
 		this._applyStateAttributes();
 
 		// afterChange callback
 		this.props.afterChange && this.props.afterChange(this);
+
+		// event
+		__dispatchEvent(this, 'afterChange');
 
 		// maintain chainability
 		return this;
