@@ -4,6 +4,7 @@ import querySelectorLive from 'coffeekraken-sugar/js/dom/querySelectorLive'
 import __autoCast from 'coffeekraken-sugar/js/utils/string/autoCast'
 import __find from 'lodash/find'
 import __dispatchEvent from 'coffeekraken-sugar/js/dom/dispatchEvent';
+import __debounce from 'coffeekraken-sugar/js/utils/functions/debounce';
 
 /**
  * @name 		SSlideshowComponent
@@ -94,6 +95,15 @@ export default class SSlideshowComponent extends SWebComponent {
 			 * @tyoe 	{Boolean}
 			 */
 			loop : false,
+
+			/**
+			 * Set if want that the plugin set the height of the s-slideshow tag accordingly to the active slide height.
+			 * This is usefull for js animations etc...
+			 * If set as string, it will be treated as a css selector to get the element inside the slider on which to apply the slide height
+			 * @prop
+			 * @type 	{Boolean|String}
+			 */
+			applySlideHeight : false,
 
 			/**
 			 * Callback when the slideshow is inited
@@ -234,6 +244,20 @@ export default class SSlideshowComponent extends SWebComponent {
 		// onInit callback
 		this.props.onInit && this.props.onInit(this);
 
+		// store the onResize debounced function
+		this._onResizeDebounced = __debounce(this._applyCurrentSlideHeightToSlideshow.bind(this), 250)
+
+		// if need to apply the slideshow height according to the slide one,
+		// listen on window resize to reapply it correctly
+		if (this.props.applySlideHeight) {
+			window.addEventListener('resize', this._onResizeDebounced);
+
+			// listen for content of the slideshow being loaded like images, etc...
+			this.addEventListener('load', (e) => {
+				this._applyCurrentSlideHeightToSlideshow();
+			}, true);
+		}
+
 		// enable
 		setTimeout(() => {
 			this._enable();
@@ -307,6 +331,10 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @return 	{SSlideshowComponent}
 	 */
 	_disable() {
+
+		// stop listening for certain events
+		window.removeEventListener('resize', this._onResizeDebounced);
+
 		// remove all classes
 		this._unapplyStateAttrubutes();
 		// maintain chainability
@@ -412,6 +440,26 @@ export default class SSlideshowComponent extends SWebComponent {
 		if (this.isFirst()) {
 			this.setAttribute('first', true);
 		}
+	}
+
+	/**
+	 * Apply the current slide height to the slideshow element itself
+	 */
+	_applyCurrentSlideHeightToSlideshow() {
+
+		if ( ! this.getActiveSlide()) return
+
+		if ( ! this._applyCurrentSlideHeightToSlideshowTarget && typeof(this.props.applySlideHeight) === 'string') {
+			// get the target to apply the height on
+			this._applyCurrentSlideHeightToSlideshowTarget = this.querySelector(this.props.applySlideHeight);
+		} else if ( ! this._applyCurrentSlideHeightToSlideshowTarget) {
+			this._applyCurrentSlideHeightToSlideshowTarget = this;
+		}
+
+		const activeSlideHeight = this.getActiveSlide().offsetHeight;
+		if ( ! this._applyCurrentSlideHeightToSlideshowTarget) return;
+		if ( ! activeSlideHeight) return
+		this._applyCurrentSlideHeightToSlideshowTarget.style.height = activeSlideHeight + 'px'
 	}
 
 	/**
@@ -615,6 +663,12 @@ export default class SSlideshowComponent extends SWebComponent {
 
 		// active the good slide
 		this._activeSlide = this._slides[slideIndex];
+
+		// if need to apply the current slide height,
+		// do it now
+		if (this.props.applySlideHeight) {
+			this._applyCurrentSlideHeightToSlideshow();
+		}
 
 		// apply total and current tokens
 		this._applyTokens();

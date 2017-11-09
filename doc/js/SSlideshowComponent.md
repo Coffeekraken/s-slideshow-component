@@ -73,6 +73,17 @@ Set if the slideshow is infinite
 Default : **false**
 
 
+### applySlideHeight
+
+Set if want that the plugin set the height of the s-slideshow tag accordingly to the active slide height.
+This is usefull for js animations etc...
+If set as string, it will be treated as a css selector to get the element inside the slider on which to apply the slide height
+
+Type : **{ [Boolean](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Boolean) , [String](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/String) }**
+
+Default : **false**
+
+
 ### onInit
 
 Callback when the slideshow is inited
