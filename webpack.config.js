@@ -2,7 +2,7 @@ module.exports = {
 	entry: {
 	},
 	output: {
-		path: '.',
+		path: require('path').resolve('.'),
 		filename: '[name]',
 	},
 	module: {

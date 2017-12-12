@@ -30,6 +30,12 @@ var _debounce = require('coffeekraken-sugar/js/utils/functions/debounce');
 
 var _debounce2 = _interopRequireDefault(_debounce);
 
+var _mutationObservable = require('coffeekraken-sugar/js/dom/mutationObservable');
+
+var _mutationObservable2 = _interopRequireDefault(_mutationObservable);
+
+require('coffeekraken-sugar/js/utils/rxjs/operators/groupByTimeout');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -142,13 +148,6 @@ var SSlideshowComponent = function (_SWebComponent) {
 			this._activeSlide = null;
 
 			/**
-    * Store the observer of the slides
-    * @type 	{Observer}
-    * @private
-    */
-			this._slidesObserver = null;
-
-			/**
     * Store the elements references like navigation, etc...
     * @type 	{Object}
     * @private
@@ -180,19 +179,11 @@ var SSlideshowComponent = function (_SWebComponent) {
 			// update references
 			this._updateReferences();
 
-			// grab the slides and maintain stack up to date
-			this._slides = [].slice.call(this.querySelectorAll(this._componentNameDash + '-slide, [' + this._componentNameDash + '-slide]'));
-			// init slides
-			this._slides.forEach(function (slide) {
-				_this2._initSlide(slide);
-			});
-			// listen for new items
-			this._slidesObserver = (0, _querySelectorLive2.default)(this._componentNameDash + '-slide, [' + this._componentNameDash + '-slide]', {
-				rootNode: this
-			}).stack(this._slides).subscribe(function (elm) {
-				// init new slide
-				_this2._initSlide(elm);
-			});
+			// update slides references
+			this._slides = this._getSlides();
+
+			// monitor new slides
+			this._monitorNewSlides();
 
 			// onInit callback
 			this.props.onInit && this.props.onInit(this);
@@ -283,9 +274,6 @@ var SSlideshowComponent = function (_SWebComponent) {
 			// next
 			this.next();
 
-			// add all classes
-			// this._applyStateAttributes();
-
 			// remove the no transmation class to allow animations, etc...
 			setTimeout(function () {
 				_this4.classList.remove('clear-transmations');
@@ -303,10 +291,8 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_disable',
 		value: function _disable() {
-
 			// stop listening for certain events
 			window.removeEventListener('resize', this._onResizeDebounced);
-
 			// remove all classes
 			this._unapplyStateAttrubutes();
 			// maintain chainability
@@ -314,14 +300,39 @@ var SSlideshowComponent = function (_SWebComponent) {
 		}
 
 		/**
-   * When the element is destroyed
+   * Monitor for new slides
    */
 
 	}, {
-		key: 'destroy',
-		value: function destroy() {
-			// destroy all element in slideshow that need to be destroyed
-			this._slidesObserver.unsubscribe();
+		key: '_monitorNewSlides',
+		value: function _monitorNewSlides() {
+			var _this5 = this;
+
+			(0, _mutationObservable2.default)(this, {
+				childList: true
+			}).groupByTimeout().subscribe(function (mutations) {
+				var mutation = mutations[0];
+				var needUpdateSlides = false;
+				if (mutation.addedNodes) {
+					mutation.addedNodes.forEach(function (node) {
+						if (!node.tagName || needUpdateSlides) return;
+						if (node.hasAttribute(_this5._componentNameDash + '-slide') || node.tagName.toLowerCase() === _this5._componentNameDash + '-slide') {
+							needUpdateSlides = true;
+						}
+					});
+				}
+				if (mutation.removedNodes) {
+					mutation.removedNodes.forEach(function (node) {
+						if (!node.tagName || needUpdateSlides) return;
+						if (node.hasAttribute(_this5._componentNameDash + '-slide') || node.tagName.toLowerCase() === _this5._componentNameDash + '-slide') {
+							needUpdateSlides = true;
+						}
+					});
+				}
+				if (needUpdateSlides) {
+					_this5._slides = _this5._getSlides();
+				}
+			});
 		}
 
 		/**
@@ -331,6 +342,9 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_initSlide',
 		value: function _initSlide(slide) {
+			// do not init slide twice
+			if (slide._sSlideshowInited) return;
+			slide._sSlideshowInited = true;
 			// callback if exist
 			this.props.initSlide && this.props.initSlide(slide);
 			// slides initer
@@ -346,24 +360,27 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_unapplyStateAttrubutes',
 		value: function _unapplyStateAttrubutes() {
+			var _this6 = this;
 
-			// unactivate all the slides
-			this._slides.forEach(function (slide) {
-				slide.removeAttribute('active');
-				slide.removeAttribute('before-active');
-				slide.removeAttribute('after-active');
-				slide.removeAttribute('next');
-				slide.removeAttribute('previous');
-				slide.removeAttribute('first');
-				slide.removeAttribute('last');
+			this.mutate(function () {
+				// unactivate all the slides
+				_this6._slides.forEach(function (slide) {
+					slide.removeAttribute('active');
+					slide.removeAttribute('before-active');
+					slide.removeAttribute('after-active');
+					slide.removeAttribute('next');
+					slide.removeAttribute('previous');
+					slide.removeAttribute('first');
+					slide.removeAttribute('last');
+				});
+				// remove the active class on all goto
+				[].forEach.call(_this6._refs.goTos, function (goTo) {
+					goTo.removeAttribute('active');
+				});
+				// remove attributes on the slideshow itself
+				_this6.removeAttribute('last');
+				_this6.removeAttribute('first');
 			});
-			// remove the active class on all goto
-			[].forEach.call(this._refs.goTos, function (goTo) {
-				goTo.removeAttribute('active');
-			});
-			// remove attributes on the slideshow itself
-			this.removeAttribute('last');
-			this.removeAttribute('first');
 		}
 
 		/**
@@ -373,59 +390,61 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_applyStateAttributes',
 		value: function _applyStateAttributes() {
-			var _this5 = this;
+			var _this7 = this;
 
-			// activate the current slide
-			this._activeSlide.setAttribute('active', true);
-			// goto classes
-			[].forEach.call(this._refs.goTos, function (goTo) {
-				var slide = goTo.getAttribute(_this5._componentNameDash + '-goto');
-				var idx = _this5._getSlideIdxById(slide);
-				if (idx === _this5.props.slide) {
-					goTo.setAttribute('active', true);
+			this.mutate(function () {
+				// activate the current slide
+				_this7._activeSlide.setAttribute('active', true);
+				// goto classes
+				[].forEach.call(_this7._refs.goTos, function (goTo) {
+					var slide = goTo.getAttribute(_this7._componentNameDash + '-goto');
+					var idx = _this7._getSlideIdxById(slide);
+					if (idx === _this7.props.slide) {
+						goTo.setAttribute('active', true);
+					}
+				});
+				// add the next and previous classes
+				if (_this7.getPreviousSlide()) {
+					if (!_this7.getPreviousSlide().hasAttribute('previous')) {
+						_this7.getPreviousSlide().setAttribute('previous', true);
+					}
+				}
+				if (_this7.getNextSlide()) {
+					if (!_this7.getNextSlide().hasAttribute('next')) {
+						_this7.getNextSlide().setAttribute('next', true);
+					}
+				}
+				// apply the first and last classes
+				if (_this7.getFirstSlide()) {
+					if (!_this7.getFirstSlide().hasAttribute('first')) {
+						_this7.getFirstSlide().setAttribute('first', true);
+					}
+				}
+				if (_this7.getLastSlide()) {
+					if (!_this7.getLastSlide().hasAttribute('last')) {
+						_this7.getLastSlide().setAttribute('last', true);
+					}
+				}
+				// apply the beforeActiveClass
+				_this7.getBeforeActiveSlides().forEach(function (slide) {
+					if (!slide.hasAttribute('before-active')) {
+						slide.setAttribute('before-active', true);
+					}
+				});
+				// apply the afterActiveClass
+				_this7.getAfterActiveSlides().forEach(function (slide) {
+					if (!slide.hasAttribute('after-active')) {
+						slide.setAttribute('after-active', true);
+					}
+				});
+				// first and last attribute on the slideshow itself
+				if (_this7.isLast()) {
+					_this7.setAttribute('last', true);
+				}
+				if (_this7.isFirst()) {
+					_this7.setAttribute('first', true);
 				}
 			});
-			// add the next and previous classes
-			if (this.getPreviousSlide()) {
-				if (!this.getPreviousSlide().hasAttribute('previous')) {
-					this.getPreviousSlide().setAttribute('previous', true);
-				}
-			}
-			if (this.getNextSlide()) {
-				if (!this.getNextSlide().hasAttribute('next')) {
-					this.getNextSlide().setAttribute('next', true);
-				}
-			}
-			// apply the first and last classes
-			if (this.getFirstSlide()) {
-				if (!this.getFirstSlide().hasAttribute('first')) {
-					this.getFirstSlide().setAttribute('first', true);
-				}
-			}
-			if (this.getLastSlide()) {
-				if (!this.getLastSlide().hasAttribute('last')) {
-					this.getLastSlide().setAttribute('last', true);
-				}
-			}
-			// apply the beforeActiveClass
-			this.getBeforeActiveSlides().forEach(function (slide) {
-				if (!slide.hasAttribute('before-active')) {
-					slide.setAttribute('before-active', true);
-				}
-			});
-			// apply the afterActiveClass
-			this.getAfterActiveSlides().forEach(function (slide) {
-				if (!slide.hasAttribute('after-active')) {
-					slide.setAttribute('after-active', true);
-				}
-			});
-			// first and last attribute on the slideshow itself
-			if (this.isLast()) {
-				this.setAttribute('last', true);
-			}
-			if (this.isFirst()) {
-				this.setAttribute('first', true);
-			}
 		}
 
 		/**
@@ -435,20 +454,23 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_applyCurrentSlideHeightToSlideshow',
 		value: function _applyCurrentSlideHeightToSlideshow() {
+			var _this8 = this;
 
 			if (!this.getActiveSlide()) return;
 
-			if (!this._applyCurrentSlideHeightToSlideshowTarget && typeof this.props.applySlideHeight === 'string') {
-				// get the target to apply the height on
-				this._applyCurrentSlideHeightToSlideshowTarget = this.querySelector(this.props.applySlideHeight);
-			} else if (!this._applyCurrentSlideHeightToSlideshowTarget) {
-				this._applyCurrentSlideHeightToSlideshowTarget = this;
-			}
+			this.mutate(function () {
+				if (!_this8._applyCurrentSlideHeightToSlideshowTarget && typeof _this8.props.applySlideHeight === 'string') {
+					// get the target to apply the height on
+					_this8._applyCurrentSlideHeightToSlideshowTarget = _this8.querySelector(_this8.props.applySlideHeight);
+				} else if (!_this8._applyCurrentSlideHeightToSlideshowTarget) {
+					_this8._applyCurrentSlideHeightToSlideshowTarget = _this8;
+				}
 
-			var activeSlideHeight = this.getActiveSlide().offsetHeight;
-			if (!this._applyCurrentSlideHeightToSlideshowTarget) return;
-			if (!activeSlideHeight) return;
-			this._applyCurrentSlideHeightToSlideshowTarget.style.height = activeSlideHeight + 'px';
+				var activeSlideHeight = _this8.getActiveSlide().offsetHeight;
+				if (!_this8._applyCurrentSlideHeightToSlideshowTarget) return;
+				if (!activeSlideHeight) return;
+				_this8._applyCurrentSlideHeightToSlideshowTarget.style.height = activeSlideHeight + 'px';
+			});
 		}
 
 		/**
@@ -483,20 +505,20 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_applyTokens',
-		value: function _applyTokens() {
-			var _this6 = this;
+		key: '_injectDynamicValuesInHtml',
+		value: function _injectDynamicValuesInHtml() {
+			var _this9 = this;
 
 			// apply current
 			if (this._refs.current) {
 				[].forEach.call(this._refs.current, function (current) {
-					current.innerHTML = _this6.props.slide + 1;
+					current.innerHTML = _this9.props.slide + 1;
 				});
 			}
 			// apply total
 			if (this._refs.total) {
 				[].forEach.call(this._refs.total, function (total) {
-					total.innerHTML = _this6._slides.length;
+					total.innerHTML = _this9._slides.length;
 				});
 			}
 		}
@@ -526,12 +548,8 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: 'next',
 		value: function next() {
-
 			// stop if the document is hidden
 			if (document.hidden) return;
-
-			// check if is in viewport
-			// if ( ! __isInViewport(this) && this.props.slide !== -1) return;
 
 			// get the current active slide index
 			var idx = this.props.slide;
@@ -582,9 +600,6 @@ var SSlideshowComponent = function (_SWebComponent) {
 
 			// stop if the document is hidden
 			if (document.hidden) return;
-
-			// check if is in viewport
-			// if ( ! __isInViewport(this) && this.props.slide !== -1) return;
 
 			// get the current active slide index
 			var idx = this.props.slide;
@@ -682,7 +697,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 			}
 
 			// apply total and current tokens
-			this._applyTokens();
+			this._injectDynamicValuesInHtml();
 
 			// onChange callback
 			this.props.onChange && this.props.onChange(this);
@@ -874,6 +889,26 @@ var SSlideshowComponent = function (_SWebComponent) {
 		key: 'isLast',
 		value: function isLast() {
 			return this._slides[this._slides.length - 1].hasAttribute('active');
+		}
+
+		/**
+   * Go find the slides of the slideshow
+   * @return 	{Array} 	The array of slides found
+   */
+
+	}, {
+		key: '_getSlides',
+		value: function _getSlides() {
+			var _this10 = this;
+
+			// grab the slides and maintain stack up to date
+			var slides = [].slice.call(this.querySelectorAll(this._componentNameDash + '-slide, [' + this._componentNameDash + '-slide]'));
+			// init slides
+			slides.forEach(function (slide) {
+				_this10._initSlide(slide);
+			});
+			// return the slides
+			return slides;
 		}
 
 		/**
