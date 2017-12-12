@@ -5,6 +5,9 @@ import __autoCast from 'coffeekraken-sugar/js/utils/string/autoCast'
 import __find from 'lodash/find'
 import __dispatchEvent from 'coffeekraken-sugar/js/dom/dispatchEvent';
 import __debounce from 'coffeekraken-sugar/js/utils/functions/debounce';
+import __mutationObservable from 'coffeekraken-sugar/js/dom/mutationObservable';
+import 'coffeekraken-sugar/js/utils/rxjs/operators/groupByTimeout';
+
 
 /**
  * @name 		SSlideshowComponent
@@ -194,13 +197,6 @@ export default class SSlideshowComponent extends SWebComponent {
 		this._activeSlide = null;
 
 		/**
-		 * Store the observer of the slides
-		 * @type 	{Observer}
-		 * @private
-		 */
-		this._slidesObserver = null;
-
-		/**
 		 * Store the elements references like navigation, etc...
 		 * @type 	{Object}
 		 * @private
@@ -227,19 +223,11 @@ export default class SSlideshowComponent extends SWebComponent {
 		// update references
 		this._updateReferences();
 
-		// grab the slides and maintain stack up to date
-		this._slides = [].slice.call(this.querySelectorAll(`${this._componentNameDash}-slide, [${this._componentNameDash}-slide]`));
-		// init slides
-		this._slides.forEach((slide) => {
-			this._initSlide(slide);
-		});
-		// listen for new items
-		this._slidesObserver = querySelectorLive(`${this._componentNameDash}-slide, [${this._componentNameDash}-slide]`, {
-			rootNode : this
-		}).stack(this._slides).subscribe((elm) => {
-			// init new slide
-			this._initSlide(elm);
-		});
+		// update slides references
+		this._slides = this._getSlides();
+
+		// monitor new slides
+		this._monitorNewSlides();
 
 		// onInit callback
 		this.props.onInit && this.props.onInit(this);
@@ -314,9 +302,6 @@ export default class SSlideshowComponent extends SWebComponent {
 		// next
 		this.next();
 
-		// add all classes
-		// this._applyStateAttributes();
-
 		// remove the no transmation class to allow animations, etc...
 		setTimeout(() => {
 			this.classList.remove('clear-transmations');
@@ -331,10 +316,8 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @return 	{SSlideshowComponent}
 	 */
 	_disable() {
-
 		// stop listening for certain events
 		window.removeEventListener('resize', this._onResizeDebounced);
-
 		// remove all classes
 		this._unapplyStateAttrubutes();
 		// maintain chainability
@@ -342,17 +325,49 @@ export default class SSlideshowComponent extends SWebComponent {
 	}
 
 	/**
-	 * When the element is destroyed
+	 * Monitor for new slides
 	 */
-	destroy() {
-		// destroy all element in slideshow that need to be destroyed
-		this._slidesObserver.unsubscribe();
+	_monitorNewSlides() {
+		__mutationObservable(this, {
+			childList : true
+		}).groupByTimeout().subscribe((mutations) => {
+			const mutation = mutations[0];
+			let needUpdateSlides = false;
+			if (mutation.addedNodes) {
+				mutation.addedNodes.forEach((node) => {
+					if ( ! node.tagName || needUpdateSlides) return;
+					if (
+						node.hasAttribute(`${this._componentNameDash}-slide`)
+						|| node.tagName.toLowerCase() === `${this._componentNameDash}-slide`
+					) {
+						needUpdateSlides = true;
+					}
+				});
+			}
+			if (mutation.removedNodes) {
+				mutation.removedNodes.forEach((node) => {
+					if ( ! node.tagName || needUpdateSlides) return;
+					if (
+						node.hasAttribute(`${this._componentNameDash}-slide`)
+						|| node.tagName.toLowerCase() === `${this._componentNameDash}-slide`
+					) {
+						needUpdateSlides = true;
+					}
+				});
+			}
+			if (needUpdateSlides) {
+				this._slides = this._getSlides();
+			}
+		});
 	}
 
 	/**
 	 * Init a new slide
 	 */
 	_initSlide(slide) {
+		// do not init slide twice
+		if (slide._sSlideshowInited) return;
+		slide._sSlideshowInited = true;
 		// callback if exist
 		this.props.initSlide && this.props.initSlide(slide);
 		// slides initer
@@ -365,81 +380,84 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * Remove the attributes from the elements
 	 */
 	_unapplyStateAttrubutes() {
-
-		// unactivate all the slides
-		this._slides.forEach((slide) => {
-			slide.removeAttribute('active');
-			slide.removeAttribute('before-active');
-			slide.removeAttribute('after-active');
-			slide.removeAttribute('next');
-			slide.removeAttribute('previous');
-			slide.removeAttribute('first');
-			slide.removeAttribute('last');
+		this.mutate(() => {
+			// unactivate all the slides
+			this._slides.forEach((slide) => {
+				slide.removeAttribute('active');
+				slide.removeAttribute('before-active');
+				slide.removeAttribute('after-active');
+				slide.removeAttribute('next');
+				slide.removeAttribute('previous');
+				slide.removeAttribute('first');
+				slide.removeAttribute('last');
+			});
+			// remove the active class on all goto
+			[].forEach.call(this._refs.goTos, (goTo) => {
+				goTo.removeAttribute('active');
+			});
+			// remove attributes on the slideshow itself
+			this.removeAttribute('last');
+			this.removeAttribute('first');
 		});
-		// remove the active class on all goto
-		[].forEach.call(this._refs.goTos, (goTo) => {
-			goTo.removeAttribute('active');
-		});
-		// remove attributes on the slideshow itself
-		this.removeAttribute('last');
-		this.removeAttribute('first');
 	}
 
 	/**
 	 * Apply the good attributes to the elements
 	 */
 	_applyStateAttributes() {
-		// activate the current slide
-		this._activeSlide.setAttribute('active', true);
-		// goto classes
-		[].forEach.call(this._refs.goTos, (goTo) => {
-			const slide = goTo.getAttribute(`${this._componentNameDash}-goto`);
-			const idx = this._getSlideIdxById(slide);
-			if (idx === this.props.slide) {
-				goTo.setAttribute('active', true);
+		this.mutate(() => {
+			// activate the current slide
+			this._activeSlide.setAttribute('active', true);
+			// goto classes
+			[].forEach.call(this._refs.goTos, (goTo) => {
+				const slide = goTo.getAttribute(`${this._componentNameDash}-goto`);
+				const idx = this._getSlideIdxById(slide);
+				if (idx === this.props.slide) {
+					goTo.setAttribute('active', true);
+				}
+			});
+			// add the next and previous classes
+			if (this.getPreviousSlide()) {
+				if ( ! this.getPreviousSlide().hasAttribute('previous')) {
+					this.getPreviousSlide().setAttribute('previous', true);
+				}
+			}
+			if (this.getNextSlide()) {
+				if ( ! this.getNextSlide().hasAttribute('next')) {
+					this.getNextSlide().setAttribute('next', true);
+				}
+			}
+			// apply the first and last classes
+			if (this.getFirstSlide()) {
+				if ( ! this.getFirstSlide().hasAttribute('first')) {
+					this.getFirstSlide().setAttribute('first', true);
+				}
+			}
+			if (this.getLastSlide()) {
+				if ( ! this.getLastSlide().hasAttribute('last')) {
+					this.getLastSlide().setAttribute('last', true);
+				}
+			}
+			// apply the beforeActiveClass
+			this.getBeforeActiveSlides().forEach((slide) => {
+				if ( ! slide.hasAttribute('before-active') ) {
+					slide.setAttribute('before-active', true);
+				}
+			});
+			// apply the afterActiveClass
+			this.getAfterActiveSlides().forEach((slide) => {
+				if ( ! slide.hasAttribute('after-active') ) {
+					slide.setAttribute('after-active', true);
+				}
+			});
+			// first and last attribute on the slideshow itself
+			if (this.isLast()) {
+				this.setAttribute('last', true);
+			}
+			if (this.isFirst()) {
+				this.setAttribute('first', true);
 			}
 		});
-		// add the next and previous classes
-		if (this.getPreviousSlide()) {
-			if ( ! this.getPreviousSlide().hasAttribute('previous')) {
-				this.getPreviousSlide().setAttribute('previous', true);
-			}
-		}
-		if (this.getNextSlide()) {
-			if ( ! this.getNextSlide().hasAttribute('next')) {
-				this.getNextSlide().setAttribute('next', true);
-			}
-		}
-		// apply the first and last classes
-		if (this.getFirstSlide()) {
-			if ( ! this.getFirstSlide().hasAttribute('first')) {
-				this.getFirstSlide().setAttribute('first', true);
-			}
-		}
-		if (this.getLastSlide()) {
-			if ( ! this.getLastSlide().hasAttribute('last')) {
-				this.getLastSlide().setAttribute('last', true);
-			}
-		}
-		// apply the beforeActiveClass
-		this.getBeforeActiveSlides().forEach((slide) => {
-			if ( ! slide.hasAttribute('before-active') ) {
-				slide.setAttribute('before-active', true);
-			}
-		});
-		// apply the afterActiveClass
-		this.getAfterActiveSlides().forEach((slide) => {
-			if ( ! slide.hasAttribute('after-active') ) {
-				slide.setAttribute('after-active', true);
-			}
-		});
-		// first and last attribute on the slideshow itself
-		if (this.isLast()) {
-			this.setAttribute('last', true);
-		}
-		if (this.isFirst()) {
-			this.setAttribute('first', true);
-		}
 	}
 
 	/**
@@ -449,17 +467,19 @@ export default class SSlideshowComponent extends SWebComponent {
 
 		if ( ! this.getActiveSlide()) return
 
-		if ( ! this._applyCurrentSlideHeightToSlideshowTarget && typeof(this.props.applySlideHeight) === 'string') {
-			// get the target to apply the height on
-			this._applyCurrentSlideHeightToSlideshowTarget = this.querySelector(this.props.applySlideHeight);
-		} else if ( ! this._applyCurrentSlideHeightToSlideshowTarget) {
-			this._applyCurrentSlideHeightToSlideshowTarget = this;
-		}
+		this.mutate(() => {
+			if ( ! this._applyCurrentSlideHeightToSlideshowTarget && typeof(this.props.applySlideHeight) === 'string') {
+				// get the target to apply the height on
+				this._applyCurrentSlideHeightToSlideshowTarget = this.querySelector(this.props.applySlideHeight);
+			} else if ( ! this._applyCurrentSlideHeightToSlideshowTarget) {
+				this._applyCurrentSlideHeightToSlideshowTarget = this;
+			}
 
-		const activeSlideHeight = this.getActiveSlide().offsetHeight;
-		if ( ! this._applyCurrentSlideHeightToSlideshowTarget) return;
-		if ( ! activeSlideHeight) return
-		this._applyCurrentSlideHeightToSlideshowTarget.style.height = activeSlideHeight + 'px'
+			const activeSlideHeight = this.getActiveSlide().offsetHeight;
+			if ( ! this._applyCurrentSlideHeightToSlideshowTarget) return;
+			if ( ! activeSlideHeight) return
+			this._applyCurrentSlideHeightToSlideshowTarget.style.height = activeSlideHeight + 'px'
+		});
 	}
 
 	/**
@@ -489,7 +509,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	/**
 	 * Apply the differents tokens available to use in the html template
 	 */
-	_applyTokens() {
+	_injectDynamicValuesInHtml() {
 		// apply current
 		if (this._refs.current) {
 			[].forEach.call(this._refs.current, (current) => {
@@ -523,12 +543,8 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @return 	{SSlideshowComponent}
 	 */
 	next() {
-
 		// stop if the document is hidden
 		if (document.hidden) return;
-
-		// check if is in viewport
-		// if ( ! __isInViewport(this) && this.props.slide !== -1) return;
 
 		// get the current active slide index
 		const idx = this.props.slide;
@@ -576,9 +592,6 @@ export default class SSlideshowComponent extends SWebComponent {
 
 		// stop if the document is hidden
 		if (document.hidden) return;
-
-		// check if is in viewport
-		// if ( ! __isInViewport(this) && this.props.slide !== -1) return;
 
 		// get the current active slide index
 		const idx = this.props.slide;
@@ -671,7 +684,7 @@ export default class SSlideshowComponent extends SWebComponent {
 		}
 
 		// apply total and current tokens
-		this._applyTokens();
+		this._injectDynamicValuesInHtml();
 
 		// onChange callback
 		this.props.onChange && this.props.onChange(this);
@@ -821,6 +834,21 @@ export default class SSlideshowComponent extends SWebComponent {
 	 */
 	isLast() {
 		return this._slides[this._slides.length-1].hasAttribute('active');
+	}
+
+	/**
+	 * Go find the slides of the slideshow
+	 * @return 	{Array} 	The array of slides found
+	 */
+	_getSlides() {
+		// grab the slides and maintain stack up to date
+		let slides = [].slice.call(this.querySelectorAll(`${this._componentNameDash}-slide, [${this._componentNameDash}-slide]`));
+		// init slides
+		slides.forEach((slide) => {
+			this._initSlide(slide);
+		});
+		// return the slides
+		return slides;
 	}
 
 	/**
