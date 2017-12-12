@@ -132,11 +132,6 @@ Type : **{ [Function](https://developer.mozilla.org/fr/docs/Web/JavaScript/Refer
 ## Methods
 
 
-### destroy
-
-When the element is destroyed
-
-
 ### next
 
 Go to next slide
