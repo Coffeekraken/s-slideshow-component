@@ -260,7 +260,6 @@ export default class SSlideshowComponent extends SWebComponent {
 	componentUnmount() {
 		super.componentUnmount();
 		this._disable();
-		this.destroy();
 	}
 
 	/**

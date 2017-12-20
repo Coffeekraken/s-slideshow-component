@@ -219,7 +219,6 @@ var SSlideshowComponent = function (_SWebComponent) {
 		value: function componentUnmount() {
 			_get(SSlideshowComponent.prototype.__proto__ || Object.getPrototypeOf(SSlideshowComponent.prototype), 'componentUnmount', this).call(this);
 			this._disable();
-			this.destroy();
 		}
 
 		/**
