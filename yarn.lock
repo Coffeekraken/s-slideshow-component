@@ -1807,6 +1807,12 @@ coffeekraken-s-share-component@^1.0.0:
     coffeekraken-sugar "^1.0.0"
     sharer.npm.js "0.0.10"
 
+coffeekraken-s-typography-component@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/coffeekraken-s-typography-component/-/coffeekraken-s-typography-component-1.0.1.tgz#07289fe64165b6e947036ddf42dc95f5d3527e0f"
+  dependencies:
+    coffeekraken-sugar "^1.0.5"
+
 coffeekraken-scripts-stack@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/coffeekraken-scripts-stack/-/coffeekraken-scripts-stack-1.0.2.tgz#71c4d124c2bc7b81a5e7277f870be58b18af0f1d"
@@ -1827,7 +1833,7 @@ coffeekraken-scripts-stack@^1.0.1:
     strip-ansi "^4.0.0"
     terminate "^2.1.0"
 
-coffeekraken-sugar@^1.0.0:
+coffeekraken-sugar@^1.0.0, coffeekraken-sugar@^1.0.5:
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/coffeekraken-sugar/-/coffeekraken-sugar-1.0.12.tgz#62ff541daf9eba63bf9de9e9fd1ddb317f918fdd"
   dependencies:

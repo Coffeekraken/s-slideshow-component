@@ -2663,6 +2663,277 @@
  * @author 			Olivier Bossel <olivier.bossel@gmail.com>
  */
 /**
+ * @name 	STypographyComponent
+ * This file provide the mixins to create typography elements
+ */
+/**
+ * Apply the title css
+ * @param 		{Number} 		$size 		The size wanted. If unitless, will use modular scale to calculate size
+ * @param 		{Integer}		[$base=null] 		The base on which to calculate the modular scale if needed
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the title bare css
+ * @param 		{Number} 		$size 				The size wanted. If unitless, will use modular scale to calculate size
+ * @param 		{Integer}		[$base=null] 		The base on which to calculate the modular scale if needed
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the title style css
+ * @param 		{Number} 		$size 				The size wanted. If unitless, will use modular scale to calculate size
+ * @param 		{Integer}		[$base=null] 		The base on which to calculate the modular scale if needed
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the paragraph bare css
+ * @param 		{Number} 		$size 				The size wanted
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the paragraph style css
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the link css
+ * @param 		{Color} 		[$color=primary] 		The color used to style link
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the link bare css
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the link style css
+ * @param 		{Color} 		[$color=primary] 		The color used to style link
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the inline-text css
+ * @param 		{String} 		$tag 		The tag to use the style for
+ * @param 		{Color} 		[$color=primary] 		The color used to style different inline text elements
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the inline-text bare css
+ * @param 		{String} 		$tag 		The tag to use the style for
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the inline-text css
+ * @param 		{String} 		$tag 		The tag to use the style for
+ * @param 		{Color} 		[$color=primary] 		The color used to style different inline text elements
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the list css
+ * @param 		{String|List} 		$tag 				The tag to style like "ul", "ol li" or "dl dt"
+ * @param 		{Color} 			[$color=primary] 	The color used for styling bullets
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the list bare css
+ * @param 		{String|List} 		$tag 				The tag to style like "ul", "ol li" or "dl dt"
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the list style css
+ * @param 		{String|List} 		$tag 				The tag to style like "ul", "ol li" or "dl dt"
+ * @param 		{Color} 			[$color=primary] 	The color used for styling bullets
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the caption css
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the caption bare css
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the caption style css
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the quote css
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the quote bare css
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Apply the quote style css
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * @name 	STypographyComponent Classes
+ * This file provide the mixins to generate typography classes
+ */
+/**
+ * Provide all the classes of the typography component like titles, paragraphs, lists, etc..
+ * @param 		{Color} 	[$color=primary] 		The main color used to generate the texts styles
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the styling for the titles classes:
+ * - ```.h1-h6```
+ * - ```.tf h1-h6```
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the bare styling for the titles classes
+ * - ```.h1-h6```
+ * - ```.tf h1-h6```
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the style styling for the titles classes
+ * - ```.h1-h6```
+ * - ```.tf h1-h6```
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the styling for the paragraphs classes
+ * - ```.p```, ```.tf p```
+ * - ```.p--lead```, ```.tf p.p--lead```
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the bare styling for the ```.p``` and ```.p--lead``` classes
+ * - ```.p```, ```.tf p```
+ * - ```.p--lead```, ```.tf p.p--lead```
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the bare styling for the ```.p``` class
+ * - ```.p```, ```.tf p```
+ * - ```.p--lead```, ```.tf p.p--lead```
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the styling for the links classes
+ * - ```.link```, ```.tf a```
+ * @param 		{Color} 		[$color=primary] 		The color used to style links
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the bare styling for the links classes
+ * - ```.link```, ```.tf a```
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the style styling for the links classes
+ * - ```.link```, ```.tf a```
+ * @param 		{Color} 		[$color=primary] 		The color used to style links
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the styling for the inline-text classes
+ * - ```.mark```, ```.tf mark```
+ * - ```.del```, ```.tf del```
+ * - ```.s```, ```.tf s```
+ * - ```.ins```, ```.tf ins```
+ * - ```.u```, ```.tf u```
+ * - ```.small```, ```.tf small```
+ * - ```.strong```, ```.tf strong```
+ * - ```.em```, ```.tf em```
+ * @param 		{Color} 		[$color=primary] 		The color used to style different inline text elements
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the bare styling for the inline-text classes
+ * - ```.mark```, ```.tf mark```
+ * - ```.del```, ```.tf del```
+ * - ```.s```, ```.tf s```
+ * - ```.ins```, ```.tf ins```
+ * - ```.u```, ```.tf u```
+ * - ```.small```, ```.tf small```
+ * - ```.strong```, ```.tf strong```
+ * - ```.em```, ```.tf em```
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the style styling for the inline-text classes
+ * - ```.mark```, ```.tf mark```
+ * - ```.del```, ```.tf del```
+ * - ```.s```, ```.tf s```
+ * - ```.ins```, ```.tf ins```
+ * - ```.u```, ```.tf u```
+ * - ```.small```, ```.tf small```
+ * - ```.strong```, ```.tf strong```
+ * - ```.em```, ```.tf em```
+ * @param 		{Color} 		[$color=primary] 		The color used to style different inline text elements
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the styling for the lists classes
+ * - ```.dl```, ```.tf dl```
+ * 	- ```.dt```, ```.tf dt```
+ * 	- ```.dd```, ```.tf dd```
+ * - ```.ul```, ```.tf ul```
+ * 	- ```.li```, ```.tf li```
+ * - ```.ol```, ```.tf ol```
+ * 	- ```.li```, ```.tf li```
+ * @param 		{Color} 		[$color=primary] 		The color used to style bullets
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the bare styling for the lists classes
+ * - ```.dl```, ```.tf dl```
+ * 	- ```.dt```, ```.tf dt```
+ * 	- ```.dd```, ```.tf dd```
+ * - ```.ul```, ```.tf ul```
+ * 	- ```.li```, ```.tf li```
+ * - ```.ol```, ```.tf ol```
+ * 	- ```.li```, ```.tf li```
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the style styling for the lists classes
+ * - ```.dl```, ```.tf dl```
+ * 	- ```.dt```, ```.tf dt```
+ * 	- ```.dd```, ```.tf dd```
+ * - ```.ul```, ```.tf ul```
+ * 	- ```.li```, ```.tf li```
+ * - ```.ol```, ```.tf ol```
+ * 	- ```.li```, ```.tf li```
+ * @param 		{Color} 		[$color=primary] 		The color used to style bullets
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the styling for the captions classes
+ * - ```.caption```, ```.figcaption```, ```.tf caption```, ```.tf figcaption```
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the bare styling for the captions classes
+ * - ```.caption```, ```.figcaption```, ```.tf caption```, ```.tf figcaption```
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the style styling for the captions classes
+ * - ```.caption```, ```.figcaption```, ```.tf caption```, ```.tf figcaption```
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the styling for the quotes classes
+ * - ```.quote```, ```.tf quote```
+ * - ```.blockquote```, ```.tf blockquote```
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the bare styling for the quotes classes
+ * - ```.quote```, ```.tf quote```
+ * - ```.blockquote```, ```.tf blockquote```
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
+ * Provide the style styling for the quotes classes
+ * - ```.quote```, ```.tf quote```
+ * - ```.blockquote```, ```.tf blockquote```
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+/**
  * @name 	s-slideshow Classes
  * This file provide all the mixins to generate component classes
  */
@@ -4199,6 +4470,786 @@ body {
 
 body {
   padding: 3rem;
+}
+
+/**
+	 * @name 	```.h1```
+	 * h1 title styling
+	 * @styleguide 	Typography / Titles
+	 * @example 	html
+	 * <h1 class="h1">Hello World</h1>
+	 * <div class="tf">
+	 * 	<h1>Hello World</h1>
+	 * </div>
+	 */
+.h1,
+.tf h1 {
+  font-size: 3.5em;
+  line-height: 1.5;
+}
+
+/**
+	 * @name 	```.h2```
+	 * h2 title styling
+	 * @styleguide 	Typography / Titles
+	 * @example 	html
+	 * <h2 class="h2">Hello World</h2>
+	 * <div class="tf">
+	 * 	<h2>Hello World</h2>
+	 * </div>
+	 */
+.h2,
+.tf h2 {
+  font-size: 3em;
+  line-height: 1.5;
+}
+
+/**
+	 * @name 	```.h3```
+	 * h3 title styling
+	 * @styleguide 	Typography / Titles
+	 * @example 	html
+	 * <h3 class="h3">Hello World</h3>
+	 * <div class="tf">
+	 * 	<h3>Hello World</h3>
+	 * </div>
+	 */
+.h3,
+.tf h3 {
+  font-size: 2.5em;
+  line-height: 1.5;
+}
+
+/**
+	 * @name 	```.h4```
+	 * h4 title styling
+	 * @styleguide 	Typography / Titles
+	 * @example 	html
+	 * <h4 class="h4">Hello World</h4>
+	 * <div class="tf">
+	 * 	<h4>Hello World</h4>
+	 * </div>
+	 */
+.h4,
+.tf h4 {
+  font-size: 2em;
+  line-height: 1.5;
+}
+
+/**
+	 * @name 	```.h5```
+	 * h5 title styling
+	 * @styleguide 	Typography / Titles
+	 * @example 	html
+	 * <h5 class="h5">Hello World</h5>
+	 * <div class="tf">
+	 * 	<h5>Hello World</h5>
+	 * </div>
+	 */
+.h5,
+.tf h5 {
+  font-size: 1.5em;
+  line-height: 1.5;
+}
+
+/**
+	 * @name 	```.h6```
+	 * h6 title styling
+	 * @styleguide 	Typography / Titles
+	 * @example 	html
+	 * <h6 class="h6">Hello World</h6>
+	 * <div class="tf">
+	 * 	<h6>Hello World</h6>
+	 * </div>
+	 */
+.h6,
+.tf h6 {
+  font-size: 1em;
+  line-height: 1.5;
+}
+
+h1.vr,
+.vr h1, h2.vr,
+.vr h2, h3.vr,
+.vr h3, h4.vr,
+.vr h4, h5.vr,
+.vr h5, h6.vr,
+.vr h6,
+.h1.vr,
+.vr
+.h1, .h2.vr,
+.vr .h2, .h3.vr,
+.vr .h3, .h4.vr,
+.vr .h4, .h5.vr,
+.vr .h5, .h6.vr,
+.vr .h6 {
+  margin-bottom: 1rem;
+}
+
+h1.vr:last-child,
+.vr h1:last-child, h2.vr:last-child,
+.vr h2:last-child, h3.vr:last-child,
+.vr h3:last-child, h4.vr:last-child,
+.vr h4:last-child, h5.vr:last-child,
+.vr h5:last-child, h6.vr:last-child,
+.vr h6:last-child,
+.h1.vr:last-child,
+.vr
+.h1:last-child, .h2.vr:last-child,
+.vr .h2:last-child, .h3.vr:last-child,
+.vr .h3:last-child, .h4.vr:last-child,
+.vr .h4:last-child, .h5.vr:last-child,
+.vr .h5:last-child, .h6.vr:last-child,
+.vr .h6:last-child {
+  margin-bottom: 0;
+}
+
+/**
+	 * @name 	```.p```
+	 * Default paragraph styling
+	 * @styleguide 	Typography / Paragraphs
+	 * @example 	html
+	 * <p class="p ">
+	 * 	Duis gravida justo at urna interdum blandit. Sed venenatis, eros dictum gravida dictum, mauris sapien feugiat libero, at fermentum quam tellus dignissim nunc. Donec eu rutrum dui, in rhoncus lacus.
+	 * </p>
+	 * <div class="tf ">
+	 * 	<p>
+	 * 		Duis gravida justo at urna interdum blandit. Sed venenatis, eros dictum gravida dictum, mauris sapien feugiat libero, at fermentum quam tellus dignissim nunc. Donec eu rutrum dui, in rhoncus lacus.
+	 *   </p>
+	 * </div>
+	 */
+.p,
+.tf p {
+  font-size: 1em;
+  line-height: 1.5;
+}
+
+/**
+	 * @name 	```.p--lead```
+	 * Lead paragraph styling
+	 * @styleguide 	Typography / Paragraphs
+	 * @example 	html
+	 * <p class="p p--lead ">
+	 * 	Duis gravida justo at urna interdum blandit. Sed venenatis, eros dictum gravida dictum, mauris sapien feugiat libero, at fermentum quam tellus dignissim nunc. Donec eu rutrum dui, in rhoncus lacus.
+	 * </p>
+	 * <div class="tf ">
+	 * 	<p class="lead">
+	 * 		Duis gravida justo at urna interdum blandit. Sed venenatis, eros dictum gravida dictum, mauris sapien feugiat libero, at fermentum quam tellus dignissim nunc. Donec eu rutrum dui, in rhoncus lacus.
+	 *   </p>
+	 * </div>
+	 */
+.p--lead,
+.tf p.lead {
+  font-size: 1.3em !important;
+  font-weight: lighter;
+}
+
+p.vr,
+.vr p, .p.vr,
+.vr .p {
+  margin-bottom: 1rem;
+}
+
+p.vr:last-child,
+.vr p:last-child, .p.vr:last-child,
+.vr .p:last-child {
+  margin-bottom: 0;
+}
+
+.link,
+.tf a:not(.btn) {
+  text-decoration: none;
+  color: #f2bc2b;
+}
+
+/**
+	 * @name 		Marked text ```.mark```
+	 * For highlighting a run of text due to its relevance in another context, use the ```mark``` tag.
+	 * @styleguide 		Typography / Inline texts
+	 * @example 		html
+	 * This is a <span class="mark">marked text</span>
+	 * <div class="tf">
+	 * 	This is another <mark>marked text</mark>
+	 * </div>
+	 */
+/**
+	 * @name 		Deleted text ```.del```
+	 * For indicating blocks of text that have been deleted use the ```del``` tag.
+	 * @styleguide 		Typography / Inline texts
+	 * @example 		html
+	 * This is a <span class="del">deleted text</span>
+	 * <div class="tf">
+	 * 	This is another <del>deleted text</del>
+	 * </div>
+	 */
+/**
+	 * @name 		Strikethrough text ```.s```
+	 * For indicating blocks of text that are no longer relevant use the ```s``` tag.
+	 * @styleguide 		Typography / Inline texts
+	 * @example 		html
+	 * This is a <span class="s">striked through text</span>
+	 * <div class="tf">
+	 * 	This is another <s>striked through text</s>
+	 * </div>
+	 */
+/**
+	 * @name 		Inserted text ```.ins```
+	 * For indicating additions to the document use the ```ins``` tag.
+	 * @styleguide 		Typography / Inline texts
+	 * @example 		html
+	 * This is a <span class="ins">inserted text</span>
+	 * <div class="tf">
+	 * 	This is another <ins>inserted text</ins>
+	 * </div>
+	 */
+/**
+	 * @name 		Underlined text ```.u```
+	 * To underline text use the ```u``` tag.
+	 * @styleguide 		Typography / Inline texts
+	 * @example 		html
+	 * This is a <span class="u">underlined text</span>
+	 * <div class="tf">
+	 * 	This is another <u>underlined text</u>
+	 * </div>
+	 */
+/**
+	 * @name 		Small text ```.small```
+	 * For de-emphasizing inline or blocks of text, use the ```small``` tag to set text at 85% the size of the parent.
+	 * @styleguide 		Typography / Inline texts
+	 * @example 		html
+	 * This is a <span class="small">small text</span>
+	 * <div class="tf">
+	 * 	This is another <small>small text</small>
+	 * </div>
+	 */
+/**
+	 * @name 		Bold ```.strong```
+	 * For emphasizing a snippet of text with a heavier font-weight.
+	 * @styleguide 		Typography / Inline texts
+	 * @example 		html
+	 * This is a <span class="strong">strong text</span>
+	 * <div class="tf">
+	 * 	This is another <strong>strong text</strong>
+	 * </div>
+	 */
+/**
+	 * @name 		Italics ```.em```
+	 * For emphasizing a snippet of text with italics.
+	 * @styleguide 		Typography / Inline texts
+	 * @example 		html
+	 * This is an <span class="em">italic text</span>
+	 * <div class="tf">
+	 * 	This is another <em>italic text</em>
+	 * </div>
+	 */
+.mark,
+.tf mark {
+  background-color: rgba(242, 188, 43, 0.1);
+}
+
+.del,
+.tf del {
+  text-decoration: line-through;
+}
+
+.s,
+.tf s {
+  text-decoration: line-through;
+}
+
+.ins,
+.tf ins {
+  text-decoration: underline;
+}
+
+.u,
+.tf u {
+  text-decoration: underline;
+}
+
+.small,
+.tf small {
+  font-size: .65em;
+}
+
+.strong,
+.tf strong {
+  font-weight: bold;
+}
+
+.em,
+.tf em {
+  font-style: italic;
+}
+
+/**
+	 * @name 	Description list ```.dl .dt .dd```
+	 * A list of terms with their associated descriptions.
+	 * @styleguide 		Typography / Lists
+	 * @example 	html
+	 * <div class="tf">
+	 * 	<dl>
+	 *  	<dt>List item 1</dt>
+	 *  	<dd>Mauris sit amet erat vitae mi pellentesque placerat. Vestibulum dapibus.</dd>
+	 *  	<dt>List item 1</dt>
+	 *  	<dd>Mauris sit amet erat vitae mi pellentesque placerat. Vestibulum dapibus.</dd>
+	 *  	<dt>List item 1</dt>
+	 *  	<dd>Mauris sit amet erat vitae mi pellentesque placerat. Vestibulum dapibus.</dd>
+	 * 	</dl>
+	 * </div>
+	 */
+.dl,
+.tf dl {
+  counter-reset: s-list;
+}
+
+.dt,
+.tf dl > dt {
+  font-weight: bold;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.dd,
+.tf dl > dd {
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+/**
+	 * @name 	Unordered list ```.ul .li```
+	 * A list of items in which the order does not explicitly matter.
+	 * @styleguide 		Typography / Lists
+	 * @example 	html
+	 * <div class="tf">
+	 * 	<ul>
+	 *  	<li>List item 1</li>
+	 *  	<li>List item 2</li>
+	 *  	<li>List item 3</li>
+	 *  	<li>List item 4</li>
+	 * 	</ul>
+	 * </div>
+	 */
+.ul,
+.tf ul {
+  counter-reset: s-list;
+}
+
+.ul > .li,
+.ul > li,
+.tf ul > li {
+  padding-left: 1em;
+  position: relative;
+  line-height: 1.5;
+}
+
+.ul > .li:before,
+.ul > li:before,
+.tf ul > li:before {
+  content: counter(s-list, circle);
+  counter-increment: s-list;
+}
+
+.ul > .li:before,
+.ul > li:before,
+.tf ul > li:before {
+  left: 0;
+  color: #848e91 !important;
+}
+
+.ul > .li:before,
+.ul > li:before,
+.tf ul > li:before {
+  position: absolute;
+  display: block;
+}
+
+.ul > .li > ul,
+.ul > .li > ol,
+.ul > .li > dl,
+.ul > li > ul,
+.ul > li > ol,
+.ul > li > dl,
+.tf ul > li > ul,
+.tf ul > li > ol,
+.tf ul > li > dl {
+  margin-left: 0;
+  margin-bottom: 0;
+}
+
+/**
+	 * @name 	Ordered list ```.ol .li```
+	 * A list of items in which the order does explicitly matter.
+	 * @styleguide 		Typography / Lists
+	 * @example 	html
+	 * <div class="tf">
+	 * 	<ol>
+	 *  	<li>List item 1</li>
+	 *  	<li>List item 2</li>
+	 *  	<li>List item 3</li>
+	 *  	<li>List item 4</li>
+	 * 	</ol>
+	 * </div>
+	 */
+.ol,
+.tf ol {
+  counter-reset: s-list;
+}
+
+.ol > .li,
+.ol > li,
+.tf ol > li {
+  padding-left: 1em;
+  position: relative;
+  line-height: 1.5;
+}
+
+.ol > .li:before,
+.ol > li:before,
+.tf ol > li:before {
+  content: counter(s-list, decimal);
+  counter-increment: s-list;
+}
+
+.ol > .li:before,
+.ol > li:before,
+.tf ol > li:before {
+  left: 0;
+  top: 0.4em;
+  color: #848e91 !important;
+  font-size: 0.6em !important;
+}
+
+.ol > .li:before,
+.ol > li:before,
+.tf ol > li:before {
+  position: absolute;
+  display: block;
+}
+
+.ol > .li > ul,
+.ol > .li > ol,
+.ol > .li > dl,
+.ol > li > ul,
+.ol > li > ol,
+.ol > li > dl,
+.tf ol > li > ul,
+.tf ol > li > ol,
+.tf ol > li > dl {
+  margin-left: 0;
+  margin-bottom: 0;
+}
+
+dl.vr,
+.vr dl, ul.vr,
+.vr ul, ol.vr,
+.vr ol,
+.dl.vr,
+.vr
+.dl, .ul.vr,
+.vr .ul, .ol.vr,
+.vr .ol {
+  margin-bottom: 1rem;
+}
+
+dl.vr:last-child,
+.vr dl:last-child, ul.vr:last-child,
+.vr ul:last-child, ol.vr:last-child,
+.vr ol:last-child,
+.dl.vr:last-child,
+.vr
+.dl:last-child, .ul.vr:last-child,
+.vr .ul:last-child, .ol.vr:last-child,
+.vr .ol:last-child {
+  margin-bottom: 0;
+}
+
+dl.vr dl, dl.vr ul, dl.vr ol,
+dl.vr .dl, dl.vr .ul, dl.vr .ol,
+.vr dl dl,
+.vr dl ul,
+.vr dl ol,
+.vr dl .dl,
+.vr dl .ul,
+.vr dl .ol, ul.vr dl, ul.vr ul, ul.vr ol,
+ul.vr .dl, ul.vr .ul, ul.vr .ol,
+.vr ul dl,
+.vr ul ul,
+.vr ul ol,
+.vr ul .dl,
+.vr ul .ul,
+.vr ul .ol, ol.vr dl, ol.vr ul, ol.vr ol,
+ol.vr .dl, ol.vr .ul, ol.vr .ol,
+.vr ol dl,
+.vr ol ul,
+.vr ol ol,
+.vr ol .dl,
+.vr ol .ul,
+.vr ol .ol,
+.dl.vr dl,
+.dl.vr ul,
+.dl.vr ol,
+.dl.vr .dl,
+.dl.vr .ul,
+.dl.vr .ol,
+.vr
+.dl dl,
+.vr
+.dl ul,
+.vr
+.dl ol,
+.vr
+.dl .dl,
+.vr
+.dl .ul,
+.vr
+.dl .ol, .ul.vr dl, .ul.vr ul, .ul.vr ol,
+.ul.vr .dl, .ul.vr .ul, .ul.vr .ol,
+.vr .ul dl,
+.vr .ul ul,
+.vr .ul ol,
+.vr .ul .dl,
+.vr .ul .ul,
+.vr .ul .ol, .ol.vr dl, .ol.vr ul, .ol.vr ol,
+.ol.vr .dl, .ol.vr .ul, .ol.vr .ol,
+.vr .ol dl,
+.vr .ol ul,
+.vr .ol ol,
+.vr .ol .dl,
+.vr .ol .ul,
+.vr .ol .ol {
+  margin-top: .5em;
+  margin-bottom: .5em;
+}
+
+.dt,
+.tf dl > dt {
+  font-weight: bold;
+  color: #848e91;
+}
+
+.dd,
+.tf dl > dd {
+  color: #848e91;
+}
+
+.ul > .li,
+.ul > li,
+.tf ul > li {
+  padding-left: 1em;
+  position: relative;
+  color: #848e91;
+}
+
+.ul > .li:before,
+.ul > li:before,
+.tf ul > li:before {
+  content: counter(s-list, circle);
+  counter-increment: s-list;
+}
+
+.ul > .li:before,
+.ul > li:before,
+.tf ul > li:before {
+  left: 0;
+  color: #f2bc2b !important;
+}
+
+.ul > .li:before,
+.ul > li:before,
+.tf ul > li:before {
+  position: absolute;
+  display: block;
+}
+
+.ul > .li > ul,
+.ul > .li > ol,
+.ul > .li > dl,
+.ul > li > ul,
+.ul > li > ol,
+.ul > li > dl,
+.tf ul > li > ul,
+.tf ul > li > ol,
+.tf ul > li > dl {
+  margin-left: 0;
+  margin-bottom: 0;
+}
+
+.ol > .li,
+.ol > li,
+.tf ol > li {
+  padding-left: 1em;
+  position: relative;
+  color: #848e91;
+}
+
+.ol > .li:before,
+.ol > li:before,
+.tf ol > li:before {
+  content: counter(s-list, decimal);
+  counter-increment: s-list;
+}
+
+.ol > .li:before,
+.ol > li:before,
+.tf ol > li:before {
+  left: 0;
+  top: 0.4em;
+  color: #f2bc2b !important;
+  font-size: 0.6em !important;
+}
+
+.ol > .li:before,
+.ol > li:before,
+.tf ol > li:before {
+  position: absolute;
+  display: block;
+}
+
+.ol > .li > ul,
+.ol > .li > ol,
+.ol > .li > dl,
+.ol > li > ul,
+.ol > li > ol,
+.ol > li > dl,
+.tf ol > li > ul,
+.tf ol > li > ol,
+.tf ol > li > dl {
+  margin-left: 0;
+  margin-bottom: 0;
+}
+
+/**
+	 * @name 		Default caption ```.caption```
+	 * Display a caption styled text
+	 * @styleguide 	Typography / Caption
+	 * @example 	html
+	 * <div class="tf">
+	 * 	<div class="caption">
+	 * 		Nunc venenatis, odio at porta egestas, tortor eros mollis sapien.
+	 * 	</div>
+	 * </div>
+	 */
+.caption,
+.tf caption,
+.tf figcaption {
+  font-style: italic;
+  font-size: .65em;
+  display: block;
+}
+
+.caption,
+.figcaption .tf caption,
+.tf figcaption {
+  opacity: .65;
+}
+
+/**
+	 * @name 		Default quote ```.blockquote```
+	 * Display a quote styled text
+	 * @styleguide 	Typography / Quote
+	 * @example 	html
+	 * <div class="tf">
+	 * 	<quote>
+	 * 		Nunc venenatis, odio at porta egestas, tortor eros mollis sapien.
+	 * 	</quote>
+	 * 	<div class="caption pull-right">
+	 *  	John Doe
+	 * 	</div>
+	 * </div>
+	 */
+.quote,
+.blockquote,
+.tf quote,
+.tf blockquote {
+  font-size: 2.5em;
+  font-style: italic;
+  font-family: Palatino, Times, Georgia, serif;
+  font-weight: normal;
+  padding: 1rem 2rem 1rem 2rem;
+  display: block;
+}
+
+.quote cite,
+.blockquote cite,
+.tf quote cite,
+.tf blockquote cite {
+  font-size: .5em;
+  font-style: italic;
+  display: block;
+  margin-top: 1rem;
+}
+
+.quote cite:before,
+.blockquote cite:before,
+.tf quote cite:before,
+.tf blockquote cite:before {
+  content: "\2014 \0020";
+}
+
+.quote.vr,
+.vr .quote,
+.blockquote.vr,
+.vr
+.blockquote,
+quote.vr,
+.vr
+quote,
+blockquote.vr,
+.vr
+blockquote {
+  margin-bottom: 1rem;
+}
+
+.quote.vr:last-child,
+.vr .quote:last-child,
+.blockquote.vr:last-child,
+.vr
+.blockquote:last-child,
+quote.vr:last-child,
+.vr
+quote:last-child,
+blockquote.vr:last-child,
+.vr
+blockquote:last-child {
+  margin-bottom: 0;
+}
+
+.quote,
+.blockquote,
+.tf blockquote,
+.tf quote {
+  position: relative;
+}
+
+.quote:before, .quote:after,
+.blockquote:before,
+.blockquote:after,
+.tf blockquote:before,
+.tf blockquote:after,
+.tf quote:before,
+.tf quote:after {
+  display: inline-block;
+  position: absolute;
+  opacity: .4;
+}
+
+.quote:before,
+.blockquote:before,
+.tf blockquote:before,
+.tf quote:before {
+  content: "“";
+  top: 0;
+  left: 0;
+}
+
+.quote:after,
+.blockquote:after,
+.tf blockquote:after,
+.tf quote:after {
+  content: "”";
+  bottom: 0;
+  right: 0;
 }
 
 s-slideshow [s-slideshow-slide] {

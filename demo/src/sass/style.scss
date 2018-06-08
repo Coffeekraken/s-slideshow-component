@@ -1,4 +1,5 @@
 @import 'node_modules/coffeekraken-sugar/index';
+@import 'node_modules/coffeekraken-s-typography-component/index';
 @import '../../../index';
 
 @include s-setup(());
@@ -8,6 +9,8 @@
 body {
 	padding: s-space(bigger);
 }
+
+@include s-typography-classes();
 
 @include s-slideshow-classes();
 s-slideshow {
