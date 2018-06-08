@@ -1,5 +1,6 @@
 @import 'node_modules/coffeekraken-sugar/index';
 @import 'node_modules/coffeekraken-s-typography-component/index';
+@import 'node_modules/coffeekraken-s-button-component/index';
 @import '../../../index';
 
 @include s-setup(());
@@ -11,6 +12,7 @@ body {
 }
 
 @include s-typography-classes();
+@include s-button-classes();
 
 @include s-slideshow-classes();
 s-slideshow {

@@ -1770,6 +1770,12 @@ coffeekraken-s-atv-card-component@^1.0.0:
   dependencies:
     coffeekraken-sugar "^1.0.0"
 
+coffeekraken-s-button-component@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/coffeekraken-s-button-component/-/coffeekraken-s-button-component-1.0.1.tgz#2ed3e7beed17a34a7a8eedbd57da671f4e21de26"
+  dependencies:
+    coffeekraken-sugar "^1.0.5"
+
 coffeekraken-s-codemirror-component@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/coffeekraken-s-codemirror-component/-/coffeekraken-s-codemirror-component-1.0.1.tgz#3cc0e36d5147ce58648d392a38db478f53fb0c5e"

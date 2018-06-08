@@ -96,6 +96,7 @@ module.exports = {
 			data : `
 				@import 'node_modules/coffeekraken-sugar/index';
 				@import 'node_modules/coffeekraken-s-typography-component/index';
+				@import 'node_modules/coffeekraken-s-button-component/index';
 				@import 'index';
 				@include s-init();
 				@include s-classes();
