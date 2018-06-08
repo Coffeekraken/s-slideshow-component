@@ -1,6 +1,6 @@
 {
   "name": "coffeekraken-s-slideshow-component",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Create nice, simple and fully customizable slideshow.",
   "main": "dist/index.js",
   "homepage": "http://coffeekraken.io",
@@ -33,7 +33,7 @@
     "doc": "rm -rf doc && npm run doc:js && npm run doc:css",
     "doc:js": "coffeekraken-docblock-to-markdown -f 'src/**/*.js' -d doc --remove-path src/",
     "doc:css": "coffeekraken-docblock-to-markdown -f 'src/**/*.scss' -d doc --remove-path src/",
-    "start": "coffeekraken-scripts-stack dist:js demo:server"
+    "start": "coffeekraken-scripts-stack dist:js demo:server -i start"
   },
   "keywords": [
     "slideshow",
