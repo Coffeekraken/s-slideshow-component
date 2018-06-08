@@ -26,14 +26,11 @@ module.exports = {
 						Coffeekraken s-slideshow-component
 					</h1>
 					<p class="p m-b-bigger">Provide a nice and fully customizable select webcomponent that use a real select as source of truth</p>
-					<s-slideshow class="ratio-16-9 m-b" loop>
+					<s-slideshow class="ratio-16-9 m-b" loop timeout="5000">
 						<div s-slideshow-slide>
 							<img class="abs-cover" src="https://source.unsplash.com/category/buildings/800x600" />
 							<div class="slideshow__metas">
-								<h1 class="h3 m-b">Hello World #1</h1>
-								<p class="p m-b">
-									Ut sollicitudin enim ac nibh tempor commodo. Phasellus a nunc congue, sollicitudin nibh molestie, rutrum ligula. Duis ex diam, finibus sed dictum sit amet, faucibus sollicitudin risus. Nam eget tortor.
-								</p>
+								<h1 class="h5 m-b">Hello World #1</h1>
 								<a href="#" class="btn btn--primary">
 									More info...
 								</a>
@@ -42,10 +39,7 @@ module.exports = {
 						<div s-slideshow-slide active>
 							<img class="abs-cover" src="https://source.unsplash.com//category/food/800x600" />
 							<div class="slideshow__metas slideshow__metas--primary">
-								<h1 class="h3 m-b">Hello World #2</h1>
-								<p class="p m-b">
-									Ut sollicitudin enim ac nibh tempor commodo. Phasellus a nunc congue, sollicitudin nibh molestie, rutrum ligula. Duis ex diam, finibus sed dictum sit amet, faucibus sollicitudin risus. Nam eget tortor.
-								</p>
+								<h1 class="h5 m-b">Hello World #2</h1>
 								<a href="#" class="btn btn--secondary">
 									More info...
 								</a>
@@ -54,10 +48,7 @@ module.exports = {
 						<div s-slideshow-slide id="my-cool-slide">
 							<img class="abs-cover" src="https://source.unsplash.com//category/people/800x600" />
 							<div class="slideshow__metas slideshow__metas--secondary">
-								<h1 class="h3 m-b">Hello World #3</h1>
-								<p class="p m-b">
-									Ut sollicitudin enim ac nibh tempor commodo. Phasellus a nunc congue, sollicitudin nibh molestie, rutrum ligula. Duis ex diam, finibus sed dictum sit amet, faucibus sollicitudin risus. Nam eget tortor.
-								</p>
+								<h1 class="h5 m-b">Hello World #3</h1>
 								<a href="#" class="btn btn--primary">
 									More info...
 								</a>
@@ -66,15 +57,23 @@ module.exports = {
 						<div s-slideshow-slide>
 							<img class="abs-cover" src="https://source.unsplash.com//category/nature/800x600" />
 							<div class="slideshow__metas slideshow__metas--success">
-								<h1 class="h3 m-b">Hello World #4</h1>
-								<p class="p m-b">
-									Ut sollicitudin enim ac nibh tempor commodo. Phasellus a nunc congue, sollicitudin nibh molestie, rutrum ligula. Duis ex diam, finibus sed dictum sit amet, faucibus sollicitudin risus. Nam eget tortor.
-								</p>
+								<h1 class="h5 m-b">Hello World #4</h1>
 								<a href="#" class="btn btn--secondary">
 									More info...
 								</a>
 							</div>
 						</div>
+
+						<div s-slideshow-next class="slideshow__next">></div>
+						<div s-slideshow-previous class="slideshow__previous"><</div>
+
+						<ul class="slideshow__navigation">
+							<li class="slideshow__navigation-item" s-slideshow-goto="0"></li>
+							<li class="slideshow__navigation-item" s-slideshow-goto="1"></li>
+							<li class="slideshow__navigation-item" s-slideshow-goto="2"></li>
+							<li class="slideshow__navigation-item" s-slideshow-goto="3"></li>
+						</ul>
+
 					</s-slideshow>
 					<a href="#" onclick="document.querySelector('s-slideshow').previous()" class="btn btn--secondary">
 						Previous
@@ -83,7 +82,7 @@ module.exports = {
 						Next
 					</a>
 					<a href="#" onclick="document.querySelector('s-slideshow').goTo(3)" class="btn">
-						Go to slide 3
+						Go to slide 4
 					</a>
 					<a href="#" onclick="document.querySelector('s-slideshow').goTo('my-cool-slide')" class="btn">
 						Go to "my-cool-slide"
@@ -114,7 +113,8 @@ module.exports = {
 					max-width: 1000px;
 				}
 				.slideshow__metas {
-					padding: s-space(big);
+					padding: s-space(medium);
+					width:100%;
 					@include s-position(absolute, bottom);
 					background : s-color(default);
 					opacity:0;
@@ -133,13 +133,49 @@ module.exports = {
 						transform: translateY(0);
 					}
 				}
-				img {
-					opacity:0;
-					@include s-transition(slow);
-					&[loaded] {
-						opacity:1;
+
+				.slideshow__next,
+				.slideshow__previous {
+					font-size: s-rem(30px);
+					color: white;
+					position:absolute;
+					top:33%;
+					transform: translateY(-50%);
+					z-index:10;
+					background-color: s-color(black, -opacity .5);
+					display:inline-block;
+					padding:6px 15px 10px 15px;
+					line-height: 1;
+					user-select: none;
+					cursor: pointer;
+
+					&:hover {
+						background-color: s-color(black, -opacity .8);
 					}
 				}
+				.slideshow__next {
+					right:0;
+				}
+
+				.slideshow__navigation {
+					position:absolute;
+					bottom:s-rem(10px); left:0;
+					width: 100%;
+					z-index:10;
+					text-align: center;
+				}
+					.slideshow__navigation-item {
+						display: inline-block;
+						width: s-rem(8px); height: s-rem(8px);
+						background-color: s-color(white, -opacity .3);
+						border-radius: s-rem(4px);
+						cursor: pointer;
+
+						&:hover,
+						&[active] {
+							background-color: s-color(white, -opacity 1);
+						}
+					}
 			`
 		},
 		js : {

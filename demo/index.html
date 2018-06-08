@@ -5,7 +5,7 @@
 </head>
 <body>
 
-	<s-slideshow class="ratio-16-9 m-b" loop>
+	<s-slideshow class="ratio-16-9 m-b" loop timeout="5000">
 		<div s-slideshow-slide>
 			<img class="abs-cover" src="https://source.unsplash.com/category/buildings/800x600" />
 			<div class="slideshow__metas">
@@ -54,6 +54,17 @@
 				</a>
 			</div>
 		</div>
+
+		<div s-slideshow-next class="slideshow__next">></div>
+		<div s-slideshow-previous class="slideshow__previous"><</div>
+
+		<ul class="slideshow__navigation">
+			<li class="slideshow__navigation-item" s-slideshow-goto="0"></li>
+			<li class="slideshow__navigation-item" s-slideshow-goto="1"></li>
+			<li class="slideshow__navigation-item" s-slideshow-goto="2"></li>
+			<li class="slideshow__navigation-item" s-slideshow-goto="3"></li>
+		</ul>
+
 	</s-slideshow>
 	<a href="#" onclick="document.querySelector('s-slideshow').previous()" class="btn btn--secondary">
 		Previous
@@ -62,7 +73,7 @@
 		Next
 	</a>
 	<a href="#" onclick="document.querySelector('s-slideshow').goTo(3)" class="btn">
-		Go to slide 3
+		Go to slide 4
 	</a>
 	<a href="#" onclick="document.querySelector('s-slideshow').goTo('my-cool-slide')" class="btn">
 		Go to "my-cool-slide"

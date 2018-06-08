@@ -1,13 +1,14 @@
 import SWebComponent from 'coffeekraken-sugar/js/core/SWebComponent'
 import querySelectorLive from 'coffeekraken-sugar/js/dom/querySelectorLive'
-// import __isInViewport from 'coffeekraken-sugar/js/dom/isInViewport'
+import __isInViewport from 'coffeekraken-sugar/js/dom/isInViewport'
 import __autoCast from 'coffeekraken-sugar/js/utils/string/autoCast'
-import __find from 'lodash/find'
+import _find from 'lodash/find'
+import __onSwipe from 'coffeekraken-sugar/js/dom/onSwipe'
 import __dispatchEvent from 'coffeekraken-sugar/js/dom/dispatchEvent';
 import __debounce from 'coffeekraken-sugar/js/utils/functions/debounce';
 import __mutationObservable from 'coffeekraken-sugar/js/dom/mutationObservable';
+import STimer from 'coffeekraken-sugar/js/classes/STimer'
 import 'coffeekraken-sugar/js/utils/rxjs/operators/groupByTimeout';
-
 
 /**
  * @name 		SSlideshowComponent
@@ -141,7 +142,52 @@ export default class SSlideshowComponent extends SWebComponent {
 			 * @prop
 			 * @type 	{Function}
 			 */
-			initSlide : null
+			initSlide : null,
+
+			/**
+			 * Change slide when click on the slideshow depending on the props.direction setting.
+			 * Will not trigger slide change if the user want to select something in the slide or that
+			 * he clicked on an interactive item like a link, button, textarea, input or select.
+			 * @prop
+			 * @type 	{Boolean}
+			 */
+			nextOnClick : false,
+
+			/**
+			 * Set the direction of the slideshow when click
+			 * @prop
+			 * @type 		{String}
+			 * @values 		forward|backward
+			 */
+			direction : 'forward',
+
+			/**
+			 * Timeout between each slides
+			 * @prop
+			 * @type 	{Number}
+			 */
+			timeout : null,
+
+			/**
+			 * Specify if need to pause the timer on hover
+			 * @prop
+			 * @type 	{Boolean}
+			 */
+			pauseOnHover : true,
+
+			/**
+			 * Set if the keyboard navigation is enabled
+			 * @prop
+			 * @type 	{Boolean}
+			 */
+			keyboardEnabled : true,
+
+			/**
+			 * Set if the touch navigation is enabled
+			 * @prop
+			 * @type 	{Boolean}
+			 */
+			touchEnabled : true
 
 		};
 	}
@@ -276,6 +322,7 @@ export default class SSlideshowComponent extends SWebComponent {
 				this._changeSlideTimeout = setTimeout(() => {
 					this._goTo(newVal);
 				});
+				if (this._timer) this._timer.reset( ! this._isMouseover);
 			break;
 		}
 	}
@@ -306,6 +353,39 @@ export default class SSlideshowComponent extends SWebComponent {
 			this.classList.remove('clear-transmations');
 		});
 
+		// listen for click on element
+		this.addEventListener('click', this._onClick.bind(this));
+
+		// enable keyboard navigation
+		if (this.props.keyboardEnabled) {
+			this._initKeyboardNavigation();
+		}
+		// enable touch navigation
+		if (this.props.touchEnabled) {
+			this._initTouchNavigation();
+		}
+
+		this.addEventListener('mousedown', this._onMousedown.bind(this));
+		this.addEventListener('mouseup', this._onMouseup.bind(this));
+		this.addEventListener('mouseenter', this._onMouseover.bind(this));
+		this.addEventListener('mouseleave', this._onMouseout.bind(this));
+
+		// init the previous and next navigation
+		this._initPreviousAndNextButtons();
+
+		// timeout
+		if (this.props.timeout) {
+			this._timer = new STimer(this.props.timeout, {
+				loop : true,
+				tickCount : 1
+			});
+			this._timer.onTick(() => {
+				if (this.props.direction === 'forward') this.next();
+				else this.previous();
+			});
+			this._timer.start();
+		}
+
 		// maintain chainability
 		return this;
 	}
@@ -317,10 +397,117 @@ export default class SSlideshowComponent extends SWebComponent {
 	_disable() {
 		// stop listening for certain events
 		window.removeEventListener('resize', this._onResizeDebounced);
+
 		// remove all classes
 		this._unapplyStateAttrubutes();
+
+		// disable keyboard navigation
+		document.removeEventListener('keyup', this._onKeyup);
+
+		// disable mouse navigation
+		this.removeEventListener('mousedown', this._onMousedown);
+		this.removeEventListener('mouseup', this._onMouseup);
+		this.removeEventListener('mouseenter', this._onMouseover);
+		this.removeEventListener('mouseleave', this._onMouseout);
+
+		// do not listen for click anymore
+		this.removeEventListener('click', this._onClick);
+		this._refs.previous && this._refs.previous.removeEventListener('click', this._onPreviousClick);
+		this._refs.next && this._refs.next.removeEventListener('click', this._onNextClick);
+
 		// maintain chainability
 		return this;
+	}
+
+	/**
+	 * When the user click on the slideshow
+	 * @param 	{Event} 	e 	The event
+	 */
+	_onClick(e) {
+
+		// check if we click on a goto element
+		let goTo = e.target.getAttribute(`${this._componentNameDash}-goto`);
+		if (goTo) {
+			// autocast
+			goTo = __autoCast(goTo);
+			this.goTo(goTo);
+		} else if (
+			e.target.nodeName.toLowerCase() !== 'a'
+			&& e.target.nodeName.toLowerCase() !== 'button'
+			&& e.target.nodeName.toLowerCase() !== 'input'
+			&& e.target.nodeName.toLowerCase() !== 'textarea'
+			&& e.target.nodeName.toLowerCase() !== 'select'
+		) {
+			if (this.props.nextOnClick) {
+
+				if (this._mouseupTimestamp && this._mousedownTimestamp) {
+					if (this._mouseupTimestamp - this._mousedownTimestamp > 200) {
+						return;
+					}
+				}
+
+				if (this.props.direction === 'forward') {
+					this.next();
+				} else {
+					this.previous();
+				}
+			}
+		}
+	}
+
+	/**
+	 * When the user has clicked on the next button
+	 * @param 	{Event} 	e 	The event
+	 */
+	_onNextClick(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		this.next();
+	}
+
+	/**
+	 * When the mouse enter the slideshow
+	 * @param 	{Event} 	e 	The event
+	 */
+	_onMouseover(e) {
+		// pause timer
+		this._isMouseover = true;
+		if (this._timer && this.props.pauseOnHover) this._timer.pause();
+	}
+
+	/**
+	 * When the mouse leave the slideshow
+	 * @param 	{Event} 	e 	The event
+	 */
+	_onMouseout(e) {
+		this._isMouseover = false;
+		if (this._timer && this.props.pauseOnHover) this._timer.start();
+	}
+
+	/**
+	 * When the user has clicked on the previous button
+	 * @param 	{Event} 	e 	The event
+	 */
+	_onPreviousClick(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		this.previous();
+	}
+
+	/**
+	 * When the user has clicked down on the slideshow
+	 * @param 	{Event} 	e 	The event
+	 */
+	_onMousedown(e) {
+		this._mousedownTimestamp = new Date().getTime();
+	}
+
+	/**
+	 * When the user has clicked down on the slideshow
+	 * @param 	{Event} 	e 	The event
+	 */
+	_onMouseup(e) {
+		this._mouseupTimestamp = new Date().getTime();
 	}
 
 	/**
@@ -494,7 +681,7 @@ export default class SSlideshowComponent extends SWebComponent {
 		// if is a string
 		if (typeof(id) === 'string') {
 			// find the slide
-			const slideElm = __find(this._slides, (sld) => {
+			const slideElm = _find(this._slides, (sld) => {
 				return sld.id === id.replace('#','');
 			});
 			if (slideElm) {
@@ -535,6 +722,61 @@ export default class SSlideshowComponent extends SWebComponent {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Init the previous and next buttons
+	 */
+	_initPreviousAndNextButtons() {
+		// if the next element exist
+		if (this._refs.next) {
+			this._refs.next.addEventListener('click', this._onNextClick.bind(this));
+		}
+		// if the previous element exist
+		if (this._refs.previous) {
+			this._refs.previous.addEventListener('click', this._onPreviousClick.bind(this));
+		}
+	}
+
+	/**
+	 * Init the keyboard navigation
+	 */
+	_initKeyboardNavigation() {
+		// listen for keyup event
+		document.addEventListener('keyup', this._onKeyup.bind(this));
+	}
+
+	/**
+	 * Init the touch navigation
+	 */
+	_initTouchNavigation() {
+		// listen for swiped
+		__onSwipe(this, (swipeNfo) => {
+			if (swipeNfo.left) {
+				this.next();
+			} else if (swipeNfo.right) {
+				this.previous();
+			}
+		});
+	}
+
+	/**
+	 * When the user has released a keyboard key
+	 * @param 	{Event} 	e 	The event
+	 */
+	_onKeyup(e) {
+		// do nothing if the slideshow is not in viewport
+		if ( ! __isInViewport(this)) return;
+
+		// check the key
+		switch(e.keyCode) {
+			case 39: // right arrow
+				this.next();
+			break;
+			case 37: // left arrow
+				this.previous();
+			break;
+		}
 	}
 
 	/**
@@ -860,5 +1102,8 @@ export default class SSlideshowComponent extends SWebComponent {
 		this._refs.current = this.querySelectorAll(`${this._componentNameDash}-current, [${this._componentNameDash}-current]`);
 		// grab all the goto elements
 		this._refs.goTos = this.querySelectorAll(`${this._componentNameDash}-goto, [${this._componentNameDash}-goto]`);
+		// grab the next and previous element
+		this._refs.next = this.querySelector(`${this._componentNameDash}-next, [${this._componentNameDash}-next]`);
+		this._refs.previous = this.querySelector(`${this._componentNameDash}-previous, [${this._componentNameDash}-previous]`);
 	}
 }

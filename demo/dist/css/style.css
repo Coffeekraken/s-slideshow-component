@@ -5797,6 +5797,53 @@ s-slideshow {
   transform: translateY(0);
 }
 
+.slideshow__next,
+.slideshow__previous {
+  font-size: 2.14286rem;
+  color: white;
+  position: absolute;
+  top: 33%;
+  transform: translateX(0) translateY(-50%) translateZ(0);
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: inline-block;
+  padding: 6px 15px 10px 15px;
+  line-height: 1;
+  user-select: none;
+  cursor: pointer;
+}
+
+.slideshow__next:hover,
+.slideshow__previous:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.slideshow__next {
+  right: 0;
+}
+
+.slideshow__navigation {
+  position: absolute;
+  bottom: 0.71429rem;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  text-align: center;
+}
+
+.slideshow__navigation-item {
+  display: inline-block;
+  width: 0.57143rem;
+  height: 0.57143rem;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 0.28571rem;
+  cursor: pointer;
+}
+
+.slideshow__navigation-item:hover, .slideshow__navigation-item[active] {
+  background-color: white;
+}
+
 img {
   opacity: 0;
   transition: all 0.5s ease-in-out 0s, outline-color 0s linear 0s;

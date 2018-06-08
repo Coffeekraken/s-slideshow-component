@@ -126,6 +126,64 @@ Callback used to init a new slide
 
 Type : **{ [Function](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Function) }**
 
+Default : **null**
+
+
+### nextOnClick
+
+Change slide when click on the slideshow depending on the props.direction setting.
+Will not trigger slide change if the user want to select something in the slide or that
+he clicked on an interactive item like a link, button, textarea, input or select.
+
+Type : **{ [Boolean](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Boolean) }**
+
+Default : **false**
+
+
+### direction
+
+Set the direction of the slideshow when click
+
+Type : **{ [String](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/String) }**
+
+Values : **forward,backward**
+
+Default : **forward**
+
+
+### timeout
+
+Timeout between each slides
+
+Type : **{ [Number](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Number) }**
+
+Default : **null**
+
+
+### pauseOnHover
+
+Specify if need to pause the timer on hover
+
+Type : **{ [Boolean](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Boolean) }**
+
+Default : **true**
+
+
+### keyboardEnabled
+
+Set if the keyboard navigation is enabled
+
+Type : **{ [Boolean](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Boolean) }**
+
+Default : **true**
+
+
+### touchEnabled
+
+Set if the touch navigation is enabled
+
+Type : **{ [Boolean](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Boolean) }**
+
 
 
 
