@@ -1,5 +1,6 @@
 module.exports = {
 	entry: {
+		'demo/dist/js/app.js' : './demo/src/js/app.js'
 	},
 	output: {
 		path: require('path').resolve('.'),

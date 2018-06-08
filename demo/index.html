@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" href="dist/css/style.css" />
+</head>
+<body>
+
+	<s-slideshow class="ratio-16-9 m-b" loop>
+		<div s-slideshow-slide>
+			<img class="abs-cover" src="https://source.unsplash.com/category/buildings/800x600" />
+			<div class="slideshow__metas">
+				<h1 class="h3 m-b">Hello World #1</h1>
+				<p class="p m-b">
+					Ut sollicitudin enim ac nibh tempor commodo. Phasellus a nunc congue, sollicitudin nibh molestie, rutrum ligula. Duis ex diam, finibus sed dictum sit amet, faucibus sollicitudin risus. Nam eget tortor.
+				</p>
+				<a href="#" class="btn btn--primary">
+					More info...
+				</a>
+			</div>
+		</div>
+		<div s-slideshow-slide active>
+			<img class="abs-cover" src="https://source.unsplash.com//category/food/800x600" />
+			<div class="slideshow__metas slideshow__metas--primary">
+				<h1 class="h3 m-b">Hello World #2</h1>
+				<p class="p m-b">
+					Ut sollicitudin enim ac nibh tempor commodo. Phasellus a nunc congue, sollicitudin nibh molestie, rutrum ligula. Duis ex diam, finibus sed dictum sit amet, faucibus sollicitudin risus. Nam eget tortor.
+				</p>
+				<a href="#" class="btn btn--secondary">
+					More info...
+				</a>
+			</div>
+		</div>
+		<div s-slideshow-slide id="my-cool-slide">
+			<img class="abs-cover" src="https://source.unsplash.com//category/people/800x600" />
+			<div class="slideshow__metas slideshow__metas--secondary">
+				<h1 class="h3 m-b">Hello World #3</h1>
+				<p class="p m-b">
+					Ut sollicitudin enim ac nibh tempor commodo. Phasellus a nunc congue, sollicitudin nibh molestie, rutrum ligula. Duis ex diam, finibus sed dictum sit amet, faucibus sollicitudin risus. Nam eget tortor.
+				</p>
+				<a href="#" class="btn btn--primary">
+					More info...
+				</a>
+			</div>
+		</div>
+		<div s-slideshow-slide>
+			<img class="abs-cover" src="https://source.unsplash.com//category/nature/800x600" />
+			<div class="slideshow__metas slideshow__metas--success">
+				<h1 class="h3 m-b">Hello World #4</h1>
+				<p class="p m-b">
+					Ut sollicitudin enim ac nibh tempor commodo. Phasellus a nunc congue, sollicitudin nibh molestie, rutrum ligula. Duis ex diam, finibus sed dictum sit amet, faucibus sollicitudin risus. Nam eget tortor.
+				</p>
+				<a href="#" class="btn btn--secondary">
+					More info...
+				</a>
+			</div>
+		</div>
+	</s-slideshow>
+	<a href="#" onclick="document.querySelector('s-slideshow').previous()">
+		Previous
+	</a>
+	&nbsp;&nbsp;
+	<a href="#" onclick="document.querySelector('s-slideshow').next()">
+		Next
+	</a>
+	&nbsp;&nbsp;
+	<a href="#" onclick="document.querySelector('s-slideshow').goTo(3)">
+		Go to slide 3
+	</a>
+	&nbsp;&nbsp;
+	<a href="#" onclick="document.querySelector('s-slideshow').goTo('my-cool-slide')">
+		Go to "my-cool-slide"
+	</a>
+
+	<script src="dist/js/app.js"></script>
+</body>
+</html>
