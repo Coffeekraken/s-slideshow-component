@@ -113,7 +113,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 /**
 * @name 	afterChange
-* Dispatched after the change happen
+* Dispatched after the change has happened
 * @event
 */
 
@@ -201,18 +201,9 @@ var SSlideshowComponent = function (_SWebComponent) {
 			this.props.onInit && this.props.onInit(this);
 
 			// store the onResize debounced function
-			this._onResizeDebounced = (0, _debounce2.default)(this._applyCurrentSlideHeightToSlideshow.bind(this), 250);
-
-			// if need to apply the slideshow height according to the slide one,
-			// listen on window resize to reapply it correctly
-			if (this.props.applySlideHeight) {
-				window.addEventListener('resize', this._onResizeDebounced);
-
-				// listen for content of the slideshow being loaded like images, etc...
-				this.addEventListener('load', function (e) {
-					_this2._applyCurrentSlideHeightToSlideshow();
-				}, true);
-			}
+			this._onResizeDebouncedFn = (0, _debounce2.default)(this._applyCurrentSlideHeightToSlideshow.bind(this), 250);
+			this._onSlideContentLoadedFn = this._onSlideContentLoaded.bind(this);
+			this._onKeyUpFn = this._onKeyup.bind(this);
 
 			// enable
 			setTimeout(function () {
@@ -254,6 +245,26 @@ var SSlideshowComponent = function (_SWebComponent) {
 					});
 					if (this._timer) this._timer.reset(!this._isMouseover);
 					break;
+				case 'timeout':
+					// if there's not timeout anymore
+					// stop the timer if needed
+					if (!newVal && this._timer) {
+						this._timer.stop();
+						this._timer.destroy();
+						this._timer = null;
+						return;
+					}
+					// create the timer if not any
+					if (!this._timer) {
+						this._timer = this._createTimer(newVal);
+						return;
+					}
+					// otherwise, simply set the new dureation of the timer
+					this._timer.duration(newVal);
+					break;
+				case 'applySlideHeight':
+					if (!newVal) this.style.height = null;else this._applyCurrentSlideHeightToSlideshow();
+					break;
 			}
 		}
 
@@ -280,6 +291,10 @@ var SSlideshowComponent = function (_SWebComponent) {
 		value: function _enable() {
 			var _this4 = this;
 
+			// if need to apply the slideshow height according to the slide one,
+			// listen on window resize to reapply it correctly
+			if (this.props.applySlideHeight) this._enableApplySlideHeight();
+
 			// no transmation
 			this.classList.add('clear-transmations');
 
@@ -295,13 +310,10 @@ var SSlideshowComponent = function (_SWebComponent) {
 			this.addEventListener('click', this._onClick.bind(this));
 
 			// enable keyboard navigation
-			if (this.props.keyboardEnabled) {
-				this._initKeyboardNavigation();
-			}
-			// enable touch navigation
-			if (this.props.touchEnabled) {
-				this._initTouchNavigation();
-			}
+			if (this.props.keyboardEnabled) this._initKeyboardNavigation();
+
+			// init touch navigation
+			this._initTouchNavigation();
 
 			this.addEventListener('mousedown', this._onMousedown.bind(this));
 			this.addEventListener('mouseup', this._onMouseup.bind(this));
@@ -313,14 +325,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 
 			// timeout
 			if (this.props.timeout) {
-				this._timer = new _STimer2.default(this.props.timeout, {
-					loop: true,
-					tickCount: 1
-				});
-				this._timer.onTick(function () {
-					if (_this4.props.direction === 'forward') _this4.next();else _this4.previous();
-				});
-				this._timer.start();
+				this._timer = this._createTimer(this.props.timeout);
 			}
 
 			// maintain chainability
@@ -335,14 +340,13 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_disable',
 		value: function _disable() {
-			// stop listening for certain events
-			window.removeEventListener('resize', this._onResizeDebounced);
+			if (this.props.applySlideHeight) this._disableApplySlideHeight();
 
 			// remove all classes
 			this._unapplyStateAttrubutes();
 
 			// disable keyboard navigation
-			document.removeEventListener('keyup', this._onKeyup);
+			document.removeEventListener('keyup', this._onKeyUpFn);
 
 			// disable mouse navigation
 			this.removeEventListener('mousedown', this._onMousedown);
@@ -357,6 +361,87 @@ var SSlideshowComponent = function (_SWebComponent) {
 
 			// maintain chainability
 			return this;
+		}
+
+		/**
+   * Create a timer
+   */
+
+	}, {
+		key: '_createTimer',
+		value: function _createTimer(timeout) {
+			var _this5 = this;
+
+			var timer = new _STimer2.default(timeout, {
+				loop: true,
+				tickCount: 1
+			});
+			timer.onTick(function () {
+				if (_this5.props.direction === 'forward') _this5.next();else _this5.previous();
+			});
+			timer.start();
+			return timer;
+		}
+
+		/**
+   * Enable apply slide height
+   */
+
+	}, {
+		key: '_enableApplySlideHeight',
+		value: function _enableApplySlideHeight() {
+			// listen for window resize to resize the slideshow if needed
+			window.addEventListener('resize', this._onResizeDebouncedFn);
+
+			// listen for content of the slideshow being loaded like images, etc...
+			this.addEventListener('load', this._onSlideContentLoadedFn, true);
+		}
+
+		/**
+   * Disable apply slide height
+   */
+
+	}, {
+		key: '_disableApplySlideHeight',
+		value: function _disableApplySlideHeight() {
+			window.removeEventListener('resize', this._onResizeDebouncedFn);
+			this.removeEventListener('load', this._onSlideContentLoadedFn, true);
+		}
+
+		/**
+   * On images, etc... are loaded inside the slideshow
+   */
+
+	}, {
+		key: '_onSlideContentLoaded',
+		value: function _onSlideContentLoaded(e) {
+			this._applyCurrentSlideHeightToSlideshow();
+		}
+
+		/**
+   * Apply the current slide height to the slideshow element itself
+   */
+
+	}, {
+		key: '_applyCurrentSlideHeightToSlideshow',
+		value: function _applyCurrentSlideHeightToSlideshow() {
+			var _this6 = this;
+
+			if (!this.getActiveSlide()) return;
+
+			this.mutate(function () {
+				if (!_this6._applyCurrentSlideHeightToSlideshowTarget && typeof _this6.props.applySlideHeight === 'string') {
+					// get the target to apply the height on
+					_this6._applyCurrentSlideHeightToSlideshowTarget = _this6.querySelector(_this6.props.applySlideHeight);
+				} else if (!_this6._applyCurrentSlideHeightToSlideshowTarget) {
+					_this6._applyCurrentSlideHeightToSlideshowTarget = _this6;
+				}
+
+				var activeSlideHeight = _this6.getActiveSlide().offsetHeight;
+				if (!_this6._applyCurrentSlideHeightToSlideshowTarget) return;
+				if (!activeSlideHeight) return;
+				_this6._applyCurrentSlideHeightToSlideshowTarget.style.height = activeSlideHeight + 'px';
+			});
 		}
 
 		/**
@@ -375,14 +460,18 @@ var SSlideshowComponent = function (_SWebComponent) {
 				goTo = (0, _autoCast2.default)(goTo);
 				this.goTo(goTo);
 			} else if (e.target.nodeName.toLowerCase() !== 'a' && e.target.nodeName.toLowerCase() !== 'button' && e.target.nodeName.toLowerCase() !== 'input' && e.target.nodeName.toLowerCase() !== 'textarea' && e.target.nodeName.toLowerCase() !== 'select') {
+				// do something only if the prop nextOnClick is true
 				if (this.props.nextOnClick) {
 
+					// a click must be lower than 200 ms,
+					// otherwise we stop here
 					if (this._mouseupTimestamp && this._mousedownTimestamp) {
 						if (this._mouseupTimestamp - this._mousedownTimestamp > 200) {
 							return;
 						}
 					}
 
+					// check direction and respond accordingly
 					if (this.props.direction === 'forward') {
 						this.next();
 					} else {
@@ -472,7 +561,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_monitorNewSlides',
 		value: function _monitorNewSlides() {
-			var _this5 = this;
+			var _this7 = this;
 
 			(0, _mutationObservable2.default)(this, {
 				childList: true
@@ -482,7 +571,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 				if (mutation.addedNodes) {
 					mutation.addedNodes.forEach(function (node) {
 						if (!node.tagName || needUpdateSlides) return;
-						if (node.hasAttribute(_this5._componentNameDash + '-slide') || node.tagName.toLowerCase() === _this5._componentNameDash + '-slide') {
+						if (node.hasAttribute(_this7._componentNameDash + '-slide') || node.tagName.toLowerCase() === _this7._componentNameDash + '-slide') {
 							needUpdateSlides = true;
 						}
 					});
@@ -490,13 +579,13 @@ var SSlideshowComponent = function (_SWebComponent) {
 				if (mutation.removedNodes) {
 					mutation.removedNodes.forEach(function (node) {
 						if (!node.tagName || needUpdateSlides) return;
-						if (node.hasAttribute(_this5._componentNameDash + '-slide') || node.tagName.toLowerCase() === _this5._componentNameDash + '-slide') {
+						if (node.hasAttribute(_this7._componentNameDash + '-slide') || node.tagName.toLowerCase() === _this7._componentNameDash + '-slide') {
 							needUpdateSlides = true;
 						}
 					});
 				}
 				if (needUpdateSlides) {
-					_this5._slides = _this5._getSlides();
+					_this7._slides = _this7._getSlides();
 				}
 			});
 		}
@@ -526,11 +615,11 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_unapplyStateAttrubutes',
 		value: function _unapplyStateAttrubutes() {
-			var _this6 = this;
+			var _this8 = this;
 
 			this.mutate(function () {
 				// unactivate all the slides
-				_this6._slides.forEach(function (slide) {
+				_this8._slides.forEach(function (slide) {
 					slide.removeAttribute('active');
 					slide.removeAttribute('before-active');
 					slide.removeAttribute('after-active');
@@ -540,12 +629,12 @@ var SSlideshowComponent = function (_SWebComponent) {
 					slide.removeAttribute('last');
 				});
 				// remove the active class on all goto
-				[].forEach.call(_this6._refs.goTos, function (goTo) {
+				[].forEach.call(_this8._refs.goTos, function (goTo) {
 					goTo.removeAttribute('active');
 				});
 				// remove attributes on the slideshow itself
-				_this6.removeAttribute('last');
-				_this6.removeAttribute('first');
+				_this8.removeAttribute('last');
+				_this8.removeAttribute('first');
 			});
 		}
 
@@ -556,86 +645,60 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_applyStateAttributes',
 		value: function _applyStateAttributes() {
-			var _this7 = this;
+			var _this9 = this;
 
 			this.mutate(function () {
 				// activate the current slide
-				_this7._activeSlide.setAttribute('active', true);
+				_this9._activeSlide.setAttribute('active', true);
 				// goto classes
-				[].forEach.call(_this7._refs.goTos, function (goTo) {
-					var slide = goTo.getAttribute(_this7._componentNameDash + '-goto');
-					var idx = _this7._getSlideIdxById(slide);
-					if (idx === _this7.props.slide) {
+				[].forEach.call(_this9._refs.goTos, function (goTo) {
+					var slide = goTo.getAttribute(_this9._componentNameDash + '-goto');
+					var idx = _this9._getSlideIdxById(slide);
+					if (idx === _this9.props.slide) {
 						goTo.setAttribute('active', true);
 					}
 				});
 				// add the next and previous classes
-				if (_this7.getPreviousSlide()) {
-					if (!_this7.getPreviousSlide().hasAttribute('previous')) {
-						_this7.getPreviousSlide().setAttribute('previous', true);
+				if (_this9.getPreviousSlide()) {
+					if (!_this9.getPreviousSlide().hasAttribute('previous')) {
+						_this9.getPreviousSlide().setAttribute('previous', true);
 					}
 				}
-				if (_this7.getNextSlide()) {
-					if (!_this7.getNextSlide().hasAttribute('next')) {
-						_this7.getNextSlide().setAttribute('next', true);
+				if (_this9.getNextSlide()) {
+					if (!_this9.getNextSlide().hasAttribute('next')) {
+						_this9.getNextSlide().setAttribute('next', true);
 					}
 				}
 				// apply the first and last classes
-				if (_this7.getFirstSlide()) {
-					if (!_this7.getFirstSlide().hasAttribute('first')) {
-						_this7.getFirstSlide().setAttribute('first', true);
+				if (_this9.getFirstSlide()) {
+					if (!_this9.getFirstSlide().hasAttribute('first')) {
+						_this9.getFirstSlide().setAttribute('first', true);
 					}
 				}
-				if (_this7.getLastSlide()) {
-					if (!_this7.getLastSlide().hasAttribute('last')) {
-						_this7.getLastSlide().setAttribute('last', true);
+				if (_this9.getLastSlide()) {
+					if (!_this9.getLastSlide().hasAttribute('last')) {
+						_this9.getLastSlide().setAttribute('last', true);
 					}
 				}
 				// apply the beforeActiveClass
-				_this7.getBeforeActiveSlides().forEach(function (slide) {
+				_this9.getBeforeActiveSlides().forEach(function (slide) {
 					if (!slide.hasAttribute('before-active')) {
 						slide.setAttribute('before-active', true);
 					}
 				});
 				// apply the afterActiveClass
-				_this7.getAfterActiveSlides().forEach(function (slide) {
+				_this9.getAfterActiveSlides().forEach(function (slide) {
 					if (!slide.hasAttribute('after-active')) {
 						slide.setAttribute('after-active', true);
 					}
 				});
 				// first and last attribute on the slideshow itself
-				if (_this7.isLast()) {
-					_this7.setAttribute('last', true);
+				if (_this9.isLast()) {
+					_this9.setAttribute('last', true);
 				}
-				if (_this7.isFirst()) {
-					_this7.setAttribute('first', true);
+				if (_this9.isFirst()) {
+					_this9.setAttribute('first', true);
 				}
-			});
-		}
-
-		/**
-   * Apply the current slide height to the slideshow element itself
-   */
-
-	}, {
-		key: '_applyCurrentSlideHeightToSlideshow',
-		value: function _applyCurrentSlideHeightToSlideshow() {
-			var _this8 = this;
-
-			if (!this.getActiveSlide()) return;
-
-			this.mutate(function () {
-				if (!_this8._applyCurrentSlideHeightToSlideshowTarget && typeof _this8.props.applySlideHeight === 'string') {
-					// get the target to apply the height on
-					_this8._applyCurrentSlideHeightToSlideshowTarget = _this8.querySelector(_this8.props.applySlideHeight);
-				} else if (!_this8._applyCurrentSlideHeightToSlideshowTarget) {
-					_this8._applyCurrentSlideHeightToSlideshowTarget = _this8;
-				}
-
-				var activeSlideHeight = _this8.getActiveSlide().offsetHeight;
-				if (!_this8._applyCurrentSlideHeightToSlideshowTarget) return;
-				if (!activeSlideHeight) return;
-				_this8._applyCurrentSlideHeightToSlideshowTarget.style.height = activeSlideHeight + 'px';
 			});
 		}
 
@@ -673,18 +736,18 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_injectDynamicValuesInHtml',
 		value: function _injectDynamicValuesInHtml() {
-			var _this9 = this;
+			var _this10 = this;
 
 			// apply current
 			if (this._refs.current) {
 				[].forEach.call(this._refs.current, function (current) {
-					current.innerHTML = _this9.props.slide + 1;
+					current.innerHTML = _this10.props.slide + 1;
 				});
 			}
 			// apply total
 			if (this._refs.total) {
 				[].forEach.call(this._refs.total, function (total) {
-					total.innerHTML = _this9._slides.length;
+					total.innerHTML = _this10._slides.length;
 				});
 			}
 		}
@@ -731,7 +794,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 		key: '_initKeyboardNavigation',
 		value: function _initKeyboardNavigation() {
 			// listen for keyup event
-			document.addEventListener('keyup', this._onKeyup.bind(this));
+			document.addEventListener('keyup', this._onKeyUpFn);
 		}
 
 		/**
@@ -741,14 +804,17 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_initTouchNavigation',
 		value: function _initTouchNavigation() {
-			var _this10 = this;
+			var _this11 = this;
 
 			// listen for swiped
 			(0, _onSwipe2.default)(this, function (swipeNfo) {
+				// if the touch navigation is not enabled, stop here
+				if (!_this11.props.touchEnabled) return;
+				// check the swipe direction
 				if (swipeNfo.left) {
-					_this10.next();
+					_this11.next();
 				} else if (swipeNfo.right) {
-					_this10.previous();
+					_this11.previous();
 				}
 			});
 		}
@@ -761,6 +827,9 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_onKeyup',
 		value: function _onKeyup(e) {
+			// do nothing if the keyboard navigation if not enabled
+			if (!this.props.keyboardEnabled) return;
+
 			// do nothing if the slideshow is not in viewport
 			if (!(0, _isInViewport2.default)(this)) return;
 
@@ -1136,13 +1205,13 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: '_getSlides',
 		value: function _getSlides() {
-			var _this11 = this;
+			var _this12 = this;
 
 			// grab the slides and maintain stack up to date
 			var slides = [].slice.call(this.querySelectorAll(this._componentNameDash + '-slide, [' + this._componentNameDash + '-slide]'));
 			// init slides
 			slides.forEach(function (slide) {
-				_this11._initSlide(slide);
+				_this12._initSlide(slide);
 			});
 			// return the slides
 			return slides;
