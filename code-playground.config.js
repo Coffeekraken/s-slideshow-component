@@ -25,7 +25,7 @@ module.exports = {
 					<h1 class="h1 m-b-small">
 						Coffeekraken s-slideshow-component
 					</h1>
-					<p class="p m-b-bigger">Provide a nice and fully customizable select webcomponent that use a real select as source of truth</p>
+					<p class="p m-b-bigger">Create nice, simple and fully customizable slideshow.</p>
 					<s-slideshow class="ratio-16-9 m-b" loop timeout="5000">
 						<div s-slideshow-slide>
 							<img class="abs-cover" src="https://source.unsplash.com/category/buildings/800x600" />
