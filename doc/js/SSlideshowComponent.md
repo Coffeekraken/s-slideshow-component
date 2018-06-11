@@ -328,4 +328,4 @@ Dispatched when the change happen
 
 ### afterChange
 
-Dispatched after the change happen
+Dispatched after the change has happened

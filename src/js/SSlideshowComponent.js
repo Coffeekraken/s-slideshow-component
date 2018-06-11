@@ -65,7 +65,7 @@ import 'coffeekraken-sugar/js/utils/rxjs/operators/groupByTimeout';
 
  /**
  * @name 	afterChange
- * Dispatched after the change happen
+ * Dispatched after the change has happened
  * @event
  */
 
@@ -279,18 +279,9 @@ export default class SSlideshowComponent extends SWebComponent {
 		this.props.onInit && this.props.onInit(this);
 
 		// store the onResize debounced function
-		this._onResizeDebounced = __debounce(this._applyCurrentSlideHeightToSlideshow.bind(this), 250)
-
-		// if need to apply the slideshow height according to the slide one,
-		// listen on window resize to reapply it correctly
-		if (this.props.applySlideHeight) {
-			window.addEventListener('resize', this._onResizeDebounced);
-
-			// listen for content of the slideshow being loaded like images, etc...
-			this.addEventListener('load', (e) => {
-				this._applyCurrentSlideHeightToSlideshow();
-			}, true);
-		}
+		this._onResizeDebouncedFn = __debounce(this._applyCurrentSlideHeightToSlideshow.bind(this), 250)
+		this._onSlideContentLoadedFn = this._onSlideContentLoaded.bind(this);
+		this._onKeyUpFn = this._onKeyup.bind(this);
 
 		// enable
 		setTimeout(() => {
@@ -324,6 +315,27 @@ export default class SSlideshowComponent extends SWebComponent {
 				});
 				if (this._timer) this._timer.reset( ! this._isMouseover);
 			break;
+			case 'timeout':
+				// if there's not timeout anymore
+				// stop the timer if needed
+				if ( ! newVal && this._timer) {
+					this._timer.stop();
+					this._timer.destroy();
+					this._timer = null;
+					return;
+				}
+				// create the timer if not any
+				if ( ! this._timer) {
+					this._timer = this._createTimer(newVal);
+					return;
+				}
+				// otherwise, simply set the new dureation of the timer
+				this._timer.duration(newVal);
+			break;
+			case 'applySlideHeight':
+				if ( ! newVal) this.style.height = null;
+				else this._applyCurrentSlideHeightToSlideshow()
+			break;
 		}
 	}
 
@@ -342,6 +354,10 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @return 	{SSlideshowComponent}
 	 */
 	_enable() {
+		// if need to apply the slideshow height according to the slide one,
+		// listen on window resize to reapply it correctly
+		if (this.props.applySlideHeight) this._enableApplySlideHeight()
+
 		// no transmation
 		this.classList.add('clear-transmations');
 
@@ -357,13 +373,10 @@ export default class SSlideshowComponent extends SWebComponent {
 		this.addEventListener('click', this._onClick.bind(this));
 
 		// enable keyboard navigation
-		if (this.props.keyboardEnabled) {
-			this._initKeyboardNavigation();
-		}
-		// enable touch navigation
-		if (this.props.touchEnabled) {
-			this._initTouchNavigation();
-		}
+		if (this.props.keyboardEnabled) this._initKeyboardNavigation();
+
+		// init touch navigation
+		this._initTouchNavigation();
 
 		this.addEventListener('mousedown', this._onMousedown.bind(this));
 		this.addEventListener('mouseup', this._onMouseup.bind(this));
@@ -375,15 +388,7 @@ export default class SSlideshowComponent extends SWebComponent {
 
 		// timeout
 		if (this.props.timeout) {
-			this._timer = new STimer(this.props.timeout, {
-				loop : true,
-				tickCount : 1
-			});
-			this._timer.onTick(() => {
-				if (this.props.direction === 'forward') this.next();
-				else this.previous();
-			});
-			this._timer.start();
+			this._timer = this._createTimer(this.props.timeout);
 		}
 
 		// maintain chainability
@@ -395,14 +400,13 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @return 	{SSlideshowComponent}
 	 */
 	_disable() {
-		// stop listening for certain events
-		window.removeEventListener('resize', this._onResizeDebounced);
+		if (this.props.applySlideHeight) this._disableApplySlideHeight()
 
 		// remove all classes
 		this._unapplyStateAttrubutes();
 
 		// disable keyboard navigation
-		document.removeEventListener('keyup', this._onKeyup);
+		document.removeEventListener('keyup', this._onKeyUpFn);
 
 		// disable mouse navigation
 		this.removeEventListener('mousedown', this._onMousedown);
@@ -417,6 +421,70 @@ export default class SSlideshowComponent extends SWebComponent {
 
 		// maintain chainability
 		return this;
+	}
+
+	/**
+	 * Create a timer
+	 */
+	_createTimer(timeout) {
+		const timer = new STimer(timeout, {
+			loop : true,
+			tickCount : 1
+		});
+		timer.onTick(() => {
+			if (this.props.direction === 'forward') this.next();
+			else this.previous();
+		});
+		timer.start();
+		return timer;
+	}
+
+	/**
+	 * Enable apply slide height
+	 */
+	_enableApplySlideHeight() {
+		// listen for window resize to resize the slideshow if needed
+		window.addEventListener('resize', this._onResizeDebouncedFn);
+
+		// listen for content of the slideshow being loaded like images, etc...
+		this.addEventListener('load', this._onSlideContentLoadedFn, true);
+	}
+
+	/**
+	 * Disable apply slide height
+	 */
+	_disableApplySlideHeight() {
+		window.removeEventListener('resize', this._onResizeDebouncedFn);
+		this.removeEventListener('load', this._onSlideContentLoadedFn, true);
+	}
+
+	/**
+	 * On images, etc... are loaded inside the slideshow
+	 */
+	_onSlideContentLoaded(e) {
+		this._applyCurrentSlideHeightToSlideshow();
+	}
+
+	/**
+	 * Apply the current slide height to the slideshow element itself
+	 */
+	_applyCurrentSlideHeightToSlideshow() {
+
+		if ( ! this.getActiveSlide()) return
+
+		this.mutate(() => {
+			if ( ! this._applyCurrentSlideHeightToSlideshowTarget && typeof(this.props.applySlideHeight) === 'string') {
+				// get the target to apply the height on
+				this._applyCurrentSlideHeightToSlideshowTarget = this.querySelector(this.props.applySlideHeight);
+			} else if ( ! this._applyCurrentSlideHeightToSlideshowTarget) {
+				this._applyCurrentSlideHeightToSlideshowTarget = this;
+			}
+
+			const activeSlideHeight = this.getActiveSlide().offsetHeight;
+			if ( ! this._applyCurrentSlideHeightToSlideshowTarget) return;
+			if ( ! activeSlideHeight) return
+			this._applyCurrentSlideHeightToSlideshowTarget.style.height = activeSlideHeight + 'px'
+		});
 	}
 
 	/**
@@ -438,14 +506,18 @@ export default class SSlideshowComponent extends SWebComponent {
 			&& e.target.nodeName.toLowerCase() !== 'textarea'
 			&& e.target.nodeName.toLowerCase() !== 'select'
 		) {
+			// do something only if the prop nextOnClick is true
 			if (this.props.nextOnClick) {
 
+				// a click must be lower than 200 ms,
+				// otherwise we stop here
 				if (this._mouseupTimestamp && this._mousedownTimestamp) {
 					if (this._mouseupTimestamp - this._mousedownTimestamp > 200) {
 						return;
 					}
 				}
 
+				// check direction and respond accordingly
 				if (this.props.direction === 'forward') {
 					this.next();
 				} else {
@@ -647,28 +719,6 @@ export default class SSlideshowComponent extends SWebComponent {
 	}
 
 	/**
-	 * Apply the current slide height to the slideshow element itself
-	 */
-	_applyCurrentSlideHeightToSlideshow() {
-
-		if ( ! this.getActiveSlide()) return
-
-		this.mutate(() => {
-			if ( ! this._applyCurrentSlideHeightToSlideshowTarget && typeof(this.props.applySlideHeight) === 'string') {
-				// get the target to apply the height on
-				this._applyCurrentSlideHeightToSlideshowTarget = this.querySelector(this.props.applySlideHeight);
-			} else if ( ! this._applyCurrentSlideHeightToSlideshowTarget) {
-				this._applyCurrentSlideHeightToSlideshowTarget = this;
-			}
-
-			const activeSlideHeight = this.getActiveSlide().offsetHeight;
-			if ( ! this._applyCurrentSlideHeightToSlideshowTarget) return;
-			if ( ! activeSlideHeight) return
-			this._applyCurrentSlideHeightToSlideshowTarget.style.height = activeSlideHeight + 'px'
-		});
-	}
-
-	/**
 	 * Get slide idx by id
 	 * @param 		{String} 		id 		The slide id
 	 * @return 		{Integer} 				The slide idx
@@ -743,7 +793,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 */
 	_initKeyboardNavigation() {
 		// listen for keyup event
-		document.addEventListener('keyup', this._onKeyup.bind(this));
+		document.addEventListener('keyup', this._onKeyUpFn);
 	}
 
 	/**
@@ -752,6 +802,9 @@ export default class SSlideshowComponent extends SWebComponent {
 	_initTouchNavigation() {
 		// listen for swiped
 		__onSwipe(this, (swipeNfo) => {
+			// if the touch navigation is not enabled, stop here
+			if ( ! this.props.touchEnabled) return;
+			// check the swipe direction
 			if (swipeNfo.left) {
 				this.next();
 			} else if (swipeNfo.right) {
@@ -765,6 +818,9 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @param 	{Event} 	e 	The event
 	 */
 	_onKeyup(e) {
+		// do nothing if the keyboard navigation if not enabled
+		if ( ! this.props.keyboardEnabled) return;
+
 		// do nothing if the slideshow is not in viewport
 		if ( ! __isInViewport(this)) return;
 
