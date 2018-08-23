@@ -1,6 +1,6 @@
 {
   "name": "coffeekraken-s-slideshow-component",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Create nice, simple and fully customizable slideshow.",
   "main": "dist/index.js",
   "homepage": "http://coffeekraken.io",

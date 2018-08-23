@@ -844,7 +844,7 @@ export default class SSlideshowComponent extends SWebComponent {
 		if (document.hidden) return;
 
 		// get the current active slide index
-		const idx = parseInt(this.props.slide);
+		const idx = this.props.slide;
 
 		// if the slideshow is at his first time
 		let activeSlideIndex = this._slides.length-1;
@@ -891,7 +891,7 @@ export default class SSlideshowComponent extends SWebComponent {
 		if (document.hidden) return;
 
 		// get the current active slide index
-		const idx = parseInt(this.props.slide);
+		const idx = this.props.slide;
 
 		// if the slideshow is at his first time
 		let activeSlideIndex = 0;
@@ -1018,7 +1018,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @return 	{Array} 	The array of slides that are before the active one
 	 */
 	getBeforeActiveSlides() {
-		const activeIdx = parseInt(this.props.slide);
+		const activeIdx = this.props.slide;
 		const newArray = this._slides.slice(0);
 		newArray.splice(activeIdx, 1000);
 		return newArray;
@@ -1029,7 +1029,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @return 	{Array} 	The array of slides that are before the active one
 	 */
 	getAfterActiveSlides() {
-		const activeIdx = parseInt(this.props.slide);
+		const activeIdx = this.props.slide;
 		const newArray = this._slides.slice(0);
 		newArray.splice(0, activeIdx + 1);
 		return newArray;
