@@ -39,14 +39,14 @@ Features:
  </div>
 </s-slideshow>
 ```
-Author : Olivier Bossel <olivier.bossel@gmail.com>
+Author : Olivier Bossel [olivier.bossel@gmail.com](mailto:olivier.bossel@gmail.com)
 
 
 
 
 ## Attributes
 
-Here's the list of available attribute to set on the element.
+Here's the list of available attribute(s).
 
 ### slide
 
@@ -184,6 +184,8 @@ Set if the touch navigation is enabled
 
 Type : **{ [Boolean](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Boolean) }**
 
+Default : **true**
+
 
 
 
@@ -205,6 +207,7 @@ Go to previous slide
 Go to a specific slide
 
 
+#### Parameters
 Name  |  Type  |  Description  |  Status  |  Default
 ------------  |  ------------  |  ------------  |  ------------  |  ------------
 slide  |  **{ Integer }**  |  The slide index to go to or the slide id  |  required  |
@@ -217,6 +220,7 @@ Return **{ SSlideshowComponent }** The instance itself
 Register a function to init a new slide
 
 
+#### Parameters
 Name  |  Type  |  Description  |  Status  |  Default
 ------------  |  ------------  |  ------------  |  ------------  |  ------------
 initer  |  **{ [Function](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Function) }**  |  The initer function  |  required  |
