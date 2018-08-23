@@ -654,7 +654,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 				[].forEach.call(_this9._refs.goTos, function (goTo) {
 					var slide = goTo.getAttribute(_this9._componentNameDash + '-goto');
 					var idx = _this9._getSlideIdxById(slide);
-					if (idx === _this9.props.slide) {
+					if (idx === parseInt(_this9.props.slide)) {
 						goTo.setAttribute('active', true);
 					}
 				});
@@ -741,7 +741,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 			// apply current
 			if (this._refs.current) {
 				[].forEach.call(this._refs.current, function (current) {
-					current.innerHTML = _this10.props.slide + 1;
+					current.innerHTML = parseInt(_this10.props.slide) + 1;
 				});
 			}
 			// apply total
@@ -858,7 +858,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 			if (document.hidden) return;
 
 			// get the current active slide index
-			var idx = this.props.slide;
+			var idx = parseInt(this.props.slide);
 
 			// if the slideshow is at his first time
 			var activeSlideIndex = this._slides.length - 1;
@@ -908,7 +908,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 			if (document.hidden) return;
 
 			// get the current active slide index
-			var idx = this.props.slide;
+			var idx = parseInt(this.props.slide);
 
 			// if the slideshow is at his first time
 			var activeSlideIndex = 0;
@@ -1046,7 +1046,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: 'getBeforeActiveSlides',
 		value: function getBeforeActiveSlides() {
-			var activeIdx = this.props.slide;
+			var activeIdx = parseInt(this.props.slide);
 			var newArray = this._slides.slice(0);
 			newArray.splice(activeIdx, 1000);
 			return newArray;
@@ -1060,7 +1060,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: 'getAfterActiveSlides',
 		value: function getAfterActiveSlides() {
-			var activeIdx = this.props.slide;
+			var activeIdx = parseInt(this.props.slide);
 			var newArray = this._slides.slice(0);
 			newArray.splice(0, activeIdx + 1);
 			return newArray;
@@ -1074,7 +1074,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: 'getActiveSlideIndex',
 		value: function getActiveSlideIndex() {
-			return this.props.slide;
+			return parseInt(this.props.slide);
 		}
 
 		/**
@@ -1118,7 +1118,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: 'getNextSlideIndex',
 		value: function getNextSlideIndex() {
-			var activeSlideIndex = this.props.slide;
+			var activeSlideIndex = parseInt(this.props.slide);
 			if (activeSlideIndex + 1 < this._slides.length) {
 				return activeSlideIndex + 1;
 			} else {
@@ -1145,7 +1145,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: 'getPreviousSlideIndex',
 		value: function getPreviousSlideIndex() {
-			var activeSlideIndex = this.props.slide;
+			var activeSlideIndex = parseInt(this.props.slide);
 			if (activeSlideIndex > 0) {
 				return activeSlideIndex - 1;
 			} else {

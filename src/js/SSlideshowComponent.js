@@ -670,7 +670,7 @@ export default class SSlideshowComponent extends SWebComponent {
 			[].forEach.call(this._refs.goTos, (goTo) => {
 				const slide = goTo.getAttribute(`${this._componentNameDash}-goto`);
 				const idx = this._getSlideIdxById(slide);
-				if (idx === this.props.slide) {
+				if (idx === parseInt(this.props.slide)) {
 					goTo.setAttribute('active', true);
 				}
 			});
@@ -749,7 +749,7 @@ export default class SSlideshowComponent extends SWebComponent {
 		// apply current
 		if (this._refs.current) {
 			[].forEach.call(this._refs.current, (current) => {
-				current.innerHTML = this.props.slide + 1;
+				current.innerHTML = parseInt(this.props.slide) + 1;
 			});
 		}
 		// apply total
@@ -844,7 +844,7 @@ export default class SSlideshowComponent extends SWebComponent {
 		if (document.hidden) return;
 
 		// get the current active slide index
-		const idx = this.props.slide;
+		const idx = parseInt(this.props.slide);
 
 		// if the slideshow is at his first time
 		let activeSlideIndex = this._slides.length-1;
@@ -891,7 +891,7 @@ export default class SSlideshowComponent extends SWebComponent {
 		if (document.hidden) return;
 
 		// get the current active slide index
-		const idx = this.props.slide;
+		const idx = parseInt(this.props.slide);
 
 		// if the slideshow is at his first time
 		let activeSlideIndex = 0;
@@ -1018,7 +1018,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @return 	{Array} 	The array of slides that are before the active one
 	 */
 	getBeforeActiveSlides() {
-		const activeIdx = this.props.slide;
+		const activeIdx = parseInt(this.props.slide);
 		const newArray = this._slides.slice(0);
 		newArray.splice(activeIdx, 1000);
 		return newArray;
@@ -1029,7 +1029,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @return 	{Array} 	The array of slides that are before the active one
 	 */
 	getAfterActiveSlides() {
-		const activeIdx = this.props.slide;
+		const activeIdx = parseInt(this.props.slide);
 		const newArray = this._slides.slice(0);
 		newArray.splice(0, activeIdx + 1);
 		return newArray;
@@ -1040,7 +1040,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @return 	{Integer}	The active slide index
 	 */
 	getActiveSlideIndex() {
-		return this.props.slide;
+		return parseInt(this.props.slide);
 	}
 
 	/**
@@ -1072,7 +1072,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @return 	{Integer} 	The next slide index
 	 */
 	getNextSlideIndex() {
-		const activeSlideIndex = this.props.slide;
+		const activeSlideIndex = parseInt(this.props.slide);
 		if (activeSlideIndex + 1 < this._slides.length) {
 			return activeSlideIndex + 1;
 		} else {
@@ -1093,7 +1093,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @return 	{Integer} 	The previous slide index
 	 */
 	getPreviousSlideIndex() {
-		const activeSlideIndex = this.props.slide;
+		const activeSlideIndex = parseInt(this.props.slide);
 		if (activeSlideIndex > 0) {
 			return activeSlideIndex - 1;
 		} else {
