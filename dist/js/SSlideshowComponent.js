@@ -870,8 +870,8 @@ var SSlideshowComponent = function (_SWebComponent) {
 				} else {
 					activeSlideIndex = 0;
 				}
-			} else if (idx + 1 < this._slides.length) {
-				activeSlideIndex = idx + 1;
+			} else if (parseInt(idx) + 1 < this._slides.length) {
+				activeSlideIndex = parseInt(idx) + 1;
 			} else if (this.props.loop) {
 				activeSlideIndex = 0;
 			}
@@ -920,8 +920,8 @@ var SSlideshowComponent = function (_SWebComponent) {
 				} else {
 					activeSlideIndex = 0;
 				}
-			} else if (idx - 1 >= 0) {
-				activeSlideIndex = idx - 1;
+			} else if (parseInt(idx) - 1 >= 0) {
+				activeSlideIndex = parseInt(idx) - 1;
 			} else if (this.props.loop) {
 				activeSlideIndex = this._slides.length - 1;
 			}
