@@ -858,7 +858,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 			if (document.hidden) return;
 
 			// get the current active slide index
-			var idx = parseInt(this.props.slide);
+			var idx = this.props.slide;
 
 			// if the slideshow is at his first time
 			var activeSlideIndex = this._slides.length - 1;
@@ -908,7 +908,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 			if (document.hidden) return;
 
 			// get the current active slide index
-			var idx = parseInt(this.props.slide);
+			var idx = this.props.slide;
 
 			// if the slideshow is at his first time
 			var activeSlideIndex = 0;
@@ -1046,7 +1046,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: 'getBeforeActiveSlides',
 		value: function getBeforeActiveSlides() {
-			var activeIdx = parseInt(this.props.slide);
+			var activeIdx = this.props.slide;
 			var newArray = this._slides.slice(0);
 			newArray.splice(activeIdx, 1000);
 			return newArray;
@@ -1060,7 +1060,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: 'getAfterActiveSlides',
 		value: function getAfterActiveSlides() {
-			var activeIdx = parseInt(this.props.slide);
+			var activeIdx = this.props.slide;
 			var newArray = this._slides.slice(0);
 			newArray.splice(0, activeIdx + 1);
 			return newArray;
