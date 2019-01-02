@@ -29,6 +29,8 @@
 
 Create nice, simple and fully customizable slideshow.
 
+[![View demo](http://components.coffeekraken.io/assets/img/view-demo.png)](http://components.coffeekraken.io/app/s-slideshow-component)
+
 ## Features
 
 - Maintain attributes on elements for easy styling

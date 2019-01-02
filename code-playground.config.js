@@ -181,7 +181,6 @@ module.exports = {
 		js : {
 			language : 'js',
 			data : `
-				import 'webcomponents.js/webcomponents-lite'
 				import SSlideshowComponent from './dist/index'
 			`
 		}

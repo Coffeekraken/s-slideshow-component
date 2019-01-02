@@ -1,6 +1,6 @@
 {
   "name": "coffeekraken-s-slideshow-component",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Create nice, simple and fully customizable slideshow.",
   "main": "dist/index.js",
   "homepage": "http://coffeekraken.io",
@@ -57,11 +57,12 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "coffeekraken-sugar": "^1.0.0",
-    "lodash": "^4.17.4"
+    "coffeekraken-sugar": "^1.0.34",
+    "coffeekraken-s-button-component": "^1.0.1",
+    "coffeekraken-s-typography-component": "^1.0.1",
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "@webcomponents/webcomponentsjs": "^2.0.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
@@ -70,14 +71,11 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.7.0",
-    "coffeekraken-code-playground": "^1.0.0",
+    "coffeekraken-code-playground": "^1.0.11",
     "coffeekraken-docblock-to-markdown": "^1.0.0",
-    "coffeekraken-s-button-component": "^1.0.1",
-    "coffeekraken-s-typography-component": "^1.0.1",
     "coffeekraken-scripts-stack": "^1.0.1",
     "http-server": "^0.11.1",
-    "node-sass": "^4.0.0",
-    "webcomponents.js": "^0.7.24",
+    "node-sass": "^4.11.0",
     "webpack": "^4.0.0",
     "webpack-cli": "^3.0.3"
   }
