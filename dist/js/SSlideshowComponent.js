@@ -309,7 +309,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 			this.classList.add("clear-transmations");
 
 			// next
-			this.next();
+			this.next(true);
 
 			// remove the no transmation class to allow animations, etc...
 			setTimeout(function () {
@@ -886,6 +886,8 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: "next",
 		value: function next() {
+			var isFirst = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
 			// stop if the document is hidden
 			if (document.hidden) return;
 
@@ -920,7 +922,8 @@ var SSlideshowComponent = function (_SWebComponent) {
 			// set slide prop
 			this.setProps({
 				slide: activeSlideIndex,
-				slideId: slideId
+				slideId: slideId,
+				direction: isFirst ? this.props.direction : "forward"
 			});
 
 			// onNext callback
@@ -974,7 +977,8 @@ var SSlideshowComponent = function (_SWebComponent) {
 			// set slide prop
 			this.setProps({
 				slide: activeSlideIndex,
-				slideId: slideId
+				slideId: slideId,
+				direction: "backward"
 			});
 
 			// onPrevious callback
@@ -1386,7 +1390,8 @@ var SSlideshowComponent = function (_SWebComponent) {
 				nextOnClick: false,
 
 				/**
-     * Set the direction of the slideshow when click
+     * Set the direction of the slideshow when click. If click on previous button, will be set to "backward".
+     * On click on the next button, will be set to "forward".
      * @prop
      * @type 		{String}
      * @values 		forward|backward
@@ -1432,7 +1437,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}, {
 		key: "physicalProps",
 		get: function get() {
-			return ["slide", "slideId", "slidesPerChange"];
+			return ["slide", "slideId", "slidesPerChange", "direction"];
 		}
 	}]);
 
