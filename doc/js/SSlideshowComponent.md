@@ -73,6 +73,15 @@ Set if the slideshow is infinite
 Default : **false**
 
 
+### slidesPerChange
+
+Specify how many slides the slider has to pass on any change. Default is 1 but this can be usefull for special situations.
+
+Type : **{ Integer }**
+
+Default : **1**
+
+
 ### applySlideHeight
 
 Set if want that the plugin set the height of the s-slideshow tag accordingly to the active slide height.
@@ -190,6 +199,21 @@ Default : **true**
 
 
 ## Methods
+
+
+### responsiveSlidesPerChange
+
+Specify how many slide the slider has to pass on each `next` and `previous` call depending on viewport width.
+This is a parameter that works in mobile first. Meaning that a value of `'300': 2` mean from 300px to infinite, apply 2 as slidesPerChange property
+
+#### Example
+```js
+	{
+  768: 2,
+  1200: 3
+}
+```
+Default : **null**
 
 
 ### next

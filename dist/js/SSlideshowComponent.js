@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
@@ -8,47 +8,51 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _SWebComponent2 = require('coffeekraken-sugar/js/core/SWebComponent');
+var _SWebComponent2 = require("coffeekraken-sugar/js/core/SWebComponent");
 
 var _SWebComponent3 = _interopRequireDefault(_SWebComponent2);
 
-var _querySelectorLive = require('coffeekraken-sugar/js/dom/querySelectorLive');
+var _querySelectorLive = require("coffeekraken-sugar/js/dom/querySelectorLive");
 
 var _querySelectorLive2 = _interopRequireDefault(_querySelectorLive);
 
-var _isInViewport = require('coffeekraken-sugar/js/dom/isInViewport');
+var _isInViewport = require("coffeekraken-sugar/js/dom/isInViewport");
 
 var _isInViewport2 = _interopRequireDefault(_isInViewport);
 
-var _autoCast = require('coffeekraken-sugar/js/utils/string/autoCast');
+var _autoCast = require("coffeekraken-sugar/js/utils/string/autoCast");
 
 var _autoCast2 = _interopRequireDefault(_autoCast);
 
-var _find2 = require('lodash/find');
+var _find2 = require("lodash/find");
 
 var _find3 = _interopRequireDefault(_find2);
 
-var _onSwipe = require('coffeekraken-sugar/js/dom/onSwipe');
+var _onSwipe = require("coffeekraken-sugar/js/dom/onSwipe");
 
 var _onSwipe2 = _interopRequireDefault(_onSwipe);
 
-var _dispatchEvent = require('coffeekraken-sugar/js/dom/dispatchEvent');
+var _dispatchEvent = require("coffeekraken-sugar/js/dom/dispatchEvent");
 
 var _dispatchEvent2 = _interopRequireDefault(_dispatchEvent);
 
-var _debounce = require('coffeekraken-sugar/js/utils/functions/debounce');
+var _debounce = require("coffeekraken-sugar/js/utils/functions/debounce");
 
 var _debounce2 = _interopRequireDefault(_debounce);
 
-var _mutationObservable = require('coffeekraken-sugar/js/dom/mutationObservable');
+var _mutationObservable = require("coffeekraken-sugar/js/dom/mutationObservable");
 
 var _mutationObservable2 = _interopRequireDefault(_mutationObservable);
 
-var _STimer = require('coffeekraken-sugar/js/classes/STimer');
+var _addEventListener = require("coffeekraken-sugar/js/dom/addEventListener");
+
+var _addEventListener2 = _interopRequireDefault(_addEventListener);
+
+var _STimer = require("coffeekraken-sugar/js/classes/STimer");
 
 var _STimer2 = _interopRequireDefault(_STimer);
 
-require('coffeekraken-sugar/js/utils/rxjs/operators/groupByTimeout');
+require("coffeekraken-sugar/js/utils/rxjs/operators/groupByTimeout");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -106,16 +110,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  */
 
 /**
-* @name 	change
-* Dispatched when the change happen
-* @event
-*/
+ * @name 	change
+ * Dispatched when the change happen
+ * @event
+ */
 
 /**
-* @name 	afterChange
-* Dispatched after the change has happened
-* @event
-*/
+ * @name 	afterChange
+ * Dispatched after the change has happened
+ * @event
+ */
 
 var SSlideshowComponent = function (_SWebComponent) {
 	_inherits(SSlideshowComponent, _SWebComponent);
@@ -127,16 +131,16 @@ var SSlideshowComponent = function (_SWebComponent) {
 	}
 
 	_createClass(SSlideshowComponent, [{
-		key: 'componentWillMount',
+		key: "componentWillMount",
 
 
 		/**
    * Component will mount
-  	 * @definition 		SWebComponent.componentWillMount
+   * @definition 		SWebComponent.componentWillMount
    * @protected
    */
 		value: function componentWillMount() {
-			_get(SSlideshowComponent.prototype.__proto__ || Object.getPrototypeOf(SSlideshowComponent.prototype), 'componentWillMount', this).call(this);
+			_get(SSlideshowComponent.prototype.__proto__ || Object.getPrototypeOf(SSlideshowComponent.prototype), "componentWillMount", this).call(this);
 
 			/**
     * Store all the slides elements
@@ -182,11 +186,11 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'componentMount',
+		key: "componentMount",
 		value: function componentMount() {
 			var _this2 = this;
 
-			_get(SSlideshowComponent.prototype.__proto__ || Object.getPrototypeOf(SSlideshowComponent.prototype), 'componentMount', this).call(this);
+			_get(SSlideshowComponent.prototype.__proto__ || Object.getPrototypeOf(SSlideshowComponent.prototype), "componentMount", this).call(this);
 
 			// update references
 			this._updateReferences();
@@ -218,9 +222,9 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'componentUnmount',
+		key: "componentUnmount",
 		value: function componentUnmount() {
-			_get(SSlideshowComponent.prototype.__proto__ || Object.getPrototypeOf(SSlideshowComponent.prototype), 'componentUnmount', this).call(this);
+			_get(SSlideshowComponent.prototype.__proto__ || Object.getPrototypeOf(SSlideshowComponent.prototype), "componentUnmount", this).call(this);
 			this._disable();
 		}
 
@@ -231,21 +235,21 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'componentWillReceiveProp',
+		key: "componentWillReceiveProp",
 		value: function componentWillReceiveProp(name, newVal, oldVal) {
 			var _this3 = this;
 
 			if (newVal === undefined || newVal === null) return;
 			switch (name) {
-				case 'slide':
-				case 'slideId':
+				case "slide":
+				case "slideId":
 					clearTimeout(this._changeSlideTimeout);
 					this._changeSlideTimeout = setTimeout(function () {
 						_this3._goTo(newVal);
 					});
 					if (this._timer) this._timer.reset(!this._isMouseover);
 					break;
-				case 'timeout':
+				case "timeout":
 					// if there's not timeout anymore
 					// stop the timer if needed
 					if (!newVal && this._timer) {
@@ -262,7 +266,13 @@ var SSlideshowComponent = function (_SWebComponent) {
 					// otherwise, simply set the new dureation of the timer
 					this._timer.duration(newVal);
 					break;
-				case 'applySlideHeight':
+				case "slidesPerChange":
+					// go back to slide 0 if it is not the same
+					if (newVal !== oldVal) {
+						this.goTo(0);
+					}
+					break;
+				case "applySlideHeight":
 					if (!newVal) this.style.height = null;else this._applyCurrentSlideHeightToSlideshow();
 					break;
 			}
@@ -276,9 +286,9 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'render',
+		key: "render",
 		value: function render() {
-			_get(SSlideshowComponent.prototype.__proto__ || Object.getPrototypeOf(SSlideshowComponent.prototype), 'render', this).call(this);
+			_get(SSlideshowComponent.prototype.__proto__ || Object.getPrototypeOf(SSlideshowComponent.prototype), "render", this).call(this);
 		}
 
 		/**
@@ -287,7 +297,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_enable',
+		key: "_enable",
 		value: function _enable() {
 			var _this4 = this;
 
@@ -296,18 +306,18 @@ var SSlideshowComponent = function (_SWebComponent) {
 			if (this.props.applySlideHeight) this._enableApplySlideHeight();
 
 			// no transmation
-			this.classList.add('clear-transmations');
+			this.classList.add("clear-transmations");
 
 			// next
 			this.next();
 
 			// remove the no transmation class to allow animations, etc...
 			setTimeout(function () {
-				_this4.classList.remove('clear-transmations');
+				_this4.classList.remove("clear-transmations");
 			});
 
 			// listen for click on element
-			this.addEventListener('click', this._onClick.bind(this));
+			this.addEventListener("click", this._onClick.bind(this));
 
 			// enable keyboard navigation
 			if (this.props.keyboardEnabled) this._initKeyboardNavigation();
@@ -315,13 +325,19 @@ var SSlideshowComponent = function (_SWebComponent) {
 			// init touch navigation
 			this._initTouchNavigation();
 
-			this.addEventListener('mousedown', this._onMousedown.bind(this));
-			this.addEventListener('mouseup', this._onMouseup.bind(this));
-			this.addEventListener('mouseenter', this._onMouseover.bind(this));
-			this.addEventListener('mouseleave', this._onMouseout.bind(this));
+			this.addEventListener("mousedown", this._onMousedown.bind(this));
+			this.addEventListener("mouseup", this._onMouseup.bind(this));
+			this.addEventListener("mouseenter", this._onMouseover.bind(this));
+			this.addEventListener("mouseleave", this._onMouseout.bind(this));
 
 			// init the previous and next navigation
 			this._initPreviousAndNextButtons();
+
+			// listen for resize to apply the responsiveSlidesPerChange property correctly
+			this._originalSlidesPerChange = this.props.slidesPerChange;
+			this._removeResizeHandler = (0, _addEventListener2.default)(window, "resize", this._setResponsiveSlidePerChange.bind(this));
+			// first time
+			this._setResponsiveSlidePerChange();
 
 			// timeout
 			if (this.props.timeout) {
@@ -333,12 +349,28 @@ var SSlideshowComponent = function (_SWebComponent) {
 		}
 
 		/**
+   * Set responsive slides per change
+   */
+
+	}, {
+		key: "_setResponsiveSlidePerChange",
+		value: function _setResponsiveSlidePerChange() {
+			var slidesPerChange = this._originalSlidesPerChange;
+			for (var key in this.responsiveSlidesPerChange) {
+				if (window.innerWidth >= parseInt(key)) {
+					slidesPerChange = this.responsiveSlidesPerChange[key];
+				}
+			}
+			this.setProp("slidesPerChange", slidesPerChange);
+		}
+
+		/**
    * When the element is disabled
    * @return 	{SSlideshowComponent}
    */
 
 	}, {
-		key: '_disable',
+		key: "_disable",
 		value: function _disable() {
 			if (this.props.applySlideHeight) this._disableApplySlideHeight();
 
@@ -346,18 +378,20 @@ var SSlideshowComponent = function (_SWebComponent) {
 			this._unapplyStateAttrubutes();
 
 			// disable keyboard navigation
-			document.removeEventListener('keyup', this._onKeyUpFn);
+			document.removeEventListener("keyup", this._onKeyUpFn);
 
 			// disable mouse navigation
-			this.removeEventListener('mousedown', this._onMousedown);
-			this.removeEventListener('mouseup', this._onMouseup);
-			this.removeEventListener('mouseenter', this._onMouseover);
-			this.removeEventListener('mouseleave', this._onMouseout);
+			this.removeEventListener("mousedown", this._onMousedown);
+			this.removeEventListener("mouseup", this._onMouseup);
+			this.removeEventListener("mouseenter", this._onMouseover);
+			this.removeEventListener("mouseleave", this._onMouseout);
+
+			if (this._removeResizeHandler) this._removeResizeHandler();
 
 			// do not listen for click anymore
-			this.removeEventListener('click', this._onClick);
-			this._refs.previous && this._refs.previous.removeEventListener('click', this._onPreviousClick);
-			this._refs.next && this._refs.next.removeEventListener('click', this._onNextClick);
+			this.removeEventListener("click", this._onClick);
+			this._refs.previous && this._refs.previous.removeEventListener("click", this._onPreviousClick);
+			this._refs.next && this._refs.next.removeEventListener("click", this._onNextClick);
 
 			// maintain chainability
 			return this;
@@ -368,7 +402,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_createTimer',
+		key: "_createTimer",
 		value: function _createTimer(timeout) {
 			var _this5 = this;
 
@@ -377,7 +411,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 				tickCount: 1
 			});
 			timer.onTick(function () {
-				if (_this5.props.direction === 'forward') _this5.next();else _this5.previous();
+				if (_this5.props.direction === "forward") _this5.next();else _this5.previous();
 			});
 			timer.start();
 			return timer;
@@ -388,13 +422,13 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_enableApplySlideHeight',
+		key: "_enableApplySlideHeight",
 		value: function _enableApplySlideHeight() {
 			// listen for window resize to resize the slideshow if needed
-			window.addEventListener('resize', this._onResizeDebouncedFn);
+			window.addEventListener("resize", this._onResizeDebouncedFn);
 
 			// listen for content of the slideshow being loaded like images, etc...
-			this.addEventListener('load', this._onSlideContentLoadedFn, true);
+			this.addEventListener("load", this._onSlideContentLoadedFn, true);
 		}
 
 		/**
@@ -402,10 +436,10 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_disableApplySlideHeight',
+		key: "_disableApplySlideHeight",
 		value: function _disableApplySlideHeight() {
-			window.removeEventListener('resize', this._onResizeDebouncedFn);
-			this.removeEventListener('load', this._onSlideContentLoadedFn, true);
+			window.removeEventListener("resize", this._onResizeDebouncedFn);
+			this.removeEventListener("load", this._onSlideContentLoadedFn, true);
 		}
 
 		/**
@@ -413,7 +447,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_onSlideContentLoaded',
+		key: "_onSlideContentLoaded",
 		value: function _onSlideContentLoaded(e) {
 			this._applyCurrentSlideHeightToSlideshow();
 		}
@@ -423,14 +457,14 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_applyCurrentSlideHeightToSlideshow',
+		key: "_applyCurrentSlideHeightToSlideshow",
 		value: function _applyCurrentSlideHeightToSlideshow() {
 			var _this6 = this;
 
 			if (!this.getActiveSlide()) return;
 
 			this.mutate(function () {
-				if (!_this6._applyCurrentSlideHeightToSlideshowTarget && typeof _this6.props.applySlideHeight === 'string') {
+				if (!_this6._applyCurrentSlideHeightToSlideshowTarget && typeof _this6.props.applySlideHeight === "string") {
 					// get the target to apply the height on
 					_this6._applyCurrentSlideHeightToSlideshowTarget = _this6.querySelector(_this6.props.applySlideHeight);
 				} else if (!_this6._applyCurrentSlideHeightToSlideshowTarget) {
@@ -440,7 +474,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 				var activeSlideHeight = _this6.getActiveSlide().offsetHeight;
 				if (!_this6._applyCurrentSlideHeightToSlideshowTarget) return;
 				if (!activeSlideHeight) return;
-				_this6._applyCurrentSlideHeightToSlideshowTarget.style.height = activeSlideHeight + 'px';
+				_this6._applyCurrentSlideHeightToSlideshowTarget.style.height = activeSlideHeight + "px";
 			});
 		}
 
@@ -450,19 +484,17 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_onClick',
+		key: "_onClick",
 		value: function _onClick(e) {
-
 			// check if we click on a goto element
-			var goTo = e.target.getAttribute(this._componentNameDash + '-goto');
+			var goTo = e.target.getAttribute(this._componentNameDash + "-goto");
 			if (goTo) {
 				// autocast
 				goTo = (0, _autoCast2.default)(goTo);
 				this.goTo(goTo);
-			} else if (e.target.nodeName.toLowerCase() !== 'a' && e.target.nodeName.toLowerCase() !== 'button' && e.target.nodeName.toLowerCase() !== 'input' && e.target.nodeName.toLowerCase() !== 'textarea' && e.target.nodeName.toLowerCase() !== 'select') {
+			} else if (e.target.nodeName.toLowerCase() !== "a" && e.target.nodeName.toLowerCase() !== "button" && e.target.nodeName.toLowerCase() !== "input" && e.target.nodeName.toLowerCase() !== "textarea" && e.target.nodeName.toLowerCase() !== "select") {
 				// do something only if the prop nextOnClick is true
 				if (this.props.nextOnClick) {
-
 					// a click must be lower than 200 ms,
 					// otherwise we stop here
 					if (this._mouseupTimestamp && this._mousedownTimestamp) {
@@ -472,7 +504,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 					}
 
 					// check direction and respond accordingly
-					if (this.props.direction === 'forward') {
+					if (this.props.direction === "forward") {
 						this.next();
 					} else {
 						this.previous();
@@ -487,7 +519,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_onNextClick',
+		key: "_onNextClick",
 		value: function _onNextClick(e) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -500,7 +532,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_onMouseover',
+		key: "_onMouseover",
 		value: function _onMouseover(e) {
 			// pause timer
 			this._isMouseover = true;
@@ -513,7 +545,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_onMouseout',
+		key: "_onMouseout",
 		value: function _onMouseout(e) {
 			this._isMouseover = false;
 			if (this._timer && this.props.pauseOnHover) this._timer.start();
@@ -525,7 +557,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_onPreviousClick',
+		key: "_onPreviousClick",
 		value: function _onPreviousClick(e) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -538,7 +570,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_onMousedown',
+		key: "_onMousedown",
 		value: function _onMousedown(e) {
 			this._mousedownTimestamp = new Date().getTime();
 		}
@@ -549,7 +581,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_onMouseup',
+		key: "_onMouseup",
 		value: function _onMouseup(e) {
 			this._mouseupTimestamp = new Date().getTime();
 		}
@@ -559,7 +591,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_monitorNewSlides',
+		key: "_monitorNewSlides",
 		value: function _monitorNewSlides() {
 			var _this7 = this;
 
@@ -571,7 +603,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 				if (mutation.addedNodes) {
 					mutation.addedNodes.forEach(function (node) {
 						if (!node.tagName || needUpdateSlides) return;
-						if (node.hasAttribute(_this7._componentNameDash + '-slide') || node.tagName.toLowerCase() === _this7._componentNameDash + '-slide') {
+						if (node.hasAttribute(_this7._componentNameDash + "-slide") || node.tagName.toLowerCase() === _this7._componentNameDash + "-slide") {
 							needUpdateSlides = true;
 						}
 					});
@@ -579,7 +611,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 				if (mutation.removedNodes) {
 					mutation.removedNodes.forEach(function (node) {
 						if (!node.tagName || needUpdateSlides) return;
-						if (node.hasAttribute(_this7._componentNameDash + '-slide') || node.tagName.toLowerCase() === _this7._componentNameDash + '-slide') {
+						if (node.hasAttribute(_this7._componentNameDash + "-slide") || node.tagName.toLowerCase() === _this7._componentNameDash + "-slide") {
 							needUpdateSlides = true;
 						}
 					});
@@ -595,7 +627,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_initSlide',
+		key: "_initSlide",
 		value: function _initSlide(slide) {
 			// do not init slide twice
 			if (slide._sSlideshowInited) return;
@@ -613,28 +645,28 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_unapplyStateAttrubutes',
+		key: "_unapplyStateAttrubutes",
 		value: function _unapplyStateAttrubutes() {
 			var _this8 = this;
 
 			this.mutate(function () {
 				// unactivate all the slides
 				_this8._slides.forEach(function (slide) {
-					slide.removeAttribute('active');
-					slide.removeAttribute('before-active');
-					slide.removeAttribute('after-active');
-					slide.removeAttribute('next');
-					slide.removeAttribute('previous');
-					slide.removeAttribute('first');
-					slide.removeAttribute('last');
+					slide.removeAttribute("active");
+					slide.removeAttribute("before-active");
+					slide.removeAttribute("after-active");
+					slide.removeAttribute("next");
+					slide.removeAttribute("previous");
+					slide.removeAttribute("first");
+					slide.removeAttribute("last");
 				});
 				// remove the active class on all goto
 				[].forEach.call(_this8._refs.goTos, function (goTo) {
-					goTo.removeAttribute('active');
+					goTo.removeAttribute("active");
 				});
 				// remove attributes on the slideshow itself
-				_this8.removeAttribute('last');
-				_this8.removeAttribute('first');
+				_this8.removeAttribute("last");
+				_this8.removeAttribute("first");
 			});
 		}
 
@@ -643,61 +675,61 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_applyStateAttributes',
+		key: "_applyStateAttributes",
 		value: function _applyStateAttributes() {
 			var _this9 = this;
 
 			this.mutate(function () {
 				// activate the current slide
-				_this9._activeSlide.setAttribute('active', true);
+				_this9._activeSlide.setAttribute("active", true);
 				// goto classes
 				[].forEach.call(_this9._refs.goTos, function (goTo) {
-					var slide = goTo.getAttribute(_this9._componentNameDash + '-goto');
+					var slide = goTo.getAttribute(_this9._componentNameDash + "-goto");
 					var idx = _this9._getSlideIdxById(slide);
 					if (idx === parseInt(_this9.props.slide)) {
-						goTo.setAttribute('active', true);
+						goTo.setAttribute("active", true);
 					}
 				});
 				// add the next and previous classes
 				if (_this9.getPreviousSlide()) {
-					if (!_this9.getPreviousSlide().hasAttribute('previous')) {
-						_this9.getPreviousSlide().setAttribute('previous', true);
+					if (!_this9.getPreviousSlide().hasAttribute("previous")) {
+						_this9.getPreviousSlide().setAttribute("previous", true);
 					}
 				}
 				if (_this9.getNextSlide()) {
-					if (!_this9.getNextSlide().hasAttribute('next')) {
-						_this9.getNextSlide().setAttribute('next', true);
+					if (!_this9.getNextSlide().hasAttribute("next")) {
+						_this9.getNextSlide().setAttribute("next", true);
 					}
 				}
 				// apply the first and last classes
 				if (_this9.getFirstSlide()) {
-					if (!_this9.getFirstSlide().hasAttribute('first')) {
-						_this9.getFirstSlide().setAttribute('first', true);
+					if (!_this9.getFirstSlide().hasAttribute("first")) {
+						_this9.getFirstSlide().setAttribute("first", true);
 					}
 				}
 				if (_this9.getLastSlide()) {
-					if (!_this9.getLastSlide().hasAttribute('last')) {
-						_this9.getLastSlide().setAttribute('last', true);
+					if (!_this9.getLastSlide().hasAttribute("last")) {
+						_this9.getLastSlide().setAttribute("last", true);
 					}
 				}
 				// apply the beforeActiveClass
 				_this9.getBeforeActiveSlides().forEach(function (slide) {
-					if (!slide.hasAttribute('before-active')) {
-						slide.setAttribute('before-active', true);
+					if (!slide.hasAttribute("before-active")) {
+						slide.setAttribute("before-active", true);
 					}
 				});
 				// apply the afterActiveClass
 				_this9.getAfterActiveSlides().forEach(function (slide) {
-					if (!slide.hasAttribute('after-active')) {
-						slide.setAttribute('after-active', true);
+					if (!slide.hasAttribute("after-active")) {
+						slide.setAttribute("after-active", true);
 					}
 				});
 				// first and last attribute on the slideshow itself
 				if (_this9.isLast()) {
-					_this9.setAttribute('last', true);
+					_this9.setAttribute("last", true);
 				}
 				if (_this9.isFirst()) {
-					_this9.setAttribute('first', true);
+					_this9.setAttribute("first", true);
 				}
 			});
 		}
@@ -709,17 +741,17 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_getSlideIdxById',
+		key: "_getSlideIdxById",
 		value: function _getSlideIdxById(id) {
 			// autocast the id
 			id = (0, _autoCast2.default)(id);
 			// if the id is already an integer idx
-			if (typeof id === 'number') return id;
+			if (typeof id === "number") return id;
 			// if is a string
-			if (typeof id === 'string') {
+			if (typeof id === "string") {
 				// find the slide
 				var slideElm = (0, _find3.default)(this._slides, function (sld) {
-					return sld.id === id.replace('#', '');
+					return sld.id === id.replace("#", "");
 				});
 				if (slideElm) {
 					return this._slides.indexOf(slideElm);
@@ -734,7 +766,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_injectDynamicValuesInHtml',
+		key: "_injectDynamicValuesInHtml",
 		value: function _injectDynamicValuesInHtml() {
 			var _this10 = this;
 
@@ -758,11 +790,11 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_findActiveSlideByAttributes',
+		key: "_findActiveSlideByAttributes",
 		value: function _findActiveSlideByAttributes() {
 			for (var i = 0; i < this._slides.length; i++) {
 				var slide = this._slides[i];
-				if (slide.hasAttribute('active')) {
+				if (slide.hasAttribute("active")) {
 					return slide;
 				}
 			}
@@ -774,15 +806,15 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_initPreviousAndNextButtons',
+		key: "_initPreviousAndNextButtons",
 		value: function _initPreviousAndNextButtons() {
 			// if the next element exist
 			if (this._refs.next) {
-				this._refs.next.addEventListener('click', this._onNextClick.bind(this));
+				this._refs.next.addEventListener("click", this._onNextClick.bind(this));
 			}
 			// if the previous element exist
 			if (this._refs.previous) {
-				this._refs.previous.addEventListener('click', this._onPreviousClick.bind(this));
+				this._refs.previous.addEventListener("click", this._onPreviousClick.bind(this));
 			}
 		}
 
@@ -791,10 +823,10 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_initKeyboardNavigation',
+		key: "_initKeyboardNavigation",
 		value: function _initKeyboardNavigation() {
 			// listen for keyup event
-			document.addEventListener('keyup', this._onKeyUpFn);
+			document.addEventListener("keyup", this._onKeyUpFn);
 		}
 
 		/**
@@ -802,7 +834,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_initTouchNavigation',
+		key: "_initTouchNavigation",
 		value: function _initTouchNavigation() {
 			var _this11 = this;
 
@@ -825,7 +857,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_onKeyup',
+		key: "_onKeyup",
 		value: function _onKeyup(e) {
 			// do nothing if the keyboard navigation if not enabled
 			if (!this.props.keyboardEnabled) return;
@@ -852,7 +884,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'next',
+		key: "next",
 		value: function next() {
 			// stop if the document is hidden
 			if (document.hidden) return;
@@ -861,7 +893,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 			var idx = this.props.slide;
 
 			// if the slideshow is at his first time
-			var activeSlideIndex = this._slides.length - 1;
+			var activeSlideIndex = void 0;
 			if (idx === null) {
 				// try to find a slide that has the active class
 				var activeSlide = this._findActiveSlideByAttributes();
@@ -870,22 +902,25 @@ var SSlideshowComponent = function (_SWebComponent) {
 				} else {
 					activeSlideIndex = 0;
 				}
-			} else if (parseInt(idx) + 1 < this._slides.length) {
-				activeSlideIndex = parseInt(idx) + 1;
+			} else if (parseInt(idx) + this.props.slidesPerChange < this._slides.length) {
+				activeSlideIndex = parseInt(idx) + this.props.slidesPerChange;
 			} else if (this.props.loop) {
-				activeSlideIndex = 0;
+				var left = parseInt(idx) + this.props.slidesPerChange - this._slides.length;
+				activeSlideIndex = left;
+			} else {
+				activeSlideIndex = this.props.slide;
 			}
 
 			// check if the slide has an id
 			var slideId = null;
-			if (this._slides[activeSlideIndex].hasAttribute('id')) {
+			if (this._slides[activeSlideIndex].hasAttribute("id")) {
 				slideId = this._slides[activeSlideIndex].id;
 			}
 
 			// set slide prop
 			this.setProps({
-				'slide': activeSlideIndex,
-				'slideId': slideId
+				slide: activeSlideIndex,
+				slideId: slideId
 			});
 
 			// onNext callback
@@ -901,9 +936,8 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'previous',
+		key: "previous",
 		value: function previous() {
-
 			// stop if the document is hidden
 			if (document.hidden) return;
 
@@ -911,7 +945,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 			var idx = this.props.slide;
 
 			// if the slideshow is at his first time
-			var activeSlideIndex = 0;
+			var activeSlideIndex = void 0;
 			if (idx === null) {
 				// try to find a slide that has the active class
 				var activeSlide = this._findActiveSlideByAttributes();
@@ -920,22 +954,27 @@ var SSlideshowComponent = function (_SWebComponent) {
 				} else {
 					activeSlideIndex = 0;
 				}
-			} else if (parseInt(idx) - 1 >= 0) {
-				activeSlideIndex = parseInt(idx) - 1;
+			} else if (parseInt(idx) - this.props.slidesPerChange >= 0) {
+				activeSlideIndex = parseInt(idx) - this.props.slidesPerChange;
 			} else if (this.props.loop) {
-				activeSlideIndex = this._slides.length - 1;
+				var left = Math.abs(parseInt(idx) - this.props.slidesPerChange);
+				activeSlideIndex = left;
+
+				// activeSlideIndex = this._slides.length - 1;
+			} else {
+				activeSlideIndex = this.props.slide;
 			}
 
 			// check if the slide has an id
 			var slideId = null;
-			if (this._slides[activeSlideIndex].hasAttribute('id')) {
+			if (this._slides[activeSlideIndex].hasAttribute("id")) {
 				slideId = this._slides[activeSlideIndex].id;
 			}
 
 			// set slide prop
 			this.setProps({
-				'slide': activeSlideIndex,
-				'slideId': slideId
+				slide: activeSlideIndex,
+				slideId: slideId
 			});
 
 			// onPrevious callback
@@ -952,43 +991,42 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'goTo',
+		key: "goTo",
 		value: function goTo(slide) {
 			// get the slide idx
 			var slideIndex = this._getSlideIdxById(slide);
 			// check the slide index
 			if (slideIndex >= this._slides.length) {
-				throw 'The slide ' + slideIndex + ' does not exist...';
+				throw "The slide " + slideIndex + " does not exist...";
 			}
 
 			// check if the slide has an id
 			var slideId = null;
-			if (this._slides[slideIndex].hasAttribute('id')) {
+			if (this._slides[slideIndex].hasAttribute("id")) {
 				slideId = this._slides[slideIndex].id;
 			}
 
 			// set slide prop
 			this.setProps({
-				'slide': slideIndex,
-				'slideId': slideId
+				slide: slideIndex,
+				slideId: slideId
 			});
 		}
 	}, {
-		key: '_goTo',
+		key: "_goTo",
 		value: function _goTo(slide) {
-
 			// transform potential slide id in slide idx
 			var slideIndex = this._getSlideIdxById(slide);
 
 			// check the slide index
 			if (slideIndex >= this._slides.length) {
-				throw 'The slide ' + slideIndex + ' does not exist...';
+				throw "The slide " + slideIndex + " does not exist...";
 			}
 			// beforeChange callback
 			this.props.beforeChange && this.props.beforeChange(this);
 
 			// event
-			(0, _dispatchEvent2.default)(this, 'beforeChange');
+			(0, _dispatchEvent2.default)(this, "beforeChange");
 
 			// unapply classes
 			this._unapplyStateAttrubutes();
@@ -1009,7 +1047,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 			this.props.onChange && this.props.onChange(this);
 
 			// change event
-			(0, _dispatchEvent2.default)(this, 'change');
+			(0, _dispatchEvent2.default)(this, "change");
 
 			// apply classes
 			this._applyStateAttributes();
@@ -1018,7 +1056,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 			this.props.afterChange && this.props.afterChange(this);
 
 			// event
-			(0, _dispatchEvent2.default)(this, 'afterChange');
+			(0, _dispatchEvent2.default)(this, "afterChange");
 
 			// maintain chainability
 			return this;
@@ -1031,7 +1069,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'onNewSlide',
+		key: "onNewSlide",
 		value: function onNewSlide(callback) {
 			if (this._slidesIniter.indexOf(callback) === -1) {
 				this._slidesIniter.push(callback);
@@ -1044,7 +1082,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'getBeforeActiveSlides',
+		key: "getBeforeActiveSlides",
 		value: function getBeforeActiveSlides() {
 			var activeIdx = this.props.slide;
 			var newArray = this._slides.slice(0);
@@ -1058,7 +1096,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'getAfterActiveSlides',
+		key: "getAfterActiveSlides",
 		value: function getAfterActiveSlides() {
 			var activeIdx = this.props.slide;
 			var newArray = this._slides.slice(0);
@@ -1072,7 +1110,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'getActiveSlideIndex',
+		key: "getActiveSlideIndex",
 		value: function getActiveSlideIndex() {
 			return parseInt(this.props.slide);
 		}
@@ -1083,7 +1121,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'getActiveSlide',
+		key: "getActiveSlide",
 		value: function getActiveSlide() {
 			return this._activeSlide;
 		}
@@ -1094,7 +1132,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'getFirstSlide',
+		key: "getFirstSlide",
 		value: function getFirstSlide() {
 			return this._slides[0];
 		}
@@ -1105,7 +1143,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'getLastSlide',
+		key: "getLastSlide",
 		value: function getLastSlide() {
 			return this._slides[this._slides.length - 1];
 		}
@@ -1116,7 +1154,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'getNextSlideIndex',
+		key: "getNextSlideIndex",
 		value: function getNextSlideIndex() {
 			var activeSlideIndex = parseInt(this.props.slide);
 			if (activeSlideIndex + 1 < this._slides.length) {
@@ -1127,12 +1165,12 @@ var SSlideshowComponent = function (_SWebComponent) {
 		}
 
 		/**
-  * Return the previous slide element
-  * @return 	{HTMLElement} 	The previous slide
-  */
+   * Return the previous slide element
+   * @return 	{HTMLElement} 	The previous slide
+   */
 
 	}, {
-		key: 'getNextSlide',
+		key: "getNextSlide",
 		value: function getNextSlide() {
 			return this._slides[this.getNextSlideIndex()];
 		}
@@ -1143,7 +1181,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'getPreviousSlideIndex',
+		key: "getPreviousSlideIndex",
 		value: function getPreviousSlideIndex() {
 			var activeSlideIndex = parseInt(this.props.slide);
 			if (activeSlideIndex > 0) {
@@ -1154,12 +1192,12 @@ var SSlideshowComponent = function (_SWebComponent) {
 		}
 
 		/**
-  * Return the previous slide element
-  * @return 	{HTMLElement} 	The previous slide
-  */
+   * Return the previous slide element
+   * @return 	{HTMLElement} 	The previous slide
+   */
 
 	}, {
-		key: 'getPreviousSlide',
+		key: "getPreviousSlide",
 		value: function getPreviousSlide() {
 			return this._slides[this.getPreviousSlideIndex()];
 		}
@@ -1170,7 +1208,7 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'isLoop',
+		key: "isLoop",
 		value: function isLoop() {
 			return this.props.loop;
 		}
@@ -1181,9 +1219,9 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'isFirst',
+		key: "isFirst",
 		value: function isFirst() {
-			return this._slides[0].hasAttribute('active');
+			return this._slides[0].hasAttribute("active");
 		}
 
 		/**
@@ -1192,9 +1230,9 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'isLast',
+		key: "isLast",
 		value: function isLast() {
-			return this._slides[this._slides.length - 1].hasAttribute('active');
+			return this._slides[this._slides.length - 1].hasAttribute("active");
 		}
 
 		/**
@@ -1203,12 +1241,12 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: '_getSlides',
+		key: "_getSlides",
 		value: function _getSlides() {
 			var _this12 = this;
 
 			// grab the slides and maintain stack up to date
-			var slides = [].slice.call(this.querySelectorAll(this._componentNameDash + '-slide, [' + this._componentNameDash + '-slide]'));
+			var slides = [].slice.call(this.querySelectorAll(this._componentNameDash + "-slide, [" + this._componentNameDash + "-slide]"));
 			// init slides
 			slides.forEach(function (slide) {
 				_this12._initSlide(slide);
@@ -1218,24 +1256,24 @@ var SSlideshowComponent = function (_SWebComponent) {
 		}
 
 		/**
-      * Go find into dom every elements needed for the slideshow
-      * @return 	{void}
+   * Go find into dom every elements needed for the slideshow
+   * @return 	{void}
    */
 
 	}, {
-		key: '_updateReferences',
+		key: "_updateReferences",
 		value: function _updateReferences() {
 			// grab the total and current token handler
-			this._refs.total = this.querySelectorAll(this._componentNameDash + '-total, [' + this._componentNameDash + '-total]');
-			this._refs.current = this.querySelectorAll(this._componentNameDash + '-current, [' + this._componentNameDash + '-current]');
+			this._refs.total = this.querySelectorAll(this._componentNameDash + "-total, [" + this._componentNameDash + "-total]");
+			this._refs.current = this.querySelectorAll(this._componentNameDash + "-current, [" + this._componentNameDash + "-current]");
 			// grab all the goto elements
-			this._refs.goTos = this.querySelectorAll(this._componentNameDash + '-goto, [' + this._componentNameDash + '-goto]');
+			this._refs.goTos = this.querySelectorAll(this._componentNameDash + "-goto, [" + this._componentNameDash + "-goto]");
 			// grab the next and previous element
-			this._refs.next = this.querySelector(this._componentNameDash + '-next, [' + this._componentNameDash + '-next]');
-			this._refs.previous = this.querySelector(this._componentNameDash + '-previous, [' + this._componentNameDash + '-previous]');
+			this._refs.next = this.querySelector(this._componentNameDash + "-next, [" + this._componentNameDash + "-next]");
+			this._refs.previous = this.querySelector(this._componentNameDash + "-previous, [" + this._componentNameDash + "-previous]");
 		}
 	}], [{
-		key: 'defaultCss',
+		key: "defaultCss",
 
 
 		/**
@@ -1243,11 +1281,10 @@ var SSlideshowComponent = function (_SWebComponent) {
    * @protected
    */
 		value: function defaultCss(componentName, componentNameDash) {
-			return '\n\t\t\t' + componentNameDash + ' {\n\t\t\t\tdisplay : block;\n\t\t\t}\n\t\t';
+			return "\n\t\t\t" + componentNameDash + " {\n\t\t\t\tdisplay : block;\n\t\t\t}\n\t\t";
 		}
 	}, {
-		key: 'defaultProps',
-
+		key: "defaultProps",
 
 		/**
    * Default props
@@ -1256,7 +1293,6 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 		get: function get() {
 			return {
-
 				/**
      * Set the active slide by index
      * @prop
@@ -1277,6 +1313,24 @@ var SSlideshowComponent = function (_SWebComponent) {
      * @tyoe 	{Boolean}
      */
 				loop: false,
+
+				/**
+     * Specify how many slides the slider has to pass on any change. Default is 1 but this can be usefull for special situations.
+     * @prop
+     * @type    {Integer}
+     */
+				slidesPerChange: 1,
+
+				/**
+     * Specify how many slide the slider has to pass on each `next` and `previous` call depending on viewport width.
+     * This is a parameter that works in mobile first. Meaning that a value of `'300': 2` mean from 300px to infinite, apply 2 as slidesPerChange property
+     * @example    js
+     * {
+     *   768: 2,
+     *   1200: 3
+     * }
+     */
+				responsiveSlidesPerChange: null,
 
 				/**
      * Set if want that the plugin set the height of the s-slideshow tag accordingly to the active slide height.
@@ -1337,7 +1391,7 @@ var SSlideshowComponent = function (_SWebComponent) {
      * @type 		{String}
      * @values 		forward|backward
      */
-				direction: 'forward',
+				direction: "forward",
 
 				/**
      * Timeout between each slides
@@ -1366,7 +1420,6 @@ var SSlideshowComponent = function (_SWebComponent) {
      * @type 	{Boolean}
      */
 				touchEnabled: true
-
 			};
 		}
 
@@ -1377,9 +1430,9 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: 'physicalProps',
+		key: "physicalProps",
 		get: function get() {
-			return ['slide', 'slideId'];
+			return ["slide", "slideId", "slidesPerChange"];
 		}
 	}]);
 
