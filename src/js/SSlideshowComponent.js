@@ -171,7 +171,8 @@ export default class SSlideshowComponent extends SWebComponent {
 			nextOnClick: false,
 
 			/**
-			 * Set the direction of the slideshow when click
+			 * Set the direction of the slideshow when click. If click on previous button, will be set to "backward".
+			 * On click on the next button, will be set to "forward".
 			 * @prop
 			 * @type 		{String}
 			 * @values 		forward|backward
@@ -214,7 +215,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * @protected
 	 */
 	static get physicalProps() {
-		return ["slide", "slideId", "slidesPerChange"];
+		return ["slide", "slideId", "slidesPerChange", "direction"];
 	}
 
 	/**
@@ -387,7 +388,7 @@ export default class SSlideshowComponent extends SWebComponent {
 		this.classList.add("clear-transmations");
 
 		// next
-		this.next();
+		this.next(true);
 
 		// remove the no transmation class to allow animations, etc...
 		setTimeout(() => {
@@ -916,7 +917,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * Go to next slide
 	 * @return 	{SSlideshowComponent}
 	 */
-	next() {
+	next(isFirst = false) {
 		// stop if the document is hidden
 		if (document.hidden) return;
 
@@ -957,7 +958,8 @@ export default class SSlideshowComponent extends SWebComponent {
 		// set slide prop
 		this.setProps({
 			slide: activeSlideIndex,
-			slideId: slideId
+			slideId: slideId,
+			direction: isFirst ? this.props.direction : "forward"
 		});
 
 		// onNext callback
@@ -1008,7 +1010,8 @@ export default class SSlideshowComponent extends SWebComponent {
 		// set slide prop
 		this.setProps({
 			slide: activeSlideIndex,
-			slideId: slideId
+			slideId: slideId,
+			direction: "backward"
 		});
 
 		// onPrevious callback

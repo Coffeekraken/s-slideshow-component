@@ -151,7 +151,8 @@ Default : **false**
 
 ### direction
 
-Set the direction of the slideshow when click
+Set the direction of the slideshow when click. If click on previous button, will be set to "backward".
+On click on the next button, will be set to "forward".
 
 Type : **{ [String](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/String) }**
 
