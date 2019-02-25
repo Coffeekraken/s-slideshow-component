@@ -356,9 +356,9 @@ var SSlideshowComponent = function (_SWebComponent) {
 		key: "_setResponsiveSlidePerChange",
 		value: function _setResponsiveSlidePerChange() {
 			var slidesPerChange = this._originalSlidesPerChange;
-			for (var key in this.responsiveSlidesPerChange) {
+			for (var key in this.props.responsiveSlidesPerChange) {
 				if (window.innerWidth >= parseInt(key)) {
-					slidesPerChange = this.responsiveSlidesPerChange[key];
+					slidesPerChange = this.props.responsiveSlidesPerChange[key];
 				}
 			}
 			this.setProp("slidesPerChange", slidesPerChange);

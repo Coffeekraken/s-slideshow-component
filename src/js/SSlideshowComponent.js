@@ -435,9 +435,9 @@ export default class SSlideshowComponent extends SWebComponent {
 	 */
 	_setResponsiveSlidePerChange() {
 		let slidesPerChange = this._originalSlidesPerChange;
-		for (const key in this.responsiveSlidesPerChange) {
+		for (const key in this.props.responsiveSlidesPerChange) {
 			if (window.innerWidth >= parseInt(key)) {
-				slidesPerChange = this.responsiveSlidesPerChange[key];
+				slidesPerChange = this.props.responsiveSlidesPerChange[key];
 			}
 		}
 		this.setProp("slidesPerChange", slidesPerChange);
