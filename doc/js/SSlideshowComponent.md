@@ -321,6 +321,13 @@ Return the previous slide element
 Return **{ [HTMLElement](https://developer.mozilla.org/fr/docs/Web/API/HTMLElement) }** The previous slide
 
 
+### getSlides
+
+Return the slides stack in array of HTMLElement format
+
+Return **{ Array<HTMLElement> }** The slides stack
+
+
 ### isLoop
 
 Return if the slideshow loop status is true

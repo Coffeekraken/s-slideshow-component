@@ -287,7 +287,7 @@ export default class SSlideshowComponent extends SWebComponent {
 		this._updateReferences();
 
 		// update slides references
-		this._slides = this._getSlides();
+		this._slides = this._updateSlidesRefs();
 
 		// monitor new slides
 		this._monitorNewSlides();
@@ -684,7 +684,7 @@ export default class SSlideshowComponent extends SWebComponent {
 					});
 				}
 				if (needUpdateSlides) {
-					this._slides = this._getSlides();
+					this._slides = this._updateSlidesRefs();
 				}
 			});
 	}
@@ -1202,6 +1202,14 @@ export default class SSlideshowComponent extends SWebComponent {
 	}
 
 	/**
+	 * Return the slides stack in array of HTMLElement format
+	 * @return    {Array<HTMLElement>}    The slides stack
+	 */
+	getSlides() {
+		return Array.from(this._slides);
+	}
+
+	/**
 	 * Return if the slideshow loop status is true
 	 * @return 	{Boolean} 	The loop status
 	 */
@@ -1229,7 +1237,7 @@ export default class SSlideshowComponent extends SWebComponent {
 	 * Go find the slides of the slideshow
 	 * @return 	{Array} 	The array of slides found
 	 */
-	_getSlides() {
+	_updateSlidesRefs() {
 		// grab the slides and maintain stack up to date
 		let slides = [].slice.call(
 			this.querySelectorAll(
