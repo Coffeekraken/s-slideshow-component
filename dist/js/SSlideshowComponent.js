@@ -196,7 +196,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 			this._updateReferences();
 
 			// update slides references
-			this._slides = this._getSlides();
+			this._slides = this._updateSlidesRefs();
 
 			// monitor new slides
 			this._monitorNewSlides();
@@ -617,7 +617,7 @@ var SSlideshowComponent = function (_SWebComponent) {
 					});
 				}
 				if (needUpdateSlides) {
-					_this7._slides = _this7._getSlides();
+					_this7._slides = _this7._updateSlidesRefs();
 				}
 			});
 		}
@@ -1207,6 +1207,17 @@ var SSlideshowComponent = function (_SWebComponent) {
 		}
 
 		/**
+   * Return the slides stack in array of HTMLElement format
+   * @return    {Array<HTMLElement>}    The slides stack
+   */
+
+	}, {
+		key: "getSlides",
+		value: function getSlides() {
+			return Array.from(this._slides);
+		}
+
+		/**
    * Return if the slideshow loop status is true
    * @return 	{Boolean} 	The loop status
    */
@@ -1245,8 +1256,8 @@ var SSlideshowComponent = function (_SWebComponent) {
    */
 
 	}, {
-		key: "_getSlides",
-		value: function _getSlides() {
+		key: "_updateSlidesRefs",
+		value: function _updateSlidesRefs() {
 			var _this12 = this;
 
 			// grab the slides and maintain stack up to date
