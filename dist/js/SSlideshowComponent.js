@@ -961,11 +961,13 @@ var SSlideshowComponent = function (_SWebComponent) {
 				activeSlideIndex = parseInt(idx) - this.props.slidesPerChange;
 			} else if (this.props.loop) {
 				var left = Math.abs(parseInt(idx) - this.props.slidesPerChange);
-				activeSlideIndex = left;
+				activeSlideIndex = this._slides.length - left;
+				console.log('active #1', activeSlideIndex);
 
 				// activeSlideIndex = this._slides.length - 1;
 			} else {
 				activeSlideIndex = this.props.slide;
+				console.log('active #3', activeSlideIndex);
 			}
 
 			// check if the slide has an id

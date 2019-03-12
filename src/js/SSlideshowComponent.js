@@ -994,8 +994,7 @@ export default class SSlideshowComponent extends SWebComponent {
 			activeSlideIndex = parseInt(idx) - this.props.slidesPerChange;
 		} else if (this.props.loop) {
 			const left = Math.abs(parseInt(idx) - this.props.slidesPerChange);
-			activeSlideIndex = left;
-
+			activeSlideIndex = this._slides.length - left;
 			// activeSlideIndex = this._slides.length - 1;
 		} else {
 			activeSlideIndex = this.props.slide;
