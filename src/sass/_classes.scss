@@ -17,6 +17,8 @@
 @mixin s-slideshow-classes-bare() {
 	@include s-component('s-slideshow') {
 		#{s-component()} {
+			overflow: hidden;
+
 			[#{s-component()}-slide] {
 				overflow: hidden;
 				@include s-size(fit,

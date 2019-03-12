@@ -1,5 +1,19 @@
 @charset "UTF-8";
 /**
+ * Get an icon in base64 url encoded format
+ * Available icons:
+ * - search
+ * - arrow-down
+ * - angle-down
+ * - angle-up
+ * - angle-left
+ * - angle-right
+ *
+ * @param    {String}    $icon    The icon name wanted
+ * @param    {String}    [$color="default"]    The color wanted
+ * @author    Olivier Bossel <olivier.bossel@gmail.com> (https://olivierbossel.com)
+ */
+/**
  * Parse and return the Map respresentation of a border property
  * The $border argument will be parsed with the [s-parse-properties](../core/functions/_s-parse-properties.scss) function.
  *
@@ -426,7 +440,6 @@
  * The content need to be displayed as absolute top left and fit in size.
  *
  * @param 		{Number} 		$ratio 			The ratio to keep like 16/9, etc...
- * @param 		{String} 		[$type=before] 	The type of ratio to apply. Can be before or after
  *
  * @example 	scss
  * .my-cool-element {
@@ -434,6 +447,13 @@
  * }
  *
  * @author 		Olivier Bossel <olivier.bossel@gmail.com> (https://olivierbossel.com)
+ */
+/**
+ * Register a new icon to be used as base64 encoded url.
+ * If you want your icon to be colorable, you need to specify this code on your paths: `style="fill:%color"`
+ * @param    {String}    $name    The icon name
+ * @param    {String}    $svgCode    The icons svg code
+ * @author    Olivier Bossel <olivier.bossel@gmail.com> (https://olivierbossel.com)
  */
 /**
  * Print out a reset css
@@ -540,6 +560,8 @@
  * - invert {Boolean}
  * - opacity {Percent}
  * - mix {Color}
+ * - lightness {Percent}
+ * - saturation {Percent}
  *
  * @param 		{String|Color} 		$color 				The color name or the color value to manipulate
  * @param 		{String|List} 			[$modifier=null] 	The color modifier to apply. Can be a registered modifier name or a modifier list
@@ -1666,6 +1688,7 @@
  * - sugar.size.abs.cover : ```.abs-cover```
  * - sugar.size.abs.contain : ```.abs-contain```
  * - sugar.size.abs.fit : ```.abs-fit```
+ * - sugar.media.object : ```.mo .mo--center .mo--end .mo__content```
  * - sugar.clearfix.default : ```.clearfix```
  * - sugar.clearfix.float : ```.clearfix-float```
  * - sugar.clearfix.micro : ```.clearfix-micro```
@@ -2209,6 +2232,38 @@
   left: 0;
 }
 
+.mo {
+  /**
+	 * @name 		```.mo .mo--center .mo__content```
+	 * Famous media object class
+	 * @styleguide 	Helpers / Media object
+	 * @example 	html
+	 * <div class="mo">
+	 *   <div class="mo__content">
+	 *     <img src="https://source.unsplash.com/random/100x100" />
+	 *   </div>
+	 *   <div class="mo__content">
+	 *     <h2 class="h3">Hello World</h2>
+	 *     <p class="p">Phasellus fringilla aliquet justo eget pulvinar. Donec in justo leo.</p>
+	 *   </div>
+	 * </div>
+	 */
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.mo--center {
+  align-items: center;
+}
+
+.mo--end {
+  align-items: flex-end;
+}
+
+.mo__content {
+  flex: 0 1 auto;
+}
+
 .clearfix {
   /**
 	 * @name 		```.clearfix```
@@ -2293,14 +2348,18 @@
 	 * <div class="bkg-primary ratio-21-9"></div>
 	 */
   position: relative;
-  overflow: hidden;
 }
 
-.ratio-21-9:before {
+.ratio-21-9::before {
+  content: '';
+  padding-top: 42.85714%;
+  float: left;
+}
+
+.ratio-21-9::after {
   content: '';
   display: block;
-  height: 0;
-  padding-top: 42.85714%;
+  clear: both;
 }
 
 .ratio-16-9 {
@@ -2312,14 +2371,18 @@
 	 * <div class="bkg-primary ratio-16-9"></div>
 	 */
   position: relative;
-  overflow: hidden;
 }
 
-.ratio-16-9:before {
+.ratio-16-9::before {
+  content: '';
+  padding-top: 56.25%;
+  float: left;
+}
+
+.ratio-16-9::after {
   content: '';
   display: block;
-  height: 0;
-  padding-top: 56.25%;
+  clear: both;
 }
 
 .ratio-4-3 {
@@ -2331,14 +2394,18 @@
 	 * <div class="bkg-primary ratio-4-3"></div>
 	 */
   position: relative;
-  overflow: hidden;
 }
 
-.ratio-4-3:before {
+.ratio-4-3::before {
+  content: '';
+  padding-top: 75%;
+  float: left;
+}
+
+.ratio-4-3::after {
   content: '';
   display: block;
-  height: 0;
-  padding-top: 75%;
+  clear: both;
 }
 
 .ratio-1-1 {
@@ -2350,14 +2417,18 @@
 	 * <div class="bkg-primary ratio-1-1"></div>
 	 */
   position: relative;
-  overflow: hidden;
 }
 
-.ratio-1-1:before {
+.ratio-1-1::before {
+  content: '';
+  padding-top: 100%;
+  float: left;
+}
+
+.ratio-1-1::after {
   content: '';
   display: block;
-  height: 0;
-  padding-top: 100%;
+  clear: both;
 }
 
 .no-transitions {
@@ -2939,6 +3010,8 @@
  */
 .btn, .btn--block {
   display: inline-block;
+  display: inline-flex;
+  align-items: center;
   border-style: solid;
   border-width: 1px;
   border-color: rgba(0, 0, 0, 0);
@@ -3124,7 +3197,7 @@ table {
 		 * @display 	color
 		 */
 .s-settings:after {
-  content: '{"unit": "rem", "reset": true, "border-box": true, "sizes": {"smaller": 0.3, "small": 0.6, "default": 1, "medium": 1.4, "big": 2, "bigger": 3}, "typography": {"font-family": "default", "font-size": "14px", "font-sizes": null, "line-letters-count": 55, "font-format": {"eot": "embedded-opentype", "woff2": "woff2", "woff": "woff", "ttf": "truetype", "otf": "opentype", "svg": "svg", "svgz": "svgz"}}, "look-and-feel": {"border-radius": "0em", "padding-vertical": "1.4em", "padding-horizontal": "0.8em", "disabled-opacity": 0.5, "line-height": 1.4}, "spaces": {"default": "1rem"}, "colors": {"default": {"color": "#848e91"}, "title": {"color": "#2b3438"}, "text": {"color": "default"}, "link": {"color": "primary"}, "primary": {"color": "#f2bc2b"}, "secondary": {"color": "#2b3438"}, "success": {"color": "#5cb85c"}, "warning": {"color": "#f0ad4e"}, "error": {"color": "#d9534f"}, "info": {"color": "#2199e8"}}, "modular-scale": {"base": "1rem", "ratio": 1.33}, "text-format": {"scope-class": "tf"}, "vertical-rhythm": {"scope-class": "vr"}, "fonts": {"default": {"font-family": ["Helvetica Neue", "Helvetica", "Verdana", "Arial", "sans-serif"], "font-weight": "normal", "cap-height": 0.65}, "quote": {"font-family": ["Palatino", "Times", "Georgia", "serif"], "font-weight": "normal", "cap-height": 0.65}, "code": {"font-family": ["Menlo", "Monaco", "Consolas", "Courier New", "monospace"], "font-weight": "normal", "cap-height": 0.65}}, "filters": [], "transitions": {"fast": ["all", "0.1s", "ease-in-out", "0s"], "default": ["all", "0.2s", "ease-in-out", "0s"], "slow": ["all", "0.5s", "ease-in-out", "0s"]}}';
+  content: '{"unit": "rem", "reset": true, "border-box": true, "sizes": {"smaller": 0.3, "small": 0.6, "default": 1, "medium": 1.4, "big": 2, "bigger": 3}, "typography": {"font-family": "default", "font-size": "14px", "font-sizes": null, "line-letters-count": 55, "font-format": {"eot": "embedded-opentype", "woff2": "woff2", "woff": "woff", "ttf": "truetype", "otf": "opentype", "svg": "svg", "svgz": "svgz"}}, "look-and-feel": {"border-radius": "0em", "padding-vertical": "1.4em", "padding-horizontal": "0.8em", "disabled-opacity": 0.5, "line-height": 1.4}, "spaces": {"smaller": "5px", "small": "10px", "default": "20px", "medium": "40px", "big": "70px", "bigger": "100px"}, "colors": {"default": {"color": "#848e91"}, "title": {"color": "#2b3438"}, "text": {"color": "default"}, "link": {"color": "primary"}, "primary": {"color": "#f2bc2b"}, "secondary": {"color": "#2b3438"}, "success": {"color": "#5cb85c"}, "warning": {"color": "#f0ad4e"}, "error": {"color": "#d9534f"}, "info": {"color": "#2199e8"}}, "modular-scale": {"base": "1rem", "ratio": 1.33}, "text-format": {"scope-class": "tf"}, "vertical-rhythm": {"scope-class": "vr"}, "fonts": {"default": {"font-family": ["Helvetica Neue", "Helvetica", "Verdana", "Arial", "sans-serif"], "font-weight": "normal", "cap-height": 0.65}, "quote": {"font-family": ["Palatino", "Times", "Georgia", "serif"], "font-weight": "normal", "cap-height": 0.65}, "code": {"font-family": ["Menlo", "Monaco", "Consolas", "Courier New", "monospace"], "font-weight": "normal", "cap-height": 0.65}}, "filters": [], "transitions": {"fast": ["all", "0.1s", "ease-in-out", "0s"], "default": ["all", "0.2s", "ease-in-out", "0s"], "slow": ["all", "0.5s", "ease-in-out", "0s"]}}';
   display: none;
 }
 
@@ -3263,7 +3336,7 @@ body {
 			 * <div style="background:#2b3438; width:100px; height:5px"></div>
 			 */
 .m-b-smaller {
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.35714rem;
 }
 
 /**
@@ -3274,7 +3347,7 @@ body {
 			 * <div class="m-t-smaller" style="background:#2b3438; width:100px; height:5px"></div>
 			 */
 .m-t-smaller {
-  margin-top: 0.3rem;
+  margin-top: 0.35714rem;
 }
 
 /**
@@ -3285,7 +3358,7 @@ body {
 			 * <div class="m-l-smaller" style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-l-smaller {
-  margin-left: 0.3rem;
+  margin-left: 0.35714rem;
 }
 
 /**
@@ -3296,7 +3369,7 @@ body {
 			 * <div style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-r-smaller {
-  margin-right: 0.3rem;
+  margin-right: 0.35714rem;
 }
 
 /**
@@ -3307,8 +3380,8 @@ body {
 			 * <div style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-s-smaller {
-  margin-left: 0.3rem;
-  margin-right: 0.3rem;
+  margin-left: 0.35714rem;
+  margin-right: 0.35714rem;
 }
 
 /**
@@ -3320,7 +3393,7 @@ body {
 			 * </div>
 			 */
 .p-smaller {
-  padding: 0.3rem;
+  padding: 0.35714rem;
 }
 
 /**
@@ -3332,7 +3405,7 @@ body {
 			 * </div>
 			 */
 .p-b-smaller {
-  padding-bottom: 0.3rem;
+  padding-bottom: 0.35714rem;
 }
 
 /**
@@ -3344,7 +3417,7 @@ body {
 			 * </div>
 			 */
 .p-t-smaller {
-  padding-top: 0.3rem;
+  padding-top: 0.35714rem;
 }
 
 /**
@@ -3356,7 +3429,7 @@ body {
 			 * </div>
 			 */
 .p-l-smaller {
-  padding-left: 0.3rem;
+  padding-left: 0.35714rem;
 }
 
 /**
@@ -3368,7 +3441,7 @@ body {
 			 * </div>
 			 */
 .p-r-smaller {
-  padding-right: 0.3rem;
+  padding-right: 0.35714rem;
 }
 
 /**
@@ -3380,8 +3453,8 @@ body {
 			 * </div>
 			 */
 .p-s-smaller {
-  padding-left: 0.3rem;
-  padding-right: 0.3rem;
+  padding-left: 0.35714rem;
+  padding-right: 0.35714rem;
 }
 
 /**
@@ -3392,7 +3465,7 @@ body {
 			 * <div style="background:#2b3438; width:100px; height:5px"></div>
 			 */
 .m-b-small {
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.71429rem;
 }
 
 /**
@@ -3403,7 +3476,7 @@ body {
 			 * <div class="m-t-small" style="background:#2b3438; width:100px; height:5px"></div>
 			 */
 .m-t-small {
-  margin-top: 0.6rem;
+  margin-top: 0.71429rem;
 }
 
 /**
@@ -3414,7 +3487,7 @@ body {
 			 * <div class="m-l-small" style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-l-small {
-  margin-left: 0.6rem;
+  margin-left: 0.71429rem;
 }
 
 /**
@@ -3425,7 +3498,7 @@ body {
 			 * <div style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-r-small {
-  margin-right: 0.6rem;
+  margin-right: 0.71429rem;
 }
 
 /**
@@ -3436,8 +3509,8 @@ body {
 			 * <div style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-s-small {
-  margin-left: 0.6rem;
-  margin-right: 0.6rem;
+  margin-left: 0.71429rem;
+  margin-right: 0.71429rem;
 }
 
 /**
@@ -3449,7 +3522,7 @@ body {
 			 * </div>
 			 */
 .p-small {
-  padding: 0.6rem;
+  padding: 0.71429rem;
 }
 
 /**
@@ -3461,7 +3534,7 @@ body {
 			 * </div>
 			 */
 .p-b-small {
-  padding-bottom: 0.6rem;
+  padding-bottom: 0.71429rem;
 }
 
 /**
@@ -3473,7 +3546,7 @@ body {
 			 * </div>
 			 */
 .p-t-small {
-  padding-top: 0.6rem;
+  padding-top: 0.71429rem;
 }
 
 /**
@@ -3485,7 +3558,7 @@ body {
 			 * </div>
 			 */
 .p-l-small {
-  padding-left: 0.6rem;
+  padding-left: 0.71429rem;
 }
 
 /**
@@ -3497,7 +3570,7 @@ body {
 			 * </div>
 			 */
 .p-r-small {
-  padding-right: 0.6rem;
+  padding-right: 0.71429rem;
 }
 
 /**
@@ -3509,8 +3582,8 @@ body {
 			 * </div>
 			 */
 .p-s-small {
-  padding-left: 0.6rem;
-  padding-right: 0.6rem;
+  padding-left: 0.71429rem;
+  padding-right: 0.71429rem;
 }
 
 /**
@@ -3521,7 +3594,7 @@ body {
 			 * <div style="background:#2b3438; width:100px; height:5px"></div>
 			 */
 .m-b {
-  margin-bottom: 1rem;
+  margin-bottom: 1.42857rem;
 }
 
 /**
@@ -3532,7 +3605,7 @@ body {
 			 * <div class="m-t" style="background:#2b3438; width:100px; height:5px"></div>
 			 */
 .m-t {
-  margin-top: 1rem;
+  margin-top: 1.42857rem;
 }
 
 /**
@@ -3543,7 +3616,7 @@ body {
 			 * <div class="m-l" style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-l {
-  margin-left: 1rem;
+  margin-left: 1.42857rem;
 }
 
 /**
@@ -3554,7 +3627,7 @@ body {
 			 * <div style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-r {
-  margin-right: 1rem;
+  margin-right: 1.42857rem;
 }
 
 /**
@@ -3565,8 +3638,8 @@ body {
 			 * <div style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-s {
-  margin-left: 1rem;
-  margin-right: 1rem;
+  margin-left: 1.42857rem;
+  margin-right: 1.42857rem;
 }
 
 /**
@@ -3578,7 +3651,7 @@ body {
 			 * </div>
 			 */
 .p:not(p) {
-  padding: 1rem;
+  padding: 1.42857rem;
 }
 
 /**
@@ -3590,7 +3663,7 @@ body {
 			 * </div>
 			 */
 .p-b {
-  padding-bottom: 1rem;
+  padding-bottom: 1.42857rem;
 }
 
 /**
@@ -3602,7 +3675,7 @@ body {
 			 * </div>
 			 */
 .p-t {
-  padding-top: 1rem;
+  padding-top: 1.42857rem;
 }
 
 /**
@@ -3614,7 +3687,7 @@ body {
 			 * </div>
 			 */
 .p-l {
-  padding-left: 1rem;
+  padding-left: 1.42857rem;
 }
 
 /**
@@ -3626,7 +3699,7 @@ body {
 			 * </div>
 			 */
 .p-r {
-  padding-right: 1rem;
+  padding-right: 1.42857rem;
 }
 
 /**
@@ -3638,8 +3711,8 @@ body {
 			 * </div>
 			 */
 .p-s {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 1.42857rem;
+  padding-right: 1.42857rem;
 }
 
 /**
@@ -3650,7 +3723,7 @@ body {
 			 * <div style="background:#2b3438; width:100px; height:5px"></div>
 			 */
 .m-b-medium {
-  margin-bottom: 1.4rem;
+  margin-bottom: 2.85714rem;
 }
 
 /**
@@ -3661,7 +3734,7 @@ body {
 			 * <div class="m-t-medium" style="background:#2b3438; width:100px; height:5px"></div>
 			 */
 .m-t-medium {
-  margin-top: 1.4rem;
+  margin-top: 2.85714rem;
 }
 
 /**
@@ -3672,7 +3745,7 @@ body {
 			 * <div class="m-l-medium" style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-l-medium {
-  margin-left: 1.4rem;
+  margin-left: 2.85714rem;
 }
 
 /**
@@ -3683,7 +3756,7 @@ body {
 			 * <div style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-r-medium {
-  margin-right: 1.4rem;
+  margin-right: 2.85714rem;
 }
 
 /**
@@ -3694,8 +3767,8 @@ body {
 			 * <div style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-s-medium {
-  margin-left: 1.4rem;
-  margin-right: 1.4rem;
+  margin-left: 2.85714rem;
+  margin-right: 2.85714rem;
 }
 
 /**
@@ -3707,7 +3780,7 @@ body {
 			 * </div>
 			 */
 .p-medium {
-  padding: 1.4rem;
+  padding: 2.85714rem;
 }
 
 /**
@@ -3719,7 +3792,7 @@ body {
 			 * </div>
 			 */
 .p-b-medium {
-  padding-bottom: 1.4rem;
+  padding-bottom: 2.85714rem;
 }
 
 /**
@@ -3731,7 +3804,7 @@ body {
 			 * </div>
 			 */
 .p-t-medium {
-  padding-top: 1.4rem;
+  padding-top: 2.85714rem;
 }
 
 /**
@@ -3743,7 +3816,7 @@ body {
 			 * </div>
 			 */
 .p-l-medium {
-  padding-left: 1.4rem;
+  padding-left: 2.85714rem;
 }
 
 /**
@@ -3755,7 +3828,7 @@ body {
 			 * </div>
 			 */
 .p-r-medium {
-  padding-right: 1.4rem;
+  padding-right: 2.85714rem;
 }
 
 /**
@@ -3767,8 +3840,8 @@ body {
 			 * </div>
 			 */
 .p-s-medium {
-  padding-left: 1.4rem;
-  padding-right: 1.4rem;
+  padding-left: 2.85714rem;
+  padding-right: 2.85714rem;
 }
 
 /**
@@ -3779,7 +3852,7 @@ body {
 			 * <div style="background:#2b3438; width:100px; height:5px"></div>
 			 */
 .m-b-big {
-  margin-bottom: 2rem;
+  margin-bottom: 5rem;
 }
 
 /**
@@ -3790,7 +3863,7 @@ body {
 			 * <div class="m-t-big" style="background:#2b3438; width:100px; height:5px"></div>
 			 */
 .m-t-big {
-  margin-top: 2rem;
+  margin-top: 5rem;
 }
 
 /**
@@ -3801,7 +3874,7 @@ body {
 			 * <div class="m-l-big" style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-l-big {
-  margin-left: 2rem;
+  margin-left: 5rem;
 }
 
 /**
@@ -3812,7 +3885,7 @@ body {
 			 * <div style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-r-big {
-  margin-right: 2rem;
+  margin-right: 5rem;
 }
 
 /**
@@ -3823,8 +3896,8 @@ body {
 			 * <div style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-s-big {
-  margin-left: 2rem;
-  margin-right: 2rem;
+  margin-left: 5rem;
+  margin-right: 5rem;
 }
 
 /**
@@ -3836,7 +3909,7 @@ body {
 			 * </div>
 			 */
 .p-big {
-  padding: 2rem;
+  padding: 5rem;
 }
 
 /**
@@ -3848,7 +3921,7 @@ body {
 			 * </div>
 			 */
 .p-b-big {
-  padding-bottom: 2rem;
+  padding-bottom: 5rem;
 }
 
 /**
@@ -3860,7 +3933,7 @@ body {
 			 * </div>
 			 */
 .p-t-big {
-  padding-top: 2rem;
+  padding-top: 5rem;
 }
 
 /**
@@ -3872,7 +3945,7 @@ body {
 			 * </div>
 			 */
 .p-l-big {
-  padding-left: 2rem;
+  padding-left: 5rem;
 }
 
 /**
@@ -3884,7 +3957,7 @@ body {
 			 * </div>
 			 */
 .p-r-big {
-  padding-right: 2rem;
+  padding-right: 5rem;
 }
 
 /**
@@ -3896,8 +3969,8 @@ body {
 			 * </div>
 			 */
 .p-s-big {
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-left: 5rem;
+  padding-right: 5rem;
 }
 
 /**
@@ -3908,7 +3981,7 @@ body {
 			 * <div style="background:#2b3438; width:100px; height:5px"></div>
 			 */
 .m-b-bigger {
-  margin-bottom: 3rem;
+  margin-bottom: 7.14286rem;
 }
 
 /**
@@ -3919,7 +3992,7 @@ body {
 			 * <div class="m-t-bigger" style="background:#2b3438; width:100px; height:5px"></div>
 			 */
 .m-t-bigger {
-  margin-top: 3rem;
+  margin-top: 7.14286rem;
 }
 
 /**
@@ -3930,7 +4003,7 @@ body {
 			 * <div class="m-l-bigger" style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-l-bigger {
-  margin-left: 3rem;
+  margin-left: 7.14286rem;
 }
 
 /**
@@ -3941,7 +4014,7 @@ body {
 			 * <div style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-r-bigger {
-  margin-right: 3rem;
+  margin-right: 7.14286rem;
 }
 
 /**
@@ -3952,8 +4025,8 @@ body {
 			 * <div style="display:inline-block; background:#2b3438; width:50px; height:50px"></div>
 			 */
 .m-s-bigger {
-  margin-left: 3rem;
-  margin-right: 3rem;
+  margin-left: 7.14286rem;
+  margin-right: 7.14286rem;
 }
 
 /**
@@ -3965,7 +4038,7 @@ body {
 			 * </div>
 			 */
 .p-bigger {
-  padding: 3rem;
+  padding: 7.14286rem;
 }
 
 /**
@@ -3977,7 +4050,7 @@ body {
 			 * </div>
 			 */
 .p-b-bigger {
-  padding-bottom: 3rem;
+  padding-bottom: 7.14286rem;
 }
 
 /**
@@ -3989,7 +4062,7 @@ body {
 			 * </div>
 			 */
 .p-t-bigger {
-  padding-top: 3rem;
+  padding-top: 7.14286rem;
 }
 
 /**
@@ -4001,7 +4074,7 @@ body {
 			 * </div>
 			 */
 .p-l-bigger {
-  padding-left: 3rem;
+  padding-left: 7.14286rem;
 }
 
 /**
@@ -4013,7 +4086,7 @@ body {
 			 * </div>
 			 */
 .p-r-bigger {
-  padding-right: 3rem;
+  padding-right: 7.14286rem;
 }
 
 /**
@@ -4025,8 +4098,8 @@ body {
 			 * </div>
 			 */
 .p-s-bigger {
-  padding-left: 3rem;
-  padding-right: 3rem;
+  padding-left: 7.14286rem;
+  padding-right: 7.14286rem;
 }
 
 /**
@@ -4312,6 +4385,85 @@ body {
 }
 
 /**
+				 * @name 	```.b-default```
+				 * Specify the border of 1px solid to **default**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-default">
+				 * 	I have a default border color
+				 * </div>
+				 */
+.b-default {
+  border: 0.07143rem solid #848e91;
+}
+
+/**
+				 * @name 	```.b-t-default```
+				 * Specify the border top of 1px solid to **default**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-t-default">
+				 * 	I have a default border top color
+				 * </div>
+				 */
+.b-t-default {
+  border-top: 0.07143rem solid #848e91;
+}
+
+/**
+				 * @name 	```.b-r-default```
+				 * Specify the border right of 1px solid to **default**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-r-default">
+				 * 	I have a default border right color
+				 * </div>
+				 */
+.b-r-default {
+  border-right: 0.07143rem solid #848e91;
+}
+
+/**
+				 * @name 	```.b-b-default```
+				 * Specify the border bottom of 1px solid to **default**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-b-default">
+				 * 	I have a default border bottom color
+				 * </div>
+				 */
+.b-b-default {
+  border-bottom: 0.07143rem solid #848e91;
+}
+
+/**
+				 * @name 	```.b-l-default```
+				 * Specify the border left of 1px solid to **default**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-l-default">
+				 * 	I have a default border left color
+				 * </div>
+				 */
+.b-l-default {
+  border-left: 0.07143rem solid #848e91;
+}
+
+/**
+				 * @name 	```.b-s-default```
+				 * Specify the border side of 1px solid to **default**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-s-default">
+				 * 	I have a default border side color
+				 * </div>
+				 */
+.b-s-default {
+  border-left: 0.07143rem solid #848e91;
+  border-right: 0.07143rem solid #848e91;
+}
+
+/**
 				 * @name 	```.c-title```
 				 * Specify the color to **title**
 				 * @styleguide  	Colors / Classes
@@ -4335,6 +4487,85 @@ body {
 				 */
 .bkg-title {
   background-color: #2b3438;
+}
+
+/**
+				 * @name 	```.b-title```
+				 * Specify the border of 1px solid to **title**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-title">
+				 * 	I have a title border color
+				 * </div>
+				 */
+.b-title {
+  border: 0.07143rem solid #2b3438;
+}
+
+/**
+				 * @name 	```.b-t-title```
+				 * Specify the border top of 1px solid to **title**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-t-title">
+				 * 	I have a title border top color
+				 * </div>
+				 */
+.b-t-title {
+  border-top: 0.07143rem solid #2b3438;
+}
+
+/**
+				 * @name 	```.b-r-title```
+				 * Specify the border right of 1px solid to **title**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-r-title">
+				 * 	I have a title border right color
+				 * </div>
+				 */
+.b-r-title {
+  border-right: 0.07143rem solid #2b3438;
+}
+
+/**
+				 * @name 	```.b-b-title```
+				 * Specify the border bottom of 1px solid to **title**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-b-title">
+				 * 	I have a title border bottom color
+				 * </div>
+				 */
+.b-b-title {
+  border-bottom: 0.07143rem solid #2b3438;
+}
+
+/**
+				 * @name 	```.b-l-title```
+				 * Specify the border left of 1px solid to **title**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-l-title">
+				 * 	I have a title border left color
+				 * </div>
+				 */
+.b-l-title {
+  border-left: 0.07143rem solid #2b3438;
+}
+
+/**
+				 * @name 	```.b-s-title```
+				 * Specify the border side of 1px solid to **title**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-s-title">
+				 * 	I have a title border side color
+				 * </div>
+				 */
+.b-s-title {
+  border-left: 0.07143rem solid #2b3438;
+  border-right: 0.07143rem solid #2b3438;
 }
 
 /**
@@ -4364,6 +4595,85 @@ body {
 }
 
 /**
+				 * @name 	```.b-text```
+				 * Specify the border of 1px solid to **text**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-text">
+				 * 	I have a text border color
+				 * </div>
+				 */
+.b-text {
+  border: 0.07143rem solid #848e91;
+}
+
+/**
+				 * @name 	```.b-t-text```
+				 * Specify the border top of 1px solid to **text**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-t-text">
+				 * 	I have a text border top color
+				 * </div>
+				 */
+.b-t-text {
+  border-top: 0.07143rem solid #848e91;
+}
+
+/**
+				 * @name 	```.b-r-text```
+				 * Specify the border right of 1px solid to **text**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-r-text">
+				 * 	I have a text border right color
+				 * </div>
+				 */
+.b-r-text {
+  border-right: 0.07143rem solid #848e91;
+}
+
+/**
+				 * @name 	```.b-b-text```
+				 * Specify the border bottom of 1px solid to **text**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-b-text">
+				 * 	I have a text border bottom color
+				 * </div>
+				 */
+.b-b-text {
+  border-bottom: 0.07143rem solid #848e91;
+}
+
+/**
+				 * @name 	```.b-l-text```
+				 * Specify the border left of 1px solid to **text**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-l-text">
+				 * 	I have a text border left color
+				 * </div>
+				 */
+.b-l-text {
+  border-left: 0.07143rem solid #848e91;
+}
+
+/**
+				 * @name 	```.b-s-text```
+				 * Specify the border side of 1px solid to **text**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-s-text">
+				 * 	I have a text border side color
+				 * </div>
+				 */
+.b-s-text {
+  border-left: 0.07143rem solid #848e91;
+  border-right: 0.07143rem solid #848e91;
+}
+
+/**
 				 * @name 	```.c-link```
 				 * Specify the color to **link**
 				 * @styleguide  	Colors / Classes
@@ -4387,6 +4697,85 @@ body {
 				 */
 .bkg-link {
   background-color: #f2bc2b;
+}
+
+/**
+				 * @name 	```.b-link```
+				 * Specify the border of 1px solid to **link**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-link">
+				 * 	I have a link border color
+				 * </div>
+				 */
+.b-link {
+  border: 0.07143rem solid #f2bc2b;
+}
+
+/**
+				 * @name 	```.b-t-link```
+				 * Specify the border top of 1px solid to **link**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-t-link">
+				 * 	I have a link border top color
+				 * </div>
+				 */
+.b-t-link {
+  border-top: 0.07143rem solid #f2bc2b;
+}
+
+/**
+				 * @name 	```.b-r-link```
+				 * Specify the border right of 1px solid to **link**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-r-link">
+				 * 	I have a link border right color
+				 * </div>
+				 */
+.b-r-link {
+  border-right: 0.07143rem solid #f2bc2b;
+}
+
+/**
+				 * @name 	```.b-b-link```
+				 * Specify the border bottom of 1px solid to **link**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-b-link">
+				 * 	I have a link border bottom color
+				 * </div>
+				 */
+.b-b-link {
+  border-bottom: 0.07143rem solid #f2bc2b;
+}
+
+/**
+				 * @name 	```.b-l-link```
+				 * Specify the border left of 1px solid to **link**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-l-link">
+				 * 	I have a link border left color
+				 * </div>
+				 */
+.b-l-link {
+  border-left: 0.07143rem solid #f2bc2b;
+}
+
+/**
+				 * @name 	```.b-s-link```
+				 * Specify the border side of 1px solid to **link**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-s-link">
+				 * 	I have a link border side color
+				 * </div>
+				 */
+.b-s-link {
+  border-left: 0.07143rem solid #f2bc2b;
+  border-right: 0.07143rem solid #f2bc2b;
 }
 
 /**
@@ -4416,6 +4805,85 @@ body {
 }
 
 /**
+				 * @name 	```.b-primary```
+				 * Specify the border of 1px solid to **primary**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-primary">
+				 * 	I have a primary border color
+				 * </div>
+				 */
+.b-primary {
+  border: 0.07143rem solid #f2bc2b;
+}
+
+/**
+				 * @name 	```.b-t-primary```
+				 * Specify the border top of 1px solid to **primary**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-t-primary">
+				 * 	I have a primary border top color
+				 * </div>
+				 */
+.b-t-primary {
+  border-top: 0.07143rem solid #f2bc2b;
+}
+
+/**
+				 * @name 	```.b-r-primary```
+				 * Specify the border right of 1px solid to **primary**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-r-primary">
+				 * 	I have a primary border right color
+				 * </div>
+				 */
+.b-r-primary {
+  border-right: 0.07143rem solid #f2bc2b;
+}
+
+/**
+				 * @name 	```.b-b-primary```
+				 * Specify the border bottom of 1px solid to **primary**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-b-primary">
+				 * 	I have a primary border bottom color
+				 * </div>
+				 */
+.b-b-primary {
+  border-bottom: 0.07143rem solid #f2bc2b;
+}
+
+/**
+				 * @name 	```.b-l-primary```
+				 * Specify the border left of 1px solid to **primary**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-l-primary">
+				 * 	I have a primary border left color
+				 * </div>
+				 */
+.b-l-primary {
+  border-left: 0.07143rem solid #f2bc2b;
+}
+
+/**
+				 * @name 	```.b-s-primary```
+				 * Specify the border side of 1px solid to **primary**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-s-primary">
+				 * 	I have a primary border side color
+				 * </div>
+				 */
+.b-s-primary {
+  border-left: 0.07143rem solid #f2bc2b;
+  border-right: 0.07143rem solid #f2bc2b;
+}
+
+/**
 				 * @name 	```.c-secondary```
 				 * Specify the color to **secondary**
 				 * @styleguide  	Colors / Classes
@@ -4439,6 +4907,85 @@ body {
 				 */
 .bkg-secondary {
   background-color: #2b3438;
+}
+
+/**
+				 * @name 	```.b-secondary```
+				 * Specify the border of 1px solid to **secondary**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-secondary">
+				 * 	I have a secondary border color
+				 * </div>
+				 */
+.b-secondary {
+  border: 0.07143rem solid #2b3438;
+}
+
+/**
+				 * @name 	```.b-t-secondary```
+				 * Specify the border top of 1px solid to **secondary**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-t-secondary">
+				 * 	I have a secondary border top color
+				 * </div>
+				 */
+.b-t-secondary {
+  border-top: 0.07143rem solid #2b3438;
+}
+
+/**
+				 * @name 	```.b-r-secondary```
+				 * Specify the border right of 1px solid to **secondary**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-r-secondary">
+				 * 	I have a secondary border right color
+				 * </div>
+				 */
+.b-r-secondary {
+  border-right: 0.07143rem solid #2b3438;
+}
+
+/**
+				 * @name 	```.b-b-secondary```
+				 * Specify the border bottom of 1px solid to **secondary**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-b-secondary">
+				 * 	I have a secondary border bottom color
+				 * </div>
+				 */
+.b-b-secondary {
+  border-bottom: 0.07143rem solid #2b3438;
+}
+
+/**
+				 * @name 	```.b-l-secondary```
+				 * Specify the border left of 1px solid to **secondary**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-l-secondary">
+				 * 	I have a secondary border left color
+				 * </div>
+				 */
+.b-l-secondary {
+  border-left: 0.07143rem solid #2b3438;
+}
+
+/**
+				 * @name 	```.b-s-secondary```
+				 * Specify the border side of 1px solid to **secondary**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-s-secondary">
+				 * 	I have a secondary border side color
+				 * </div>
+				 */
+.b-s-secondary {
+  border-left: 0.07143rem solid #2b3438;
+  border-right: 0.07143rem solid #2b3438;
 }
 
 /**
@@ -4468,6 +5015,85 @@ body {
 }
 
 /**
+				 * @name 	```.b-success```
+				 * Specify the border of 1px solid to **success**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-success">
+				 * 	I have a success border color
+				 * </div>
+				 */
+.b-success {
+  border: 0.07143rem solid #5cb85c;
+}
+
+/**
+				 * @name 	```.b-t-success```
+				 * Specify the border top of 1px solid to **success**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-t-success">
+				 * 	I have a success border top color
+				 * </div>
+				 */
+.b-t-success {
+  border-top: 0.07143rem solid #5cb85c;
+}
+
+/**
+				 * @name 	```.b-r-success```
+				 * Specify the border right of 1px solid to **success**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-r-success">
+				 * 	I have a success border right color
+				 * </div>
+				 */
+.b-r-success {
+  border-right: 0.07143rem solid #5cb85c;
+}
+
+/**
+				 * @name 	```.b-b-success```
+				 * Specify the border bottom of 1px solid to **success**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-b-success">
+				 * 	I have a success border bottom color
+				 * </div>
+				 */
+.b-b-success {
+  border-bottom: 0.07143rem solid #5cb85c;
+}
+
+/**
+				 * @name 	```.b-l-success```
+				 * Specify the border left of 1px solid to **success**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-l-success">
+				 * 	I have a success border left color
+				 * </div>
+				 */
+.b-l-success {
+  border-left: 0.07143rem solid #5cb85c;
+}
+
+/**
+				 * @name 	```.b-s-success```
+				 * Specify the border side of 1px solid to **success**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-s-success">
+				 * 	I have a success border side color
+				 * </div>
+				 */
+.b-s-success {
+  border-left: 0.07143rem solid #5cb85c;
+  border-right: 0.07143rem solid #5cb85c;
+}
+
+/**
 				 * @name 	```.c-warning```
 				 * Specify the color to **warning**
 				 * @styleguide  	Colors / Classes
@@ -4491,6 +5117,85 @@ body {
 				 */
 .bkg-warning {
   background-color: #f0ad4e;
+}
+
+/**
+				 * @name 	```.b-warning```
+				 * Specify the border of 1px solid to **warning**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-warning">
+				 * 	I have a warning border color
+				 * </div>
+				 */
+.b-warning {
+  border: 0.07143rem solid #f0ad4e;
+}
+
+/**
+				 * @name 	```.b-t-warning```
+				 * Specify the border top of 1px solid to **warning**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-t-warning">
+				 * 	I have a warning border top color
+				 * </div>
+				 */
+.b-t-warning {
+  border-top: 0.07143rem solid #f0ad4e;
+}
+
+/**
+				 * @name 	```.b-r-warning```
+				 * Specify the border right of 1px solid to **warning**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-r-warning">
+				 * 	I have a warning border right color
+				 * </div>
+				 */
+.b-r-warning {
+  border-right: 0.07143rem solid #f0ad4e;
+}
+
+/**
+				 * @name 	```.b-b-warning```
+				 * Specify the border bottom of 1px solid to **warning**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-b-warning">
+				 * 	I have a warning border bottom color
+				 * </div>
+				 */
+.b-b-warning {
+  border-bottom: 0.07143rem solid #f0ad4e;
+}
+
+/**
+				 * @name 	```.b-l-warning```
+				 * Specify the border left of 1px solid to **warning**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-l-warning">
+				 * 	I have a warning border left color
+				 * </div>
+				 */
+.b-l-warning {
+  border-left: 0.07143rem solid #f0ad4e;
+}
+
+/**
+				 * @name 	```.b-s-warning```
+				 * Specify the border side of 1px solid to **warning**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-s-warning">
+				 * 	I have a warning border side color
+				 * </div>
+				 */
+.b-s-warning {
+  border-left: 0.07143rem solid #f0ad4e;
+  border-right: 0.07143rem solid #f0ad4e;
 }
 
 /**
@@ -4520,6 +5225,85 @@ body {
 }
 
 /**
+				 * @name 	```.b-error```
+				 * Specify the border of 1px solid to **error**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-error">
+				 * 	I have a error border color
+				 * </div>
+				 */
+.b-error {
+  border: 0.07143rem solid #d9534f;
+}
+
+/**
+				 * @name 	```.b-t-error```
+				 * Specify the border top of 1px solid to **error**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-t-error">
+				 * 	I have a error border top color
+				 * </div>
+				 */
+.b-t-error {
+  border-top: 0.07143rem solid #d9534f;
+}
+
+/**
+				 * @name 	```.b-r-error```
+				 * Specify the border right of 1px solid to **error**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-r-error">
+				 * 	I have a error border right color
+				 * </div>
+				 */
+.b-r-error {
+  border-right: 0.07143rem solid #d9534f;
+}
+
+/**
+				 * @name 	```.b-b-error```
+				 * Specify the border bottom of 1px solid to **error**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-b-error">
+				 * 	I have a error border bottom color
+				 * </div>
+				 */
+.b-b-error {
+  border-bottom: 0.07143rem solid #d9534f;
+}
+
+/**
+				 * @name 	```.b-l-error```
+				 * Specify the border left of 1px solid to **error**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-l-error">
+				 * 	I have a error border left color
+				 * </div>
+				 */
+.b-l-error {
+  border-left: 0.07143rem solid #d9534f;
+}
+
+/**
+				 * @name 	```.b-s-error```
+				 * Specify the border side of 1px solid to **error**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-s-error">
+				 * 	I have a error border side color
+				 * </div>
+				 */
+.b-s-error {
+  border-left: 0.07143rem solid #d9534f;
+  border-right: 0.07143rem solid #d9534f;
+}
+
+/**
 				 * @name 	```.c-info```
 				 * Specify the color to **info**
 				 * @styleguide  	Colors / Classes
@@ -4545,8 +5329,87 @@ body {
   background-color: #2199e8;
 }
 
+/**
+				 * @name 	```.b-info```
+				 * Specify the border of 1px solid to **info**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-info">
+				 * 	I have a info border color
+				 * </div>
+				 */
+.b-info {
+  border: 0.07143rem solid #2199e8;
+}
+
+/**
+				 * @name 	```.b-t-info```
+				 * Specify the border top of 1px solid to **info**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-t-info">
+				 * 	I have a info border top color
+				 * </div>
+				 */
+.b-t-info {
+  border-top: 0.07143rem solid #2199e8;
+}
+
+/**
+				 * @name 	```.b-r-info```
+				 * Specify the border right of 1px solid to **info**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-r-info">
+				 * 	I have a info border right color
+				 * </div>
+				 */
+.b-r-info {
+  border-right: 0.07143rem solid #2199e8;
+}
+
+/**
+				 * @name 	```.b-b-info```
+				 * Specify the border bottom of 1px solid to **info**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-b-info">
+				 * 	I have a info border bottom color
+				 * </div>
+				 */
+.b-b-info {
+  border-bottom: 0.07143rem solid #2199e8;
+}
+
+/**
+				 * @name 	```.b-l-info```
+				 * Specify the border left of 1px solid to **info**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-l-info">
+				 * 	I have a info border left color
+				 * </div>
+				 */
+.b-l-info {
+  border-left: 0.07143rem solid #2199e8;
+}
+
+/**
+				 * @name 	```.b-s-info```
+				 * Specify the border side of 1px solid to **info**
+				 * @styleguide  	Colors / Classes
+				 * @example 	html
+				 * <div class="b-s-info">
+				 * 	I have a info border side color
+				 * </div>
+				 */
+.b-s-info {
+  border-left: 0.07143rem solid #2199e8;
+  border-right: 0.07143rem solid #2199e8;
+}
+
 body {
-  padding: 3rem;
+  padding: 7.14286rem;
 }
 
 /**
@@ -4660,7 +5523,7 @@ h1.vr,
 .vr .h4, .h5.vr,
 .vr .h5, .h6.vr,
 .vr .h6 {
-  margin-bottom: 1rem;
+  margin-bottom: 1.42857rem;
 }
 
 h1.vr:last-child,
@@ -4724,7 +5587,7 @@ h1.vr:last-child,
 p.vr,
 .vr p, .p.vr,
 .vr .p {
-  margin-bottom: 1rem;
+  margin-bottom: 1.42857rem;
 }
 
 p.vr:last-child,
@@ -4884,12 +5747,12 @@ p.vr:last-child,
 .tf dl > dt {
   font-weight: bold;
   line-height: 1.5;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.71429rem;
 }
 
 .dd,
 .tf dl > dd {
-  margin-bottom: 1rem;
+  margin-bottom: 1.42857rem;
   line-height: 1.5;
 }
 
@@ -5026,7 +5889,7 @@ dl.vr,
 .dl, .ul.vr,
 .vr .ul, .ol.vr,
 .vr .ol {
-  margin-bottom: 1rem;
+  margin-bottom: 1.42857rem;
 }
 
 dl.vr:last-child,
@@ -5243,7 +6106,7 @@ ol.vr .dl, ol.vr .ul, ol.vr .ol,
   font-style: italic;
   font-family: Palatino, Times, Georgia, serif;
   font-weight: normal;
-  padding: 1rem 2rem 1rem 2rem;
+  padding: 2.5rem 5rem 2.5rem 5rem;
   display: block;
 }
 
@@ -5254,7 +6117,7 @@ ol.vr .dl, ol.vr .ul, ol.vr .ol,
   font-size: .5em;
   font-style: italic;
   display: block;
-  margin-top: 1rem;
+  margin-top: 1.42857rem;
 }
 
 .quote cite:before,
@@ -5275,7 +6138,7 @@ quote,
 blockquote.vr,
 .vr
 blockquote {
-  margin-bottom: 1rem;
+  margin-bottom: 1.42857rem;
 }
 
 .quote.vr:last-child,
@@ -5358,6 +6221,7 @@ blockquote:last-child {
   padding: 0.8em 1.4em;
   height: 2.6em;
   display: block;
+  display: flex;
   width: 100%;
 }
 
@@ -5387,7 +6251,7 @@ blockquote:last-child {
   display: block;
   bottom: 0.32em;
   left: 50%;
-  height: .2em;
+  height: 0.2em;
   width: 0;
   transform: translateX(-50%) translateY(0) translateZ(0);
   transition: all 0.1s ease-in-out 0s, outline-color 0s linear 0s;
@@ -5472,7 +6336,7 @@ blockquote:last-child {
   display: block;
   bottom: 0.32em;
   left: 50%;
-  height: .2em;
+  height: 0.2em;
   width: 0;
   transform: translateX(-50%) translateY(0) translateZ(0);
   transition: all 0.1s ease-in-out 0s, outline-color 0s linear 0s;
@@ -5484,7 +6348,7 @@ blockquote:last-child {
   width: calc(100% - 2.8em);
 }
 
-.btn.btn:disabled {
+.btn.btn--disabled, .btn.btn:disabled {
   background-color: #848e91;
   border-color: #848e91;
   color: white;
@@ -5493,7 +6357,7 @@ blockquote:last-child {
   pointer-events: none;
 }
 
-.btn.btn:disabled[active]:not(:disabled), .btn.btn:disabled.active:not(:disabled), .btn.btn:disabled:active:not(:disabled), .btn.btn:disabled:hover:not(:disabled) {
+.btn.btn--disabled[active]:not(:disabled), .btn.btn--disabled.active:not(:disabled), .btn.btn--disabled:active:not(:disabled), .btn.btn--disabled:hover:not(:disabled), .btn.btn:disabled[active]:not(:disabled), .btn.btn:disabled.active:not(:disabled), .btn.btn:disabled:active:not(:disabled), .btn.btn:disabled:hover:not(:disabled) {
   background-color: #5f676a;
   border-color: #5f676a;
 }
@@ -5582,7 +6446,7 @@ blockquote:last-child {
   display: block;
   bottom: 0.32em;
   left: 50%;
-  height: .2em;
+  height: 0.2em;
   width: 0;
   transform: translateX(-50%) translateY(0) translateZ(0);
   transition: all 0.1s ease-in-out 0s, outline-color 0s linear 0s;
@@ -5594,7 +6458,7 @@ blockquote:last-child {
   width: calc(100% - 2.8em);
 }
 
-.btn--primary.btn:disabled {
+.btn--primary.btn--disabled, .btn--primary.btn:disabled {
   background-color: #f2bc2b;
   border-color: #f2bc2b;
   color: white;
@@ -5603,7 +6467,7 @@ blockquote:last-child {
   pointer-events: none;
 }
 
-.btn--primary.btn:disabled[active]:not(:disabled), .btn--primary.btn:disabled.active:not(:disabled), .btn--primary.btn:disabled:active:not(:disabled), .btn--primary.btn:disabled:hover:not(:disabled) {
+.btn--primary.btn--disabled[active]:not(:disabled), .btn--primary.btn--disabled.active:not(:disabled), .btn--primary.btn--disabled:active:not(:disabled), .btn--primary.btn--disabled:hover:not(:disabled), .btn--primary.btn:disabled[active]:not(:disabled), .btn--primary.btn:disabled.active:not(:disabled), .btn--primary.btn:disabled:active:not(:disabled), .btn--primary.btn:disabled:hover:not(:disabled) {
   background-color: #c4920c;
   border-color: #c4920c;
 }
@@ -5692,7 +6556,7 @@ blockquote:last-child {
   display: block;
   bottom: 0.32em;
   left: 50%;
-  height: .2em;
+  height: 0.2em;
   width: 0;
   transform: translateX(-50%) translateY(0) translateZ(0);
   transition: all 0.1s ease-in-out 0s, outline-color 0s linear 0s;
@@ -5704,7 +6568,7 @@ blockquote:last-child {
   width: calc(100% - 2.8em);
 }
 
-.btn--secondary.btn:disabled {
+.btn--secondary.btn--disabled, .btn--secondary.btn:disabled {
   background-color: #2b3438;
   border-color: #2b3438;
   color: white;
@@ -5713,7 +6577,7 @@ blockquote:last-child {
   pointer-events: none;
 }
 
-.btn--secondary.btn:disabled[active]:not(:disabled), .btn--secondary.btn:disabled.active:not(:disabled), .btn--secondary.btn:disabled:active:not(:disabled), .btn--secondary.btn:disabled:hover:not(:disabled) {
+.btn--secondary.btn--disabled[active]:not(:disabled), .btn--secondary.btn--disabled.active:not(:disabled), .btn--secondary.btn--disabled:active:not(:disabled), .btn--secondary.btn--disabled:hover:not(:disabled), .btn--secondary.btn:disabled[active]:not(:disabled), .btn--secondary.btn:disabled.active:not(:disabled), .btn--secondary.btn:disabled:active:not(:disabled), .btn--secondary.btn:disabled:hover:not(:disabled) {
   background-color: #0a0c0d;
   border-color: #0a0c0d;
 }
@@ -5727,6 +6591,10 @@ blockquote:last-child {
 .btn--hover-secondary:hover[active]:not(:disabled), .btn--hover-secondary:hover.active:not(:disabled), .btn--hover-secondary:hover:active:not(:disabled), .btn--hover-secondary:hover:hover:not(:disabled) {
   background-color: #0a0c0d;
   border-color: #0a0c0d;
+}
+
+s-slideshow {
+  overflow: hidden;
 }
 
 s-slideshow [s-slideshow-slide] {
@@ -5765,7 +6633,7 @@ s-slideshow {
 }
 
 .slideshow__metas {
-  padding: 2rem;
+  padding: 5rem;
   position: absolute;
   bottom: 0%;
   left: 0%;
