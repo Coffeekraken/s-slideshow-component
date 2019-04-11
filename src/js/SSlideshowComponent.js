@@ -134,6 +134,48 @@ export default class SSlideshowComponent extends SWebComponent {
 			onInit: null,
 
 			/**
+			 * Callback before the slideshow pass to the next slide
+			 * @prop
+			 * @type    {Function}
+			 */
+			beforeNext: null,
+
+			/**
+			 * Callback when the slider change from a slide to the next
+			 * @prop
+			 * @type    {Function}
+			 */
+			onNext: null,
+
+			/**
+			 * Callback after the slider has changed to the next slide
+			 * @prop
+			 * @type    {Function}
+			 */
+			afterNext: null,
+
+			/**
+			 * Callback before the slideshow pass to the previous slide
+			 * @prop
+			 * @type    {Function}
+			 */
+			beforePrevious: null,
+
+			/**
+			 * Callback when the slider change from a slide to the previous
+			 * @prop
+			 * @type    {Function}
+			 */
+			onPrevious: null,
+
+			/**
+			 * Callback after the slider has changed to the previous slide
+			 * @prop
+			 * @type    {Function}
+			 */
+			afterPrevious: null,
+
+			/**
 			 * Callback before the slideshow pass to another slide
 			 * @prop
 			 * @type 	{Function}
@@ -921,6 +963,15 @@ export default class SSlideshowComponent extends SWebComponent {
 		// stop if the document is hidden
 		if (document.hidden) return;
 
+		/**
+		 * Dispatched before the slider pass from a slide to the next
+		 * @event
+		 * @name    beforeNext
+		 */
+		__dispatchEvent(this, 'beforeNext')
+		// callback
+		this.props.beforeNext && this.props.beforeNext(this)
+
 		// get the current active slide index
 		const idx = this.props.slide;
 
@@ -976,6 +1027,15 @@ export default class SSlideshowComponent extends SWebComponent {
 	previous() {
 		// stop if the document is hidden
 		if (document.hidden) return;
+
+		/**
+		 * Dispatched before the slider pass from a slide to the previous
+		 * @event
+		 * @name    beforePrevious
+		 */
+		__dispatchEvent(this, 'beforePrevious')
+		// callback
+		this.props.beforePrevious && this.props.beforePrevious(this)
 
 		// get the current active slide index
 		const idx = this.props.slide;
@@ -1056,7 +1116,11 @@ export default class SSlideshowComponent extends SWebComponent {
 		// beforeChange callback
 		this.props.beforeChange && this.props.beforeChange(this);
 
-		// event
+		/**
+		 * Dispatched before the slider pass from a slide to another
+		 * @event
+		 * @name    beforeChange
+		 */
 		__dispatchEvent(this, "beforeChange");
 
 		// unapply classes
@@ -1077,17 +1141,65 @@ export default class SSlideshowComponent extends SWebComponent {
 		// onChange callback
 		this.props.onChange && this.props.onChange(this);
 
-		// change event
+		/**
+		 * Dispatched when the slider change from a slide to another
+		 * @event
+		 * @name    change
+		 */
 		__dispatchEvent(this, "change");
+
+		if (this.props.direction === 'forward') {
+			/**
+			 * Dispatched when the slider pass from a slide to the next
+			 * @event
+			 * @name    next
+			 */
+			__dispatchEvent(this, 'next')
+			// callback
+			this.props.onNext && this.props.onNext(this)
+		} else {
+			/**
+			 * Dispatched when the slider pass from a slide to the previous
+			 * @event
+			 * @name    previous
+			 */
+			__dispatchEvent(this, 'previous')
+			// callback
+			this.props.onPrevious && this.props.onPrevious(this)
+		}
 
 		// apply classes
 		this._applyStateAttributes();
 
-		// afterChange callback
-		this.props.afterChange && this.props.afterChange(this);
-
-		// event
+		/**
+		 * Dispatched after the slider has changed from a slide to another
+		 * @event
+		 * @name    afterChange
+		 */
 		__dispatchEvent(this, "afterChange");
+
+		// afterChange callback
+		this.props.afterChange && this.props.afterChange(this)
+
+		if (this.props.direction === 'forward') {
+			/**
+			 * Dispatched when the slider has passed from a slide to the next
+			 * @event
+			 * @name    afterNext
+			 */
+			__dispatchEvent(this, 'afterNext')
+			// callback
+			this.props.afterNext && this.props.afterNext(this)
+		} else {
+			/**
+			 * Dispatched when the slider has passed from a slide to the previous
+			 * @event
+			 * @name    afterPrevious
+			 */
+			__dispatchEvent(this, 'afterPrevious')
+			// callback
+			this.props.afterPrevious && this.props.afterPrevious(this)
+		}
 
 		// maintain chainability
 		return this;

@@ -891,6 +891,15 @@ var SSlideshowComponent = function (_SWebComponent) {
 			// stop if the document is hidden
 			if (document.hidden) return;
 
+			/**
+    * Dispatched before the slider pass from a slide to the next
+    * @event
+    * @name    beforeNext
+    */
+			(0, _dispatchEvent2.default)(this, 'beforeNext');
+			// callback
+			this.props.beforeNext && this.props.beforeNext(this);
+
 			// get the current active slide index
 			var idx = this.props.slide;
 
@@ -944,6 +953,15 @@ var SSlideshowComponent = function (_SWebComponent) {
 			// stop if the document is hidden
 			if (document.hidden) return;
 
+			/**
+    * Dispatched before the slider pass from a slide to the previous
+    * @event
+    * @name    beforePrevious
+    */
+			(0, _dispatchEvent2.default)(this, 'beforePrevious');
+			// callback
+			this.props.beforePrevious && this.props.beforePrevious(this);
+
 			// get the current active slide index
 			var idx = this.props.slide;
 
@@ -962,12 +980,9 @@ var SSlideshowComponent = function (_SWebComponent) {
 			} else if (this.props.loop) {
 				var left = Math.abs(parseInt(idx) - this.props.slidesPerChange);
 				activeSlideIndex = this._slides.length - left;
-				console.log('active #1', activeSlideIndex);
-
 				// activeSlideIndex = this._slides.length - 1;
 			} else {
 				activeSlideIndex = this.props.slide;
-				console.log('active #3', activeSlideIndex);
 			}
 
 			// check if the slide has an id
@@ -1031,7 +1046,11 @@ var SSlideshowComponent = function (_SWebComponent) {
 			// beforeChange callback
 			this.props.beforeChange && this.props.beforeChange(this);
 
-			// event
+			/**
+    * Dispatched before the slider pass from a slide to another
+    * @event
+    * @name    beforeChange
+    */
 			(0, _dispatchEvent2.default)(this, "beforeChange");
 
 			// unapply classes
@@ -1052,17 +1071,65 @@ var SSlideshowComponent = function (_SWebComponent) {
 			// onChange callback
 			this.props.onChange && this.props.onChange(this);
 
-			// change event
+			/**
+    * Dispatched when the slider change from a slide to another
+    * @event
+    * @name    change
+    */
 			(0, _dispatchEvent2.default)(this, "change");
+
+			if (this.props.direction === 'forward') {
+				/**
+     * Dispatched when the slider pass from a slide to the next
+     * @event
+     * @name    next
+     */
+				(0, _dispatchEvent2.default)(this, 'next');
+				// callback
+				this.props.onNext && this.props.onNext(this);
+			} else {
+				/**
+     * Dispatched when the slider pass from a slide to the previous
+     * @event
+     * @name    previous
+     */
+				(0, _dispatchEvent2.default)(this, 'previous');
+				// callback
+				this.props.onPrevious && this.props.onPrevious(this);
+			}
 
 			// apply classes
 			this._applyStateAttributes();
 
+			/**
+    * Dispatched after the slider has changed from a slide to another
+    * @event
+    * @name    afterChange
+    */
+			(0, _dispatchEvent2.default)(this, "afterChange");
+
 			// afterChange callback
 			this.props.afterChange && this.props.afterChange(this);
 
-			// event
-			(0, _dispatchEvent2.default)(this, "afterChange");
+			if (this.props.direction === 'forward') {
+				/**
+     * Dispatched when the slider has passed from a slide to the next
+     * @event
+     * @name    afterNext
+     */
+				(0, _dispatchEvent2.default)(this, 'afterNext');
+				// callback
+				this.props.afterNext && this.props.afterNext(this);
+			} else {
+				/**
+     * Dispatched when the slider has passed from a slide to the previous
+     * @event
+     * @name    afterPrevious
+     */
+				(0, _dispatchEvent2.default)(this, 'afterPrevious');
+				// callback
+				this.props.afterPrevious && this.props.afterPrevious(this);
+			}
 
 			// maintain chainability
 			return this;
@@ -1364,6 +1431,48 @@ var SSlideshowComponent = function (_SWebComponent) {
      * @type 	{Function}
      */
 				onInit: null,
+
+				/**
+     * Callback before the slideshow pass to the next slide
+     * @prop
+     * @type    {Function}
+     */
+				beforeNext: null,
+
+				/**
+     * Callback when the slider change from a slide to the next
+     * @prop
+     * @type    {Function}
+     */
+				onNext: null,
+
+				/**
+     * Callback after the slider has changed to the next slide
+     * @prop
+     * @type    {Function}
+     */
+				afterNext: null,
+
+				/**
+     * Callback before the slideshow pass to the previous slide
+     * @prop
+     * @type    {Function}
+     */
+				beforePrevious: null,
+
+				/**
+     * Callback when the slider change from a slide to the previous
+     * @prop
+     * @type    {Function}
+     */
+				onPrevious: null,
+
+				/**
+     * Callback after the slider has changed to the previous slide
+     * @prop
+     * @type    {Function}
+     */
+				afterPrevious: null,
 
 				/**
      * Callback before the slideshow pass to another slide
