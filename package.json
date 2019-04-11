@@ -1,6 +1,6 @@
 {
   "name": "coffeekraken-s-slideshow-component",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Create nice, simple and fully customizable slideshow.",
   "main": "dist/index.js",
   "homepage": "http://coffeekraken.io",
@@ -57,9 +57,9 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "coffeekraken-sugar": "^1.0.34",
     "coffeekraken-s-button-component": "^1.0.1",
     "coffeekraken-s-typography-component": "^1.0.1",
+    "coffeekraken-sugar": "^1.1.0",
     "lodash": "^4.17.11"
   },
   "devDependencies": {

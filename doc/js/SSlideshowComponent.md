@@ -102,6 +102,60 @@ Type : **{ [Function](https://developer.mozilla.org/fr/docs/Web/JavaScript/Refer
 Default : **null**
 
 
+### beforeNext
+
+Callback before the slideshow pass to the next slide
+
+Type : **{ [Function](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Function) }**
+
+Default : **null**
+
+
+### onNext
+
+Callback when the slider change from a slide to the next
+
+Type : **{ [Function](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Function) }**
+
+Default : **null**
+
+
+### afterNext
+
+Callback after the slider has changed to the next slide
+
+Type : **{ [Function](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Function) }**
+
+Default : **null**
+
+
+### beforePrevious
+
+Callback before the slideshow pass to the previous slide
+
+Type : **{ [Function](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Function) }**
+
+Default : **null**
+
+
+### onPrevious
+
+Callback when the slider change from a slide to the previous
+
+Type : **{ [Function](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Function) }**
+
+Default : **null**
+
+
+### afterPrevious
+
+Callback after the slider has changed to the previous slide
+
+Type : **{ [Function](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Function) }**
+
+Default : **null**
+
+
 ### beforeChange
 
 Callback before the slideshow pass to another slide
@@ -365,3 +419,48 @@ Dispatched when the change happen
 ### afterChange
 
 Dispatched after the change has happened
+
+
+### beforeNext
+
+Dispatched before the slider pass from a slide to the next
+
+
+### beforePrevious
+
+Dispatched before the slider pass from a slide to the previous
+
+
+### beforeChange
+
+Dispatched before the slider pass from a slide to another
+
+
+### change
+
+Dispatched when the slider change from a slide to another
+
+
+### next
+
+Dispatched when the slider pass from a slide to the next
+
+
+### previous
+
+Dispatched when the slider pass from a slide to the previous
+
+
+### afterChange
+
+Dispatched after the slider has changed from a slide to another
+
+
+### afterNext
+
+Dispatched when the slider has passed from a slide to the next
+
+
+### afterPrevious
+
+Dispatched when the slider has passed from a slide to the previous

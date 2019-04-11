@@ -4,10 +4,25 @@
  * Available icons:
  * - search
  * - arrow-down
+ * - arrow-left
+ * - arrow-up
+ * - arrow-right
  * - angle-down
  * - angle-up
  * - angle-left
  * - angle-right
+ * - check
+ * - cross
+ * - menu
+ * - gear
+ * - list
+ * - refresh
+ * - trash
+ * - share
+ * - edit
+ * - save
+ * - grid
+ * - filter
  *
  * @param    {String}    $icon    The icon name wanted
  * @param    {String}    [$color="default"]    The color wanted
@@ -1465,6 +1480,7 @@
  * @param 			{List} 			[$extensions=woff2] 	The extensions list that you have available
  * @param 			{String} 		[$font-weight=normal] 	The font-weight property
  * @param 			{String} 		[$font-style=normal] 	The font-style property
+ * @param       {String}    [$font-display=auto]    The font-display property
  *
  * @example
  * // if you have these extensions files : .woff .eot .woff2
@@ -3010,8 +3026,6 @@
  */
 .btn, .btn--block {
   display: inline-block;
-  display: inline-flex;
-  align-items: center;
   border-style: solid;
   border-width: 1px;
   border-color: rgba(0, 0, 0, 0);
@@ -3233,6 +3247,7 @@ body {
 				 * @font-family 	Helvetica Neue, Helvetica, Verdana, Arial, sans-serif
 				 * @font-style 		
 				 * @font-weight 	normal
+				 * @font-display    
 				 */
 /**
 				 * @name   			quote
@@ -3241,6 +3256,7 @@ body {
 				 * @font-family 	Palatino, Times, Georgia, serif
 				 * @font-style 		
 				 * @font-weight 	normal
+				 * @font-display    
 				 */
 /**
 				 * @name   			code
@@ -3249,6 +3265,7 @@ body {
 				 * @font-family 	Menlo, Monaco, Consolas, Courier New, monospace
 				 * @font-style 		
 				 * @font-weight 	normal
+				 * @font-display    
 				 */
 /**
 			 * @name 	```.tr-fast```
@@ -6221,7 +6238,6 @@ blockquote:last-child {
   padding: 0.8em 1.4em;
   height: 2.6em;
   display: block;
-  display: flex;
   width: 100%;
 }
 
@@ -6251,7 +6267,7 @@ blockquote:last-child {
   display: block;
   bottom: 0.32em;
   left: 50%;
-  height: 0.2em;
+  height: .2em;
   width: 0;
   transform: translateX(-50%) translateY(0) translateZ(0);
   transition: all 0.1s ease-in-out 0s, outline-color 0s linear 0s;
@@ -6336,7 +6352,7 @@ blockquote:last-child {
   display: block;
   bottom: 0.32em;
   left: 50%;
-  height: 0.2em;
+  height: .2em;
   width: 0;
   transform: translateX(-50%) translateY(0) translateZ(0);
   transition: all 0.1s ease-in-out 0s, outline-color 0s linear 0s;
@@ -6348,7 +6364,7 @@ blockquote:last-child {
   width: calc(100% - 2.8em);
 }
 
-.btn.btn--disabled, .btn.btn:disabled {
+.btn.btn:disabled {
   background-color: #848e91;
   border-color: #848e91;
   color: white;
@@ -6357,7 +6373,7 @@ blockquote:last-child {
   pointer-events: none;
 }
 
-.btn.btn--disabled[active]:not(:disabled), .btn.btn--disabled.active:not(:disabled), .btn.btn--disabled:active:not(:disabled), .btn.btn--disabled:hover:not(:disabled), .btn.btn:disabled[active]:not(:disabled), .btn.btn:disabled.active:not(:disabled), .btn.btn:disabled:active:not(:disabled), .btn.btn:disabled:hover:not(:disabled) {
+.btn.btn:disabled[active]:not(:disabled), .btn.btn:disabled.active:not(:disabled), .btn.btn:disabled:active:not(:disabled), .btn.btn:disabled:hover:not(:disabled) {
   background-color: #5f676a;
   border-color: #5f676a;
 }
@@ -6446,7 +6462,7 @@ blockquote:last-child {
   display: block;
   bottom: 0.32em;
   left: 50%;
-  height: 0.2em;
+  height: .2em;
   width: 0;
   transform: translateX(-50%) translateY(0) translateZ(0);
   transition: all 0.1s ease-in-out 0s, outline-color 0s linear 0s;
@@ -6458,7 +6474,7 @@ blockquote:last-child {
   width: calc(100% - 2.8em);
 }
 
-.btn--primary.btn--disabled, .btn--primary.btn:disabled {
+.btn--primary.btn:disabled {
   background-color: #f2bc2b;
   border-color: #f2bc2b;
   color: white;
@@ -6467,7 +6483,7 @@ blockquote:last-child {
   pointer-events: none;
 }
 
-.btn--primary.btn--disabled[active]:not(:disabled), .btn--primary.btn--disabled.active:not(:disabled), .btn--primary.btn--disabled:active:not(:disabled), .btn--primary.btn--disabled:hover:not(:disabled), .btn--primary.btn:disabled[active]:not(:disabled), .btn--primary.btn:disabled.active:not(:disabled), .btn--primary.btn:disabled:active:not(:disabled), .btn--primary.btn:disabled:hover:not(:disabled) {
+.btn--primary.btn:disabled[active]:not(:disabled), .btn--primary.btn:disabled.active:not(:disabled), .btn--primary.btn:disabled:active:not(:disabled), .btn--primary.btn:disabled:hover:not(:disabled) {
   background-color: #c4920c;
   border-color: #c4920c;
 }
@@ -6556,7 +6572,7 @@ blockquote:last-child {
   display: block;
   bottom: 0.32em;
   left: 50%;
-  height: 0.2em;
+  height: .2em;
   width: 0;
   transform: translateX(-50%) translateY(0) translateZ(0);
   transition: all 0.1s ease-in-out 0s, outline-color 0s linear 0s;
@@ -6568,7 +6584,7 @@ blockquote:last-child {
   width: calc(100% - 2.8em);
 }
 
-.btn--secondary.btn--disabled, .btn--secondary.btn:disabled {
+.btn--secondary.btn:disabled {
   background-color: #2b3438;
   border-color: #2b3438;
   color: white;
@@ -6577,7 +6593,7 @@ blockquote:last-child {
   pointer-events: none;
 }
 
-.btn--secondary.btn--disabled[active]:not(:disabled), .btn--secondary.btn--disabled.active:not(:disabled), .btn--secondary.btn--disabled:active:not(:disabled), .btn--secondary.btn--disabled:hover:not(:disabled), .btn--secondary.btn:disabled[active]:not(:disabled), .btn--secondary.btn:disabled.active:not(:disabled), .btn--secondary.btn:disabled:active:not(:disabled), .btn--secondary.btn:disabled:hover:not(:disabled) {
+.btn--secondary.btn:disabled[active]:not(:disabled), .btn--secondary.btn:disabled.active:not(:disabled), .btn--secondary.btn:disabled:active:not(:disabled), .btn--secondary.btn:disabled:hover:not(:disabled) {
   background-color: #0a0c0d;
   border-color: #0a0c0d;
 }
