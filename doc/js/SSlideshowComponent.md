@@ -251,6 +251,16 @@ Type : **{ [Boolean](https://developer.mozilla.org/fr/docs/Web/JavaScript/Refere
 Default : **true**
 
 
+### padNumbers
+
+Specify the limit length of the numbers used in total and current token.
+2 means that if the current slide is the 1, the current token will be 01
+
+Type : **{ Integer }**
+
+Default : **2**
+
+
 
 
 ## Methods

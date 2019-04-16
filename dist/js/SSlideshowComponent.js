@@ -48,6 +48,10 @@ var _addEventListener = require("coffeekraken-sugar/js/dom/addEventListener");
 
 var _addEventListener2 = _interopRequireDefault(_addEventListener);
 
+var _pad = require("coffeekraken-sugar/js/utils/numbers/pad");
+
+var _pad2 = _interopRequireDefault(_pad);
+
 var _STimer = require("coffeekraken-sugar/js/classes/STimer");
 
 var _STimer2 = _interopRequireDefault(_STimer);
@@ -773,13 +777,13 @@ var SSlideshowComponent = function (_SWebComponent) {
 			// apply current
 			if (this._refs.current) {
 				[].forEach.call(this._refs.current, function (current) {
-					current.innerHTML = parseInt(_this10.props.slide) + 1;
+					current.innerHTML = (0, _pad2.default)(parseInt(_this10.props.slide) + 1, _this10.props.padNumbers);
 				});
 			}
 			// apply total
 			if (this._refs.total) {
 				[].forEach.call(this._refs.total, function (total) {
-					total.innerHTML = _this10._slides.length;
+					total.innerHTML = (0, _pad2.default)(_this10._slides.length, _this10.props.padNumbers);
 				});
 			}
 		}
@@ -1546,7 +1550,15 @@ var SSlideshowComponent = function (_SWebComponent) {
      * @prop
      * @type 	{Boolean}
      */
-				touchEnabled: true
+				touchEnabled: true,
+
+				/**
+     * Specify the limit length of the numbers used in total and current token.
+     * 2 means that if the current slide is the 1, the current token will be 01
+     * @prop
+     * @type    {Integer}
+     */
+				padNumbers: 2
 			};
 		}
 
