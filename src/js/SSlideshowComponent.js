@@ -8,6 +8,7 @@ import __dispatchEvent from "coffeekraken-sugar/js/dom/dispatchEvent";
 import __debounce from "coffeekraken-sugar/js/utils/functions/debounce";
 import __mutationObservable from "coffeekraken-sugar/js/dom/mutationObservable";
 import __addEventListener from "coffeekraken-sugar/js/dom/addEventListener";
+import __pad from 'coffeekraken-sugar/js/utils/numbers/pad';
 import STimer from "coffeekraken-sugar/js/classes/STimer";
 import "coffeekraken-sugar/js/utils/rxjs/operators/groupByTimeout";
 
@@ -247,7 +248,15 @@ export default class SSlideshowComponent extends SWebComponent {
 			 * @prop
 			 * @type 	{Boolean}
 			 */
-			touchEnabled: true
+			touchEnabled: true,
+
+			/**
+			 * Specify the limit length of the numbers used in total and current token.
+			 * 2 means that if the current slide is the 1, the current token will be 01
+			 * @prop
+			 * @type    {Integer}
+			 */
+			padNumbers: 2
 		};
 	}
 
@@ -863,13 +872,13 @@ export default class SSlideshowComponent extends SWebComponent {
 		// apply current
 		if (this._refs.current) {
 			[].forEach.call(this._refs.current, current => {
-				current.innerHTML = parseInt(this.props.slide) + 1;
+				current.innerHTML = __pad(parseInt(this.props.slide) + 1, this.props.padNumbers);
 			});
 		}
 		// apply total
 		if (this._refs.total) {
 			[].forEach.call(this._refs.total, total => {
-				total.innerHTML = this._slides.length;
+				total.innerHTML = __pad(this._slides.length, this.props.padNumbers);
 			});
 		}
 	}
